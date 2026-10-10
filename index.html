@@ -472,6 +472,48 @@
   </div>
 </div>
 
+<!-- 🎯 興大午餐吃什麼？幸運大轉盤 Modal -->
+<div class="modal-backdrop" id="lunchWheelModal" onclick="if(event.target===this)closeLunchWheelModal()">
+  <div class="modal-card" style="max-width:440px; text-align:center; border-radius:20px; padding:24px 20px;">
+    <button class="modal-close" onclick="closeLunchWheelModal()">✕</button>
+    <div style="text-align:left; border-bottom:1px solid #f1f5f9; padding-bottom:8px; margin-bottom:12px;">
+      <h3 style="font-size:17px; color:var(--primary); font-weight:900; display:flex; align-items:center; gap:6px; margin:0;">
+        🎯 興大午餐吃什麼？幸運大轉盤
+      </h3>
+      <p style="font-size:12px; color:var(--text-muted); margin-top:4px; margin-bottom:0;">
+        排除晚上夜市！精選學府路、圓廳學餐、南門路中午營業必吃與爆笑彩蛋！
+      </p>
+    </div>
+
+    <!-- Canvas Wheel -->
+    <div style="position:relative; width:280px; height:280px; margin:14px auto 10px auto;">
+      <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); z-index:10; width:0; height:0; border-left:12px solid transparent; border-right:12px solid transparent; border-top:22px solid #E63946; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.35)); pointer-events:none;"></div>
+      <canvas id="wheelCanvas" width="280" height="280" style="border-radius:50%; box-shadow:0 6px 20px rgba(0,0,0,0.12); cursor:pointer;" onclick="spinLunchWheel()"></canvas>
+      <div onclick="spinLunchWheel()" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:44px; height:44px; background:#ffffff; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:bold; color:var(--primary); border:3px solid var(--primary); cursor:pointer; user-select:none;">
+        🌲
+      </div>
+    </div>
+
+    <!-- Spin Button -->
+    <div style="margin-top:8px; width:100%; display:flex; justify-content:center;">
+      <button id="spinBtn" class="ai-btn" style="margin:0; padding:10px 32px; font-size:14px; cursor:pointer;" onclick="spinLunchWheel()">
+        🎲 點我轉動！由命運決定！
+      </button>
+    </div>
+
+    <!-- Result Box -->
+    <div id="wheelResultBox" style="display:none; width:100%; background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:12px; margin-top:12px; text-align:center;">
+      <div style="font-size:11px; color:#c5a059; font-weight:700; letter-spacing:1px;" id="wheelResultTag">✨ 今日推薦</div>
+      <div style="font-size:16px; font-weight:900; color:var(--primary); margin:4px 0;" id="wheelResultTitle">揚州炒飯</div>
+      <p style="font-size:12.5px; color:var(--text-main); margin-bottom:10px; line-height:1.5;" id="wheelResultDesc">...</p>
+      <div style="display:flex; justify-content:center; gap:8px;">
+        <button class="chip" style="font-size:12px; padding:6px 14px;" onclick="spinLunchWheel()">🔄 再抽一次</button>
+        <button class="ai-btn" style="margin:0; font-size:12px; padding:6px 16px;" id="wheelAskBtn" onclick="askAboutWheelResult()">💬 問學長姐這家</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 蝦皮式底部聊天室(iframe 內嵌 興生N-GO 助手)-->
 <div class="chat-sheet" id="chatSheet" style="position:fixed;">
   <div class="chat-sheet-header" id="sheetHeader">
@@ -523,6 +565,7 @@
   const chips = [["all", "✨ 全部"]].concat(Object.entries(BOARD_NAMES));
   chipBar.innerHTML = chips.map(([k, label], i) =>
     `<button class="chip${i === 0 ? " active" : ""}" data-b="${k}" onclick="setBoard('${k}', this)">${label}</button>`).join("") +
+    `<button class="chip" style="background:linear-gradient(135deg, #005a36 0%, #007849 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(0,90,54,.35);" onmouseover="this.style.background='linear-gradient(135deg, #004127 0%, #005a36 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #005a36 0%, #007849 100%)'" onclick="openLunchWheelModal()" title="興大午餐吃什麼？幸運大轉盤 (學府路/圓廳/揚州炒飯)">🎯 午餐吃什麼轉盤</button>` +
     `<button class="chip" style="background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(197,160,89,.35);" onmouseover="this.style.background='linear-gradient(135deg, #b8860b 0%, #996515 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #c5a059 0%, #b8860b 100%)'" onclick="openFoodMap()" title="開啟興大美食地圖 (0 Token 快速瀏覽)">🍜 興大美食地圖</button>` +
     `<button class="chip" style="background:var(--mint, #abdad5); color:var(--primary-dark, #0f2745); border-color:transparent;" onclick="openPickleModal(this)" title="匹克球學習社群(114-2 開始)">🏓 匹克球社群</button>`;
 
@@ -922,6 +965,148 @@
   function closeLineModal() {
     document.getElementById("lineModal").style.display = "none";
     document.body.style.overflow = "";
+  }
+
+  // ── 🎯 興大午餐吃什麼？幸運大轉盤 (Lunch Wheel) ──
+  const LUNCH_OPTIONS = [
+    { name: "揚州炒飯", tag: "🏆 人上人等級必吃！", color: "#005a36", textColor: "#ffffff", desc: "位於忠明南路與北區路，招牌傳統揚州炒飯，份量天花板！大一不吃會後悔！人上人等級超頂的啦！", query: "揚州炒飯" },
+    { name: "圓廳學餐 1-2F", tag: "🌲 免出校門超大冷氣", color: "#007849", textColor: "#ffffff", desc: "校內圓廳 1F-2F 自助餐、快餐、便當、鍋燒意麵任選！中午下課不用出校門曬太陽，吹冷氣省時首選！", query: "圓廳學餐" },
+    { name: "東港味", tag: "🌸 女宿後門人氣王", color: "#c5a059", textColor: "#ffffff", desc: "南門路人氣平價小吃！學長姐強烈推薦「乾麵加豆乾」與「肉絲炒飯加辣」！尖峰建議先打電話訂餐。", query: "東港味" },
+    { name: "沼澤咖哩", tag: "🍛 學生心中台中No.1", color: "#e67e22", textColor: "#ffffff", desc: "學府路高人氣濃郁咖哩！香濃醇厚，返鄉前必吃的儀式感美食，學生內用現折 50 元優惠！", query: "沼澤咖哩" },
+    { name: "大吃小算", tag: "🍲 平價大碗鍋燒意麵", color: "#d35400", textColor: "#ffffff", desc: "學府路老字號台南鍋燒意麵與肉燥飯，加麵加湯超澎湃，月底省錢救星，午餐吃超飽！", query: "大吃小算" },
+    { name: "隨便義大利麵", tag: "🍝 蛤蜊山爆量麵食", color: "#16a085", textColor: "#ffffff", desc: "學府路超人氣義大利麵！蛤蜊多到像一座小山，份量大到吃不完，同學小聚推薦首選。", query: "隨便義大利麵" },
+    { name: "佳味中西簡餐", tag: "🍱 學府路經典快餐", color: "#27ae60", textColor: "#ffffff", desc: "學府路經典老牌簡餐！大雞腿便當、酥炸豬排飯，出餐快速、份量實在，趕下午上課的最佳選擇。", query: "佳味中西簡餐" },
+    { name: "八方/梁社漢", tag: "🥟 不想思考的安全牌", color: "#f39c12", textColor: "#ffffff", desc: "學府路上永遠不踩雷的安全牌！招牌鍋貼、炸排骨飯、水餃，快速出餐立刻吃完趕上下午第一堂課！", query: "八方雲集" },
+    { name: "小叮噹牛排", tag: "🥩 平價鐵板肉食族", color: "#8e44ad", textColor: "#ffffff", desc: "學府路高CP值鐵板牛排！平價牛排附鐵板麵、荷包蛋、紅茶與玉米濃湯無限暢飲，想大口吃肉就選它！", query: "小叮噹牛排" },
+    { name: "中興湖看鵝吹風", tag: "🦢【大笑彩蛋！中獎啦】", color: "#2980b9", textColor: "#ffffff", desc: "⚠️【開玩笑的！中興湖嚴禁捕魚或喝水！】大白鵝超級兇！湖水不能吃！請立即點擊下方按鈕重新再抽一次 🤣", query: "中興湖" }
+  ];
+
+  let wheelRotation = 0;
+  let isWheelSpinning = false;
+  let currentWheelResult = null;
+
+  function openLunchWheelModal() {
+    document.getElementById("lunchWheelModal").style.display = "flex";
+    document.body.style.overflow = "hidden";
+    setTimeout(() => { drawWheel(wheelRotation); }, 50);
+  }
+
+  function closeLunchWheelModal() {
+    document.getElementById("lunchWheelModal").style.display = "none";
+    document.body.style.overflow = "";
+  }
+
+  function drawWheel(rotationAngle) {
+    const canvas = document.getElementById("wheelCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const numSlices = LUNCH_OPTIONS.length;
+    const arc = (2 * Math.PI) / numSlices;
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = cx - 4;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(rotationAngle);
+
+    for (let i = 0; i < numSlices; i++) {
+      const angle = i * arc;
+      ctx.beginPath();
+      ctx.fillStyle = LUNCH_OPTIONS[i].color;
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, radius, angle, angle + arc);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.save();
+      ctx.rotate(angle + arc / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = LUNCH_OPTIONS[i].textColor;
+      ctx.font = "bold 11px sans-serif";
+      ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
+      ctx.shadowBlur = 3;
+      ctx.fillText(LUNCH_OPTIONS[i].name, radius - 16, 4);
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function spinLunchWheel() {
+    if (isWheelSpinning) return;
+    isWheelSpinning = true;
+    const spinBtn = document.getElementById("spinBtn");
+    if (spinBtn) spinBtn.disabled = true;
+    document.getElementById("wheelResultBox").style.display = "none";
+
+    const numSlices = LUNCH_OPTIONS.length;
+    const sliceAngle = (2 * Math.PI) / numSlices;
+    const targetIndex = Math.floor(Math.random() * numSlices);
+    const targetSliceCenter = targetIndex * sliceAngle + sliceAngle / 2;
+    const baseTargetRotation = (3 * Math.PI / 2) - targetSliceCenter;
+    const extraSpins = (5 + Math.floor(Math.random() * 3)) * 2 * Math.PI;
+    const startRotation = wheelRotation % (2 * Math.PI);
+    const finalRotation = wheelRotation + extraSpins + ((baseTargetRotation - (startRotation % (2 * Math.PI)) + 4 * Math.PI) % (2 * Math.PI));
+
+    const startTime = performance.now();
+    const duration = 3800;
+
+    function animate(time) {
+      const elapsed = time - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      wheelRotation = startRotation + (finalRotation - startRotation) * ease;
+      drawWheel(wheelRotation);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        isWheelSpinning = false;
+        if (spinBtn) spinBtn.disabled = false;
+        currentWheelResult = LUNCH_OPTIONS[targetIndex];
+        showWheelResult(currentWheelResult);
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  function showWheelResult(result) {
+    const box = document.getElementById("wheelResultBox");
+    const tag = document.getElementById("wheelResultTag");
+    const title = document.getElementById("wheelResultTitle");
+    const desc = document.getElementById("wheelResultDesc");
+    const askBtn = document.getElementById("wheelAskBtn");
+
+    tag.textContent = result.tag;
+    title.textContent = result.name;
+    desc.textContent = result.desc;
+
+    if (result.name.includes("中興湖")) {
+      box.style.background = "#fff1f2";
+      box.style.borderColor = "#fecdd3";
+      tag.style.color = "#e11d48";
+      title.style.color = "#be123c";
+      askBtn.textContent = "🦢 問學長姐中興湖傳奇";
+    } else {
+      box.style.background = "#f8fafc";
+      box.style.borderColor = "#e2e8f0";
+      tag.style.color = "#c5a059";
+      title.style.color = "var(--primary)";
+      askBtn.textContent = "💬 問學長姐這家";
+    }
+    box.style.display = "block";
+  }
+
+  function askAboutWheelResult() {
+    if (!currentWheelResult) return;
+    const q = currentWheelResult.query || currentWheelResult.name;
+    closeLunchWheelModal();
+    askFood(q);
   }
 
   function askFood(storeName) {
