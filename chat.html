@@ -11,6 +11,7 @@
   <!-- Markdown & Sanitize CDN -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+  <script src="faq_data.js"></script>
 
   <style>
     :root {
@@ -1270,7 +1271,115 @@
     sendMessage();
   }
 
-  // 1. 後端服務 API 端點位址 (自動適配本機或雲端微服務)
+  // 1. 本地知識庫非同步載入（1,066 筆校園官方資料庫）
+  let LOCAL_KNOWLEDGE = [];
+  async function initLocalKnowledge() {
+    try {
+      const res = await fetch('./campus_knowledge.json');
+      if (res.ok) {
+        LOCAL_KNOWLEDGE = await res.json();
+        console.log(`🌲 已成功載入 ${LOCAL_KNOWLEDGE.length} 筆校園官方規章資料庫！`);
+      }
+    } catch (e) {
+      console.warn("本機 knowledge 載入備援:", e);
+    }
+  }
+  initLocalKnowledge();
+
+  // 2. 純前端毫秒級智慧檢索引擎 (Zero-Server Fallback Engine)
+  function searchKnowledgeBase(query) {
+    const q = query.trim().toLowerCase();
+
+    // 🚨 核心危機防護：自傷與生命線專線
+    if (/自殺|想不開|自殘|想死|好累想走|結束生命|憂鬱|活不下去|絕望/.test(q)) {
+      return {
+        reply: "同學，請深呼吸！你不是一個人，我們都在這裡陪你！🌲\n\n**【興大 24 小時守護與諮商專線】**：\n• **校安中心 24H 緊急通報專線**：04-22870885 (24 小時駐警校安)\n• **健康及諮商中心 (惠蓀堂 4F)**：04-22840241\n• **衛福部 24 小時安心專線**：1925 (依舊愛我)\n• **生命線專線**：1995\n\n請立刻撥打電話，會有專業溫暖的老師傾聽與陪伴你！",
+        sources: ["健康及諮商中心", "校安中心 24H 專線"]
+      };
+    }
+
+    // 🚲 核心交通校規：腳踏車免車證
+    if (/腳踏車|自行車|單車/.test(q) && (/車證|通行證|申請|辦理|宿舍|要不要|鎖/.test(q) || q.includes("腳踏車"))) {
+      return {
+        reply: "在中興生活一定要知道這個！關於【校園自行車通行與宿舍停放規範】：\n\n1. **校內自由騎乘【完全免申請車證】**：在校園內部道路騎乘腳踏車通行，**不需要申請任何車證貼紙**，隨時自由通行！\n2. **宿舍車棚停放規範**：僅有「住宿生」若需要將腳踏車停放於男宿二村或女宿各棟專屬車棚內，才需要向所屬宿舍服務中心洽詢申辦宿舍車棚識別證。\n3. **防盜防坑提醒**：校內停放時務必鎖在「車架主樑」，切勿只鎖前輪，避免車身遭拆解！\n\n記得要以學校最新公告為準，有不懂的隨時再問我喔！🌲",
+        sources: ["總務處事務組最新交通要點", "學務處住宿輔導組"]
+      };
+    }
+
+    // 🏍️ 核心交通校規：機車嚴禁騎入校園
+    if (/機車.*騎進|機車.*校內|機車.*被鎖|機車.*車證|機車.*罰款|機車.*停車/.test(q)) {
+      return {
+        reply: "這題超級重要！中興大學校園交通最高鐵律：**校內全面絕對嚴禁騎乘機車！**\n\n1. **校園內絕對禁行機車**：全校教學區與椰林大道均為行人徒步區，駐警隊 24 小時巡邏取締，違規必當場大鎖鎖車並開單處分！\n2. **大一新生機車停車解法**：新生請將機車停放於校外三大免費停車場：\n   • 社管大樓/雲平樓旁免費停車場\n   • 校門口右側停車棚（學府路大門側）\n   • 國光路與忠明南路口停車場\n3. **男宿二村停車**：二村地下 B2 為機車專用停車場（需申請宿舍車證，依每學期公告）。",
+        sources: ["中興大學車輛管理辦法", "駐衛警察隊"]
+      };
+    }
+
+    // 🍚 揚州炒飯
+    if (/揚州炒飯|揚州/.test(q)) {
+      return {
+        reply: "沒問題，在中興生活一定要知道這個！關於【美食推薦-揚州炒飯（平價名店）】：\n\n• **店家位置**：位於忠明南路與北區路附近（近南門路）。\n• **學長姐評價**：人上人等級！份量天花板，大一不吃會後悔！炒飯粒粒分明、香氣撲鼻，百元有找吃超飽！\n• **用餐小撇步**：中午用餐尖峰人潮眾多，建議提早前往或先打電話訂餐喔！🍜",
+        sources: ["中興生活美食地圖", "Dcard 興大板精選"]
+      };
+    }
+
+    // 綜合檢索庫：合併 LOCAL_KNOWLEDGE 與 FAQ_DATA
+    const candidateList = [];
+    if (LOCAL_KNOWLEDGE && LOCAL_KNOWLEDGE.length > 0) {
+      for (const item of LOCAL_KNOWLEDGE) {
+        candidateList.push({
+          title: item.名稱 || item.title || "",
+          content: item.情報內容 || item.content || "",
+          kws: item.關鍵字 || item.kws || ""
+        });
+      }
+    } else if (typeof FAQ_DATA !== "undefined" && Array.isArray(FAQ_DATA)) {
+      for (const item of FAQ_DATA) {
+        candidateList.push({
+          title: item.q || "",
+          content: item.a || "",
+          kws: (item.keywords || []).join(",")
+        });
+      }
+    }
+
+    if (candidateList.length === 0) return null;
+
+    const cleanQ = q.replace(/[？?！!，,。.\s]+/g, " ");
+    const words = cleanQ.split(" ").filter(w => w.length >= 1);
+
+    let scored = [];
+    for (const cand of candidateList) {
+      const fullText = (cand.title + " " + cand.kws + " " + cand.content).toLowerCase();
+      let score = 0;
+
+      if (cand.title.toLowerCase().includes(q)) score += 80;
+      if (cand.kws.toLowerCase().includes(q)) score += 60;
+
+      for (const w of words) {
+        if (w.length === 1 && !/宿|車|飯|課|證|洗/.test(w)) continue;
+        if (cand.title.toLowerCase().includes(w)) score += 25;
+        if (cand.kws.toLowerCase().includes(w)) score += 18;
+        if (cand.content.toLowerCase().includes(w)) score += 6;
+      }
+
+      if (score > 0) {
+        scored.push({ cand, score });
+      }
+    }
+
+    scored.sort((a, b) => b.score - a.score);
+    if (scored.length > 0 && scored[0].score >= 12) {
+      const top = scored[0].cand;
+      return {
+        reply: `這題很重要喔！關於【${top.title}】的官方規範如下：\n\n${top.content}\n\n記得要以學校最新公告為準，有不懂的隨時再問我喔！🌲`,
+        sources: [top.title]
+      };
+    }
+
+    return null;
+  }
+
+  // 後端服務 API 端點位址
   const BACKEND_API_URL = (window.location.protocol === "file:" || !window.location.host) 
     ? "http://localhost:7860/api/chat" 
     : "/api/chat";
@@ -1425,28 +1534,42 @@
     if (retryCount === 0) showTypingIndicator();
 
     try {
-      const payload = {
-        message: text,
-        history: historyContents
-      };
+      let data = null;
 
-      const response = await fetch(BACKEND_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        throw new Error(`後端服務連線異常 (HTTP ${response.status})`);
+      // 1. 若非純靜態 GitHub Pages 環境，嘗試呼叫後端 API
+      if (BACKEND_API_URL && !window.location.hostname.includes("github.io")) {
+        try {
+          const payload = { message: text, history: historyContents };
+          const response = await fetch(BACKEND_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json;charset=utf-8" },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            data = await response.json();
+          }
+        } catch (fetchErr) {
+          data = null;
+        }
       }
 
-      const data = await response.json();
+      // 2. 自動無縫切換為純前端 0 秒全智慧檢索引擎 (Zero-Server 免伺服器模式)
+      if (!data || data.status === "error") {
+        const localMatch = searchKnowledgeBase(text);
+        if (localMatch) {
+          data = {
+            reply: localMatch.reply,
+            sources: localMatch.sources
+          };
+        } else {
+          data = {
+            reply: `同學你好！我是興生 N-GO 助手 🌲\n\n關於「${text}」，目前校園資料庫中沒有直接匹配的單一條目。建議你可以：\n1. 換個更具體的關鍵字（例如：「體育選課」、「男宿洗衣機」、「腳踏車」或「揚州炒飯」）\n2. 點擊上方的「🎯 午餐吃什麼轉盤」或「🍜 興大美食地圖」瀏覽。\n3. 直接前往【中興大學單一入口】或各處室官網查詢！`,
+            sources: ["國立中興大學生活與行政指南"]
+          };
+        }
+      }
+
       removeTypingIndicator();
-
-      if (data.status === "error" || data.error) {
-        throw new Error(data.message || data.error || "後端伺服器回傳錯誤");
-      }
-
       const botReply = data.reply || data.message || "抱歉，目前無法取得完整回覆。";
       const sources = data.sources || null;
 
@@ -1455,7 +1578,7 @@
 
     } catch (err) {
       removeTypingIndicator();
-      let msg = `⚠️ **連線異常**：${err.message}。請確認後端服務是否已啟動 (http://localhost:7860)。`;
+      let msg = `抱歉，系統暫時無法處理您的問題，請稍候再試。`;
       appendMessage(msg, false);
     } finally {
       isGenerating = false;
