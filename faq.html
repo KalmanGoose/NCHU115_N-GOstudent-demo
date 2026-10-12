@@ -156,8 +156,8 @@
 <body>
 
 <header class="site-header">
-  <a class="brand" href="index.html"><span class="brand-logo">🌲</span>興生N-GO問答指南(非官方)</a>
-  <a class="header-cta" href="#" onclick="openChatSheet('');return false;">🤖 問 興生N-GO 助手</a>
+  <a class="brand" href="index.html"><span class="brand-logo">🌲</span>新鮮人-興生FAQ問答指南(非官方)</a>
+  <a class="header-cta" href="#" onclick="openChatSheet('');return false;">🤖 問 新鮮人-興生FAQ</a>
 </header>
 
 <!-- 📌 資料來源聲明(懶人包中心定位) -->
@@ -206,7 +206,7 @@
     <div class="hot-card hot-ai" onclick="openChatSheet('')">
       <div style="font-size:30px;">🤖</div>
       <div>
-        <div style="font-weight:900; font-size:14px;">問 興生N-GO 助手</div>
+        <div style="font-weight:900; font-size:14px;">問 新鮮人-興生FAQ</div>
         <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">選課、宿舍、美食⋯任何問題直接問,24 小時在線!</div>
       </div>
     </div>
@@ -221,7 +221,7 @@
     <h2 style="font-size:19px; font-weight:900; margin-top:10px;">先跟大家說聲抱歉 🙇</h2>
     <p style="font-size:13.5px; line-height:1.9; color:var(--text-main); margin-top:10px;">
       各系的 LINE 群連結目前<b>只有資工系是「點了直接加入」</b>,其他科系的連結都是 QR Code 圖片形式,
-      沒辦法在網頁上直接按~真的不能怪我 ==ㄏㄏ。請用興生N-GO 助手輸入你的科系,就會拿到該系的加入方式!
+      沒辦法在網頁上直接按~真的不能怪我 ==ㄏㄏ。請用新鮮人-興生FAQ輸入你的科系,就會拿到該系的加入方式!
     </p>
     <a class="ai-btn" href="https://line.me/ti/g2/YYKlpGLCC_dcEwyjuuCmaIqMysJ8nJ5Q2OWZ2w" target="_blank" rel="noopener"
        style="background:linear-gradient(135deg,#06C755,#04a344);text-decoration:none;">✅ 我是資工系,點我直接加入新生群!(LINE OpenChat)</a>
@@ -369,7 +369,7 @@
     background: var(--primary); color: #fff; padding: 9px; border-radius: var(--pill-radius); transition: .2s;
   }
   .food-mini-btn:hover { opacity: .88; transform: translateY(-1px); }
-  /* ── 🎓 學長姐精選(比照 N-GO 助手美食地圖卡片風格)── */
+  /* ── 🎓 學長姐精選(比照 新鮮人-興生FAQ美食地圖卡片風格)── */
   .senior-grid { margin-top:12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:10px; max-height:52vh; overflow-y:auto; padding:2px; }
   @media (max-width:640px){
     .senior-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
@@ -408,12 +408,12 @@
     <button class="modal-close" onclick="closeFoodMap()">✕</button>
     <span class="faq-board-tag">🍜 興大美食地圖</span>
     <h2 style="font-size:19px; font-weight:900; margin-top:10px;">今天想吃什麼?</h2>
-    <p style="font-size:13px; color:var(--text-muted); margin-top:6px;">點店家卡片,興生N-GO 助手會直接幫你介紹與推薦!</p>
+    <p style="font-size:13px; color:var(--text-muted); margin-top:6px;">點店家卡片,新鮮人-興生FAQ會直接幫你介紹與推薦!</p>
     <div style="display:flex; gap:8px; margin-top:14px;" id="foodCatBar">
       <button class="chip active" data-fcat="all" onclick="filterFoodCat('all', this)">✨ 全部</button>
       <button class="chip" data-fcat="food" onclick="filterFoodCat('food', this)">🍚 吃飽</button>
       <button class="chip" data-fcat="drink" onclick="filterFoodCat('drink', this)">🥤 飲料</button>
-      <button class="chip" style="background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(197,160,89,.35);" onclick="openSeniorPicks()" title="開啟 N-GO 助手的完整美食地圖(178間,含Dcard學長姐分享)">🎓 學長姐精選</button>
+      <button class="chip" style="background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(197,160,89,.35);" onclick="openSeniorPicks()" title="開啟 新鮮人-興生FAQ的完整美食地圖(178間,含Dcard學長姐分享)">🎓 學長姐精選</button>
     </div>
     <div class="food-modal-list" id="foodModalList">
       <div class="food-mini-card" data-cat="food" style="border:2px solid #f6ad3c; background:linear-gradient(135deg,#fffaf0,#fff);">
@@ -460,7 +460,7 @@
         <a class="food-mini-btn" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:flex; align-items:center; justify-content:center;" href="https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E8%88%88%E5%A4%A7%E5%AD%B8%20%E5%BF%A0%E5%AD%9D%E5%A4%9C%E5%B8%82">📍 開啟導航</a>
       </div>
     </div>
-    <!-- 🎓 學長姐精選(來自 N-GO 助手美食資料庫,178 間) -->
+    <!-- 🎓 學長姐精選(來自 新鮮人-興生FAQ美食資料庫,178 間) -->
     <div id="seniorPicksSection" style="display:none; margin-top:16px; border-top:2px dashed var(--mint,#abdad5); padding-top:14px;">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
         <span style="font-weight:900; font-size:15px;">🎓 學長姐精選 <span id="seniorCount" style="font-size:11.5px; color:var(--text-muted); font-weight:700;"></span></span>
@@ -472,7 +472,7 @@
   </div>
 </div>
 
-<!-- 蝦皮式底部聊天室(iframe 內嵌 興生N-GO 助手)-->
+<!-- 蝦皮式底部聊天室(iframe 內嵌 新鮮人-興生FAQ)-->
 <div class="chat-sheet" id="chatSheet" style="position:fixed;">
   <div class="chat-sheet-header" id="sheetHeader">
     <div class="chat-lights">
@@ -480,12 +480,12 @@
       <button class="light-yellow" title="往下收合" onclick="event.stopPropagation();snapSheet(-1)"></button>
       <button class="light-green" title="往上展開" onclick="event.stopPropagation();snapSheet(1)"></button>
     </div>
-    <span class="chat-sheet-title" id="chatSheetTitle">🤖 115-1興生N-GO 助手</span>
+    <span class="chat-sheet-title" id="chatSheetTitle">🤖 115-1新鮮人-興生FAQ</span>
     <div style="width:55px;"></div>
   </div>
   <div style="position:relative; flex:1; display:flex;">
     <iframe class="chat-sheet-body" id="chatFrame" title="AI 聊天室"></iframe>
-    <div class="chat-load-msg" id="chatLoadMsg">🤖 興生N-GO 助手載入中...</div>
+    <div class="chat-load-msg" id="chatLoadMsg">🤖 新鮮人-興生FAQ載入中...</div>
     <div id="deptListPanel" style="display:none; position:absolute; inset:0; background:#fff; overflow-y:auto; padding:14px 16px;"></div>
   </div>
 </div>
@@ -664,7 +664,7 @@
     document.getElementById("foodMapModal2").style.display = "flex";
     document.body.style.overflow = "hidden";
   }
-  // 🎓 學長姐精選 → 在本頁彈窗內展開 N-GO 助手的完整美食資料庫
+  // 🎓 學長姐精選 → 在本頁彈窗內展開 新鮮人-興生FAQ的完整美食資料庫
   let seniorVisible = false;
   function openSeniorPicks() {
     seniorVisible = !seniorVisible;
@@ -683,7 +683,7 @@
       if (!q) return true;
       return ((it.title || "") + " " + (it.content || "") + " " + (it.kws || "")).toLowerCase().includes(q);
     });
-    if (label) label.textContent = `共 ${seniorFiltered.length} 間(資料來源:N-GO 助手美食庫)`;
+    if (label) label.textContent = `共 ${seniorFiltered.length} 間(資料來源:新鮮人-興生FAQ美食庫)`;
     if (!seniorFiltered.length) {
       grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">🍽️ 找不到符合的店家,換個關鍵字試試!</div>`;
       return;
@@ -735,7 +735,7 @@
     if (saved === 1 || (!isMobile && saved === 1)) setLayout(saved);
     if (!isMobile) document.getElementById("layoutToggle").style.display = "none";
   })();
-  // 📍 店家卡片導航(比照 N-GO 助手美食地圖的 Google Maps 行為)
+  // 📍 店家卡片導航(比照 新鮮人-興生FAQ美食地圖的 Google Maps 行為)
   function navFood(name) {
     window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("中興大學 " + name), "_blank");
   }
@@ -755,7 +755,7 @@
   function ensureChatLoaded(askText) {
     const frame = document.getElementById("chatFrame");
     const msg = document.getElementById("chatLoadMsg");
-    msg.innerHTML = "🤖 興生N-GO 助手載入中...";
+    msg.innerHTML = "🤖 新鮮人-興生FAQ載入中...";
     msg.style.display = "flex";
     frame.onload = function () {
       // 同源檢查:確認內容真的有渲染出東西
@@ -778,7 +778,7 @@
 
   function showFail() {
     document.getElementById("chatLoadMsg").innerHTML =
-      '⚠️ 興生N-GO 助手內嵌載入失敗<br><a href="chat.html" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;">點這裡用完整頁面開啟 AI 助手 →</a>';
+      '⚠️ 新鮮人-興生FAQ內嵌載入失敗<br><a href="chat.html" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;">點這裡用完整頁面開啟 AI 助手 →</a>';
   }
 
   function openChatSheet(askText) {
@@ -788,8 +788,8 @@
     sheet.dataset.stage = "half";
     sheet.classList.add("open");
     document.getElementById("chatSheetTitle").textContent =
-      askText === "__DEPT_LIST__" ? "🤖 興生N-GO 助手 · 各系新生 LINE 群總覽" :
-      askText ? "🤖 興生N-GO 助手 · 正在問:「" + askText + "」" : "🤖 興生N-GO 助手";
+      askText === "__DEPT_LIST__" ? "🤖 新鮮人-興生FAQ · 各系新生 LINE 群總覽" :
+      askText ? "🤖 新鮮人-興生FAQ · 正在問:「" + askText + "」" : "🤖 新鮮人-興生FAQ";
     if (askText === "__DEPT_LIST__") {
       // 直接由本頁渲染科系列表,不經過 iframe(0 Token、不會白畫面)
       showDeptListPanel();
