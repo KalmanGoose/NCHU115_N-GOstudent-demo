@@ -1385,17 +1385,135 @@
 </div>
 
 <style>
-  /* ── 浮動按鈕 ── */
-  .fab-stack { position: fixed; right: 18px; bottom: 18px; z-index: 300; display: flex; flex-direction: column; gap: 10px; }
-  .fab {
-    width: 54px; height: 54px; border-radius: 50%; border: none; cursor: pointer; font-size: 22px;
-    box-shadow: var(--shadow-md); transition: transform .2s; display: flex; align-items: center; justify-content: center;
+  /* ── 📱 LINE 風格底部四大功能導航列 (Option B) ── */
+  .bottom-tab-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 350;
+    height: calc(58px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(15, 39, 69, 0.08);
+    box-shadow: 0 -4px 20px rgba(15, 39, 69, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
   }
-  .fab:hover { transform: scale(1.08); }
-  .fab-food { background: #fff; }
-  .fab-bus { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff; font-size: 24px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45); }
-  .fab-slot { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; font-size: 24px; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45); }
-  .fab-chat { background: var(--primary); color: #fff; font-size: 24px; }
+  @media (min-width: 769px) {
+    .bottom-tab-bar {
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      width: 480px;
+      bottom: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(0, 75, 151, 0.12);
+      box-shadow: 0 10px 30px rgba(0, 75, 151, 0.16);
+      height: 60px;
+      padding-bottom: 0;
+    }
+  }
+  .tab-item {
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 6px 0 4px;
+    color: #64748b;
+    position: relative;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .tab-item:active {
+    transform: scale(0.92);
+  }
+  .tab-icon {
+    font-size: 20px;
+    line-height: 1;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .tab-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    transition: color 0.2s ease;
+  }
+  .tab-item.active {
+    color: var(--primary);
+  }
+  .tab-item.active .tab-icon {
+    transform: translateY(-2px) scale(1.12);
+  }
+  .tab-item.active .tab-label {
+    color: var(--primary);
+    font-weight: 900;
+  }
+  .tab-item::after {
+    content: "";
+    position: absolute;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 3px);
+    width: 0;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--primary);
+    transition: width 0.25s ease;
+  }
+  @media (min-width: 769px) {
+    .tab-item::after {
+      bottom: 4px;
+    }
+  }
+  .tab-item.active::after {
+    width: 20px;
+  }
+  .tab-badge-dot {
+    position: absolute;
+    top: 7px;
+    right: calc(50% - 15px);
+    width: 7px;
+    height: 7px;
+    background: #ef4444;
+    border: 1.5px solid #fff;
+    border-radius: 50%;
+  }
+
+  /* 確保頁面底部不被底欄遮擋 */
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* ── 浮動按鈕：僅保留單一 AI 聊天球，飄於底欄上方 ── */
+  .fab-stack {
+    position: fixed;
+    right: 18px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    z-index: 340;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  @media (min-width: 769px) {
+    .fab-stack {
+      bottom: 24px;
+      right: 28px;
+    }
+  }
+  .fab {
+    width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer; font-size: 22px;
+    box-shadow: 0 4px 18px rgba(0, 75, 151, 0.35); transition: transform .2s; display: flex; align-items: center; justify-content: center;
+  }
+  .fab:hover { transform: scale(1.1); }
+  .fab-chat { background: linear-gradient(135deg, var(--primary) 0%, #003a75 100%); color: #fff; font-size: 24px; }
+  .fab-bus, .fab-slot, .fab-food { display: none !important; }
 
   /* ── 蝦皮式底部聊天室(三段高度 + 拖曳)── */
   .chat-sheet {
@@ -1407,7 +1525,10 @@
   .chat-sheet.open { display: flex; }
   .chat-sheet.dragging { transition: none; }
   .chat-sheet.dragging iframe { pointer-events: none !important; }
-  .chat-sheet.collapsed { height: 42px !important; }
+  .chat-sheet.collapsed {
+    bottom: calc(58px + env(safe-area-inset-bottom, 0px)) !important;
+    height: 42px !important;
+  }
   .chat-sheet.collapsed .chat-sheet-body { display: none; }
   .chat-sheet-header {
     position: relative; display: flex; align-items: center;
@@ -1633,14 +1754,31 @@
     body.cols-1 .food-ask-btn, body.cols-1 .food-map-link { font-size: 11px; padding: 4px 8px; }
   }
 </style>
-<!-- 浮動按鈕 -->
+<!-- 浮動按鈕：僅保留單一 AI 聊天小球 (懸浮於底欄上方) -->
 <div class="fab-stack">
-  <button class="fab fab-bus" id="busFab" title="興大公車即時動態與返鄉交通" onclick="openBusDynamicModal()">🚌</button>
-  <button class="fab fab-slot" id="slotFab" title="興大美食天命拉霸機" onclick="openFoodSlotModal()">🎰</button>
-  <button class="fab fab-food" title="興大美食地圖" onclick="openFoodMap()">🍜</button>
-  <button class="fab" id="topFab" title="回到頂端" style="display:none; background:#e8f5ee;" onclick="event.stopPropagation(); window.scrollTo({top:0, behavior:'smooth'});">⬆️</button>
-  <button class="fab fab-chat" title="AI 聊天室" onclick="toggleChatSheet()">💬</button>
+  <button class="fab fab-chat" title="AI 聊天室" onclick="toggleChatSheet()">🤖</button>
 </div>
+
+<!-- 📱 LINE 風格底部四大功能導航列 (iOS Bottom Tab Bar) -->
+<nav class="bottom-tab-bar" id="bottomTabBar" aria-label="快捷導航列">
+  <button class="tab-item active" id="tab-home" onclick="switchBottomTab('home')" title="首頁問答指南">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">首頁指南</span>
+  </button>
+  <button class="tab-item" id="tab-portal" onclick="switchBottomTab('portal')" title="10大常用官方系統傳送門">
+    <span class="tab-icon">🎒</span>
+    <span class="tab-label">常用系統</span>
+  </button>
+  <button class="tab-item" id="tab-transit" onclick="switchBottomTab('transit')" title="校門口即時公車與返鄉交通">
+    <span class="tab-icon">🚌</span>
+    <span class="tab-label">即時交通</span>
+    <span class="tab-badge-dot" title="即時動態"></span>
+  </button>
+  <button class="tab-item" id="tab-food" onclick="switchBottomTab('food')" title="176間美食地圖與天命拉霸機">
+    <span class="tab-icon">🍜</span>
+    <span class="tab-label">興大美食</span>
+  </button>
+</nav>
 
 <!-- 美食地圖彈窗 (0 Token 成本純前端即時瀏覽，與聊天室同款) -->
 <div class="modal-backdrop" id="foodMapModal2" onclick="closeFoodMapModalOnBackdrop(event)">
@@ -2560,6 +2698,7 @@
     const modal = document.getElementById("foodMapModal2");
     if (modal) modal.style.display = "none";
     document.body.style.overflow = "";
+    if (typeof resetBottomTabToHome === "function") resetBottomTabToHome();
   }
   const closeFoodMapModal = closeFoodMap;
 
@@ -2998,6 +3137,71 @@
       egg.classList.toggle("revealed");
     }
   }
+
+  // ── 📱 LINE 風格底部四大功能導航列 (Option B) 互動切換 ──
+  function switchBottomTab(tab) {
+    document.querySelectorAll(".bottom-tab-bar .tab-item").forEach(btn => {
+      btn.classList.remove("active");
+    });
+    const currentBtn = document.getElementById("tab-" + tab);
+    if (currentBtn) currentBtn.classList.add("active");
+
+    if (tab === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (tab === "portal") {
+      const p = document.getElementById("portalSection");
+      if (p) {
+        if (typeof togglePortalDrawer === "function") togglePortalDrawer(true);
+        const y = p.getBoundingClientRect().top + window.pageYOffset - 70;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+    } else if (tab === "transit") {
+      if (typeof openTransitModal === "function") {
+        openTransitModal("live");
+      } else if (typeof openBusDynamicModal === "function") {
+        openBusDynamicModal();
+      }
+    } else if (tab === "food") {
+      if (typeof openFoodMap === "function") {
+        openFoodMap();
+      }
+    }
+  }
+
+  function resetBottomTabToHome() {
+    document.querySelectorAll(".bottom-tab-bar .tab-item").forEach(btn => {
+      btn.classList.remove("active");
+    });
+    const homeBtn = document.getElementById("tab-home");
+    if (homeBtn) homeBtn.classList.add("active");
+  }
+
+  // 關閉交通彈窗時自動歸位回首頁 Tab
+  const origCloseTransitModal = window.closeTransitModal;
+  window.closeTransitModal = function() {
+    if (typeof origCloseTransitModal === "function") origCloseTransitModal();
+    resetBottomTabToHome();
+  };
+
+  // 監聽滾動以自動切換「首頁」與「常用系統」活耀狀態
+  window.addEventListener("scroll", () => {
+    const portal = document.getElementById("portalSection");
+    if (!portal) return;
+    const rect = portal.getBoundingClientRect();
+    const isPortalVisible = rect.top <= 140 && rect.bottom >= 150;
+    const isHome = window.scrollY < 200;
+
+    const tabHome = document.getElementById("tab-home");
+    const tabPortal = document.getElementById("tab-portal");
+
+    if (isHome && tabHome && !tabHome.classList.contains("active")) {
+      document.querySelectorAll(".bottom-tab-bar .tab-item").forEach(b => b.classList.remove("active"));
+      tabHome.classList.add("active");
+    } else if (isPortalVisible && tabPortal && !tabPortal.classList.contains("active")) {
+      document.querySelectorAll(".bottom-tab-bar .tab-item").forEach(b => b.classList.remove("active"));
+      tabPortal.classList.add("active");
+    }
+  }, { passive: true });
 
   // ── 🔒 鎖死手機端手勢縮放，防止跑版 ──
   document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
