@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="興生FAQ" />
 <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/zh/thumb/1/15/National_Chung_Hsing_University_seal.svg/1200px-National_Chung_Hsing_University_seal.svg.png" />
 <meta name="theme-color" content="#004B97" />
@@ -37,14 +37,103 @@
     }
   }
   .site-header {
-    position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0,75,151,.1); padding: 14px 24px;
+    position: sticky; top: 0; z-index: 100;
+    background: linear-gradient(135deg, #004B97 0%, #00366f 100%);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 4px 18px rgba(0, 50, 110, 0.22);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 6px);
+    padding-bottom: 12px;
+    padding-left: 20px;
+    padding-right: 20px;
     display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.25s ease;
   }
-  .brand { display:flex; align-items:center; gap:8px; font-weight:900; font-size:15px; color:var(--primary); text-decoration:none; white-space:nowrap; min-width:0; }
-  .brand-logo { flex-shrink:0; width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,var(--primary),var(--mint)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; }
-  .header-cta { background: var(--primary); color: #fff; text-decoration: none; font-size: 13px; font-weight: 700; padding: 9px 18px; border-radius: var(--pill-radius); transition: all .25s; box-shadow: var(--shadow-sm); }
-  .header-cta:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  @media screen and (max-width: 640px) {
+    .site-header {
+      padding-top: calc(env(safe-area-inset-top, 0px) + 5px);
+      padding-bottom: 10px;
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+  }
+  .brand {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 900; font-size: 15px; color: #ffffff;
+    text-decoration: none; white-space: nowrap; min-width: 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.18);
+  }
+  .brand-logo {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
+    background: rgba(255, 255, 255, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 14px;
+  }
+  .header-cta {
+    background: #ffffff; color: var(--primary);
+    text-decoration: none; font-size: 12.5px; font-weight: 800;
+    padding: 7px 15px; border-radius: var(--pill-radius);
+    transition: all .25s; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    display: inline-flex; align-items: center; gap: 4px;
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+  }
+  .header-cta:hover, .header-cta:active {
+    background: #eaf3fd; color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+  }
+
+  /* ── 🐱 往下拉發現很空時的橘貓背影與爪痕彩蛋 ── */
+  .pull-cat-wrap {
+    width: 100%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(0, 75, 151, 0.08) 0%, rgba(240, 248, 255, 0) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.25, 1), opacity 0.35s ease, padding 0.35s ease;
+    user-select: none;
+  }
+  .pull-cat-wrap.revealed {
+    max-height: 270px;
+    opacity: 1;
+    padding: 16px 16px 8px;
+  }
+  .cat-easter-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .cat-bubble {
+    background: #ffffff;
+    color: #0f2745;
+    border: 1.5px solid #fed7aa;
+    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.15);
+    border-radius: 14px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    animation: floatBubble 2.2s ease-in-out infinite;
+  }
+  @keyframes floatBubble {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  @keyframes tailWag {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-12deg); }
+    75% { transform: rotate(14deg); }
+  }
   .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 32px; text-align: center; }
   .hero-badge { display:inline-block; background:rgba(171,218,213,.35); color:var(--primary-dark); font-size:13px; font-weight:700; padding:6px 16px; border-radius:var(--pill-radius); margin-bottom:16px; }
   .hero h1 { font-size: clamp(26px, 4.5vw, 42px); font-weight: 900; line-height: 1.35; margin-bottom: 12px; }
@@ -804,9 +893,83 @@
 <body>
 
 <header class="site-header">
-  <a class="brand" href="index.html"><span class="brand-logo">🌲</span>新鮮人-興生FAQ問答指南(非官方)</a>
+  <a class="brand" href="index.html" onclick="toggleCatEasterEgg(event)" title="點擊召喚守護興大的胖橘貓 🐾">
+    <span class="brand-logo">🌲</span>新鮮人-興生FAQ問答指南(非官方)
+  </a>
   <a class="header-cta" href="#" onclick="openChatSheet('');return false;">🤖 問 新鮮人-興生FAQ</a>
 </header>
+
+<!-- 🐱 往下拉發現很空時的經典圓滾滾橘貓＋爪痕彩蛋 -->
+<div class="pull-cat-wrap" id="pullEasterEgg">
+  <div class="cat-easter-box">
+    <div class="cat-bubble">
+      <span>🐾</span> 喵～往下拉這麼用力做什麼？最上面空空如也喵～
+    </div>
+    <div style="position:relative; display:inline-block;">
+      <svg width="220" height="190" viewBox="0 0 220 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 爪痕 Scratch marks -->
+        <g class="claw-marks" opacity="0.85">
+          <path d="M35 30 Q30 65 24 95" stroke="#ea580c" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M47 25 Q43 68 38 102" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M60 32 Q58 72 54 98" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
+          <path d="M72 40 Q71 68 68 90" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="36" cy="45" r="1.5" fill="#c2410c"/>
+          <circle cx="49" cy="80" r="2" fill="#ea580c"/>
+          <circle cx="63" cy="55" r="1.5" fill="#f59e0b"/>
+        </g>
+        <!-- 粉紅肉球印 Paw print -->
+        <g class="paw-print" opacity="0.85" transform="translate(42, 115) rotate(-15)">
+          <ellipse cx="14" cy="16" rx="8" ry="6.5" fill="#f43f5e"/>
+          <circle cx="5" cy="8" r="3" fill="#fb7185"/>
+          <circle cx="11" cy="4" r="3.2" fill="#fb7185"/>
+          <circle cx="18" cy="4" r="3.2" fill="#fb7185"/>
+          <circle cx="23" cy="8" r="3" fill="#fb7185"/>
+        </g>
+        <!-- 貓咪陰影 -->
+        <ellipse cx="128" cy="172" rx="48" ry="10" fill="rgba(0,0,0,0.08)"/>
+        <!-- 貓尾巴 (左右擺動動態) -->
+        <g class="cat-tail" style="transform-origin: 142px 148px; animation: tailWag 2.4s ease-in-out infinite;">
+          <path d="M142 150 C165 152 188 140 185 110 C182 85 160 88 162 98 C164 106 174 104 172 118 C170 132 152 140 138 142 Z" fill="url(#catOrangeGradient)"/>
+          <path d="M178 102 C181 96 172 92 165 95" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+          <path d="M184 116 C186 112 176 110 172 114" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <!-- 圓滾滾橘貓胖身體 (背影) -->
+        <ellipse cx="128" cy="132" rx="46" ry="38" fill="url(#catOrangeGradient)"/>
+        <!-- 背部虎斑條紋 -->
+        <path d="M112 112 Q128 116 144 112" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
+        <path d="M106 128 Q128 133 150 128" stroke="#c2410c" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+        <path d="M110 144 Q128 149 146 144" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
+        <!-- 貓咪小後腳與粉紅肉球 -->
+        <ellipse cx="94" cy="162" rx="13" ry="9" fill="#fed7aa"/>
+        <circle cx="94" cy="162" r="4" fill="#fb7185"/>
+        <ellipse cx="156" cy="162" rx="13" ry="9" fill="#fed7aa"/>
+        <circle cx="156" cy="162" r="4" fill="#fb7185"/>
+        <!-- 貓咪頭部 (背影) -->
+        <ellipse cx="128" cy="80" rx="34" ry="29" fill="url(#catOrangeGradient)"/>
+        <!-- 頭頂虎斑花紋 -->
+        <path d="M128 56 V68" stroke="#c2410c" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M118 60 Q122 66 120 72" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+        <path d="M138 60 Q134 66 136 72" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+        <!-- 貓耳朵 -->
+        <polygon points="98,72 108,42 122,62" fill="#ea580c"/>
+        <polygon points="102,68 110,48 119,62" fill="#fda4af"/>
+        <polygon points="158,72 148,42 134,62" fill="#ea580c"/>
+        <polygon points="154,68 146,48 137,62" fill="#fda4af"/>
+        <!-- 漸層定義 -->
+        <defs>
+          <linearGradient id="catOrangeGradient" x1="80" y1="50" x2="175" y2="170" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#fdba74"/>
+            <stop offset="45%" stop-color="#fb923c"/>
+            <stop offset="100%" stop-color="#ea580c"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div style="font-size:12px; color:#c2410c; margin-top:2px; font-weight:700;">
+      🐾 爪痕到此一遊！上面有很多實用新生 FAQ 快去看啦～
+    </div>
+  </div>
+</div>
 
 <!-- 📌 資料來源聲明(懶人包中心定位) -->
 <div class="source-banner" id="sourceBanner">
@@ -2099,6 +2262,72 @@
     const d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML;
   }
 
+  // ── 🐱 經典圓滾滾橘貓背影與爪痕彩蛋生成器 ──
+  function getOrangeCatSvgHtml(bubbleMsg, subMsg) {
+    return `
+      <div class="empty-msg" style="padding:28px 16px 36px; grid-column:1/-1;">
+        <div class="cat-easter-box">
+          ${bubbleMsg ? `<div class="cat-bubble"><span>🐾</span> ${bubbleMsg}</div>` : ""}
+          <div style="position:relative; display:inline-block; margin:6px 0;">
+            <svg width="220" height="190" viewBox="0 0 220 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g class="claw-marks" opacity="0.85">
+                <path d="M35 30 Q30 65 24 95" stroke="#ea580c" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M47 25 Q43 68 38 102" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M60 32 Q58 72 54 98" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
+                <path d="M72 40 Q71 68 68 90" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="36" cy="45" r="1.5" fill="#c2410c"/>
+                <circle cx="49" cy="80" r="2" fill="#ea580c"/>
+                <circle cx="63" cy="55" r="1.5" fill="#f59e0b"/>
+              </g>
+              <g class="paw-print" opacity="0.85" transform="translate(42, 115) rotate(-15)">
+                <ellipse cx="14" cy="16" rx="8" ry="6.5" fill="#f43f5e"/>
+                <circle cx="5" cy="8" r="3" fill="#fb7185"/>
+                <circle cx="11" cy="4" r="3.2" fill="#fb7185"/>
+                <circle cx="18" cy="4" r="3.2" fill="#fb7185"/>
+                <circle cx="23" cy="8" r="3" fill="#fb7185"/>
+              </g>
+              <ellipse cx="128" cy="172" rx="48" ry="10" fill="rgba(0,0,0,0.08)"/>
+              <g class="cat-tail" style="transform-origin: 142px 148px; animation: tailWag 2.4s ease-in-out infinite;">
+                <path d="M142 150 C165 152 188 140 185 110 C182 85 160 88 162 98 C164 106 174 104 172 118 C170 132 152 140 138 142 Z" fill="url(#catOrangeGradientGrid)"/>
+                <path d="M178 102 C181 96 172 92 165 95" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+                <path d="M184 116 C186 112 176 110 172 114" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+              </g>
+              <ellipse cx="128" cy="132" rx="46" ry="38" fill="url(#catOrangeGradientGrid)"/>
+              <path d="M112 112 Q128 116 144 112" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
+              <path d="M106 128 Q128 133 150 128" stroke="#c2410c" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+              <path d="M110 144 Q128 149 146 144" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
+              <ellipse cx="94" cy="162" rx="13" ry="9" fill="#fed7aa"/>
+              <circle cx="94" cy="162" r="4" fill="#fb7185"/>
+              <ellipse cx="156" cy="162" rx="13" ry="9" fill="#fed7aa"/>
+              <circle cx="156" cy="162" r="4" fill="#fb7185"/>
+              <ellipse cx="128" cy="80" rx="34" ry="29" fill="url(#catOrangeGradientGrid)"/>
+              <path d="M128 56 V68" stroke="#c2410c" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M118 60 Q122 66 120 72" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+              <path d="M138 60 Q134 66 136 72" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+              <polygon points="98,72 108,42 122,62" fill="#ea580c"/>
+              <polygon points="102,68 110,48 119,62" fill="#fda4af"/>
+              <polygon points="158,72 148,42 134,62" fill="#ea580c"/>
+              <polygon points="154,68 146,48 137,62" fill="#fda4af"/>
+              <defs>
+                <linearGradient id="catOrangeGradientGrid" x1="80" y1="50" x2="175" y2="170" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#fdba74"/>
+                  <stop offset="45%" stop-color="#fb923c"/>
+                  <stop offset="100%" stop-color="#ea580c"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div style="font-size:13.5px; color:#b45309; font-weight:800; margin-top:4px;">
+            ${subMsg || '爪痕到此一遊！上面有很多實用新生 FAQ 快去逛逛啦～ 🐾'}
+          </div>
+          <div style="margin-top:12px;">
+            <a href="#" onclick="openChatSheet('');return false;" class="ai-btn" style="margin:0 auto; padding:8px 18px; font-size:13px; display:inline-flex;">🤖 直接詢問 AI 助手</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   function renderGrid() {
     const query = (document.getElementById("faqSearch").value || "").trim().toLowerCase();
     const allItems = getAllFaqItems();
@@ -2141,7 +2370,7 @@
           <button class="chip active" onclick="setBoard('all')">瀏覽全部問答</button>
         </div>`;
       } else {
-        grid.innerHTML = `<div class="empty-msg">🔍 找不到相關問答,換個關鍵字試試,或直接<a href="#" onclick="openChatSheet('');return false;" style="color:var(--primary);font-weight:700;">問 AI 助手</a>!</div>`;
+        grid.innerHTML = getOrangeCatSvgHtml("喵～學長姐的資料庫裡找不到這個（抓頭 🐾）", "試試看其他關鍵字，或是直接點下方問 AI 助手！");
       }
       return;
     }
@@ -2720,6 +2949,54 @@
     closeModal();
     if (typeof closeFoodSlotModal === "function") closeFoodSlotModal();
     openChatSheet(storeName);
+  }
+
+  // ── 🐱 往下拉手勢彩蛋：觸發經典圓滾滾橘貓與爪痕 ──
+  (function initCatPullEasterEgg() {
+    let touchStartY = 0;
+    let isAtTop = false;
+    let isTriggered = false;
+    const egg = document.getElementById("pullEasterEgg");
+    if (!egg) return;
+
+    window.addEventListener("touchstart", function (e) {
+      if (window.scrollY <= 4 && e.touches.length === 1) {
+        touchStartY = e.touches[0].clientY;
+        isAtTop = true;
+      } else {
+        isAtTop = false;
+      }
+    }, { passive: true });
+
+    window.addEventListener("touchmove", function (e) {
+      if (!isAtTop) return;
+      const currentY = e.touches[0].clientY;
+      const dy = currentY - touchStartY;
+      if (dy > 45 && window.scrollY <= 0) {
+        if (!isTriggered) {
+          isTriggered = true;
+          egg.classList.add("revealed");
+        }
+      }
+    }, { passive: true });
+
+    window.addEventListener("touchend", function () {
+      if (isTriggered) {
+        setTimeout(function () {
+          egg.classList.remove("revealed");
+          isTriggered = false;
+        }, 3600);
+      }
+      isAtTop = false;
+    });
+  })();
+
+  function toggleCatEasterEgg(e) {
+    if (e) e.preventDefault();
+    const egg = document.getElementById("pullEasterEgg");
+    if (egg) {
+      egg.classList.toggle("revealed");
+    }
   }
 
   // ── 🔒 鎖死手機端手勢縮放，防止跑版 ──
