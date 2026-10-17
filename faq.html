@@ -53,9 +53,9 @@
   }
   .search-wrap input:focus { border-color: var(--mint); }
   .search-icon { position:absolute; left:20px; top:50%; transform:translateY(-50%); font-size:18px; }
-  .chip-bar { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; padding: 22px 16px 8px; }
-  .chip { border: none; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 700; padding: 9px 18px; border-radius: var(--pill-radius); background: #fff; color: var(--text-muted); box-shadow: var(--shadow-sm); transition: all .22s; }
-  .chip:hover { transform: translateY(-2px); color: var(--primary); }
+  .chip-bar { display: flex; flex-wrap: wrap; gap: 7px 8px; justify-content: center; padding: 14px 16px 6px; max-width: 920px; margin: 0 auto; }
+  .chip { border: none; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: var(--pill-radius); background: #fff; color: var(--text-muted); box-shadow: var(--shadow-sm); transition: all .2s; line-height: 1.4; white-space: nowrap; }
+  .chip:hover { transform: translateY(-1px); color: var(--primary); }
   .chip.active { background: var(--primary); color: #fff; }
   main { max-width: 1080px; margin: 0 auto; padding: 20px 24px 60px; }
   .result-count { color: var(--text-muted); font-size: 13px; font-weight: 700; margin: 0; }
@@ -1162,6 +1162,7 @@
   .fab:hover { transform: scale(1.08); }
   .fab-food { background: #fff; }
   .fab-bus { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff; font-size: 24px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45); }
+  .fab-slot { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; font-size: 24px; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45); }
   .fab-chat { background: var(--primary); color: #fff; font-size: 24px; }
 
   /* ── 蝦皮式底部聊天室(三段高度 + 拖曳)── */
@@ -1364,6 +1365,8 @@
     color: var(--text-main);
   }
   @media (max-width: 640px) {
+    .chip-bar { padding: 8px 10px 4px; gap: 5px 6px; }
+    .chip { padding: 5px 10px; font-size: 11px; }
     .food-modal-card { padding: 14px 10px; max-height: 92vh; border-radius: 16px; }
     .food-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
     .food-card { padding: 8px; }
@@ -1383,9 +1386,9 @@
 <!-- 浮動按鈕 -->
 <div class="fab-stack">
   <button class="fab fab-bus" id="busFab" title="興大公車即時動態與返鄉交通" onclick="openBusDynamicModal()">🚌</button>
+  <button class="fab fab-slot" id="slotFab" title="興大美食天命拉霸機" onclick="openFoodSlotModal()">🎰</button>
   <button class="fab fab-food" title="興大美食地圖" onclick="openFoodMap()">🍜</button>
   <button class="fab" id="topFab" title="回到頂端" style="display:none; background:#e8f5ee;" onclick="event.stopPropagation(); window.scrollTo({top:0, behavior:'smooth'});">⬆️</button>
-  <button class="fab" id="tourFab" title="自動導覽" style="background:#fffaf0;" onclick="toggleTour()">🎬</button>
   <button class="fab fab-chat" title="AI 聊天室" onclick="toggleChatSheet()">💬</button>
 </div>
 
