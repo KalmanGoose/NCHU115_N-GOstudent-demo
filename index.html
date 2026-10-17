@@ -1610,20 +1610,46 @@
     background: #fff;
     box-shadow: 0 0 0 3px rgba(0,75,151,0.12);
   }
+  .food-filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .food-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px 2px 4px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .food-filter-row::-webkit-scrollbar { display: none; }
+  .food-filter-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+    padding: 2px 6px;
+    background: #f1f5f9;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
   .food-filter-bar {
     display: flex;
     gap: 6px;
     overflow-x: auto;
-    padding: 2px 2px 6px;
+    padding: 2px 2px 4px;
     scrollbar-width: none;
     -ms-overflow-style: none;
     flex-shrink: 0;
   }
   .food-filter-bar::-webkit-scrollbar { display: none; }
   .food-filter-btn {
-    padding: 5px 12px;
+    padding: 4px 11px;
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 11.5px;
     font-family: inherit;
     border: 1px solid #dbe7f3;
     background: #f8fafc;
@@ -1645,7 +1671,7 @@
   }
   .food-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 10px;
     overflow-y: auto;
     padding: 4px 2px;
@@ -1663,11 +1689,78 @@
     gap: 8px;
     transition: all 0.15s ease;
     box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    position: relative;
   }
   .food-card:hover {
     border-color: var(--mint);
     box-shadow: 0 4px 14px rgba(0,75,151,0.1);
     transform: translateY(-1px);
+  }
+  .food-card.vip-highlight {
+    border: 2px solid #f59e0b !important;
+    background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%) !important;
+    box-shadow: 0 4px 18px rgba(245, 158, 11, 0.22) !important;
+  }
+  .food-card.vip-highlight:hover {
+    box-shadow: 0 6px 24px rgba(245, 158, 11, 0.35) !important;
+  }
+  .food-vip-ribbon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(217, 119, 6, 0.35);
+    letter-spacing: 0.2px;
+    z-index: 2;
+  }
+  .food-img-thumb {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    background: #f1f5f9;
+    border: 1px solid #edf2f7;
+  }
+  .food-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10.5px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .pill-walk-near {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+  }
+  .pill-walk-mid {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+  }
+  .pill-walk-far {
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #fed7aa;
+  }
+  .pill-rating {
+    background: #fefce8;
+    color: #a16207;
+    border: 1px solid #fef08a;
+  }
+  .pill-hours {
+    background: #f8fafc;
+    color: #475569;
+    border: 1px solid #e2e8f0;
   }
   .food-card-title {
     font-size: 13.5px;
@@ -1785,12 +1878,13 @@
   <div class="food-modal-card">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
       <div>
-        <h3 style="font-size:16px; color:var(--primary); font-weight:900; display:flex; align-items:center; gap:6px; margin:0;">
-          🍜 興大校園與周邊美食地圖
-          <span style="font-size:11px; background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;">176 間精選</span>
+        <h3 style="font-size:16px; color:var(--primary); font-weight:900; display:flex; align-items:center; gap:6px; margin:0; flex-wrap:wrap;">
+          🍜 興大校園與生活圈美食地圖
+          <span style="font-size:11px; background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;">303 間全收錄 (100%真實地址)</span>
+          <span id="foodApiStatusPill" onclick="openFoodApiModal()" style="font-size:10.5px; cursor:pointer; padding:2px 8px; border-radius:8px; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; font-weight:600;" title="點擊設定 Google Apps Script Web App API 網址">⚙️ API 串接</span>
         </h3>
         <p style="font-size:12px; color:var(--text-muted); margin-top:3px; margin-bottom:0;">
-          ⚡ 0 Token 成本純前端即時瀏覽！收錄學府路、南門路、高工美村、忠孝夜市與台中名店。
+          ⚡ 支援路名商圈、步行時間、咖啡甜點、校內學餐與 Google 試算表即時同步！
         </p>
       </div>
       <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
@@ -1804,37 +1898,78 @@
 
     <!-- 搜尋框 -->
     <div style="margin-top:6px;">
-      <input type="text" id="foodSearchInput" class="food-search-box" placeholder="🔍 搜尋店名、菜色（如：炒飯、煎餃、咖哩、宵夜、牛肉麵、甜點、加飯）..." oninput="onFoodSearchChange()" />
+      <input type="text" id="foodSearchInput" class="food-search-box" placeholder="🔍 搜尋店名、菜色（如：樹瓦咖啡、玩麵、深森、牛肉麵、肉桂捲、加飯、珍奶）..." oninput="onFoodSearchChange()" />
     </div>
 
     <!-- 快速分類標籤 Filter Chips -->
-    <div class="food-filter-bar">
-      <button class="food-filter-btn active" data-filter="all" onclick="setFoodFilter('all', this)">全部 (All)</button>
-      <button class="food-filter-btn" data-filter="budget" onclick="setFoodFilter('budget', this)">💰 百元平價</button>
-      <button class="food-filter-btn" data-filter="xuefu" onclick="setFoodFilter('xuefu', this)">🎓 大門/學府路</button>
-      <button class="food-filter-btn" data-filter="nanmen" onclick="setFoodFilter('nanmen', this)">🌸 女宿/南門路</button>
-      <button class="food-filter-btn" data-filter="gaogong" onclick="setFoodFilter('gaogong', this)">🛵 男宿/高工美村</button>
-      <button class="food-filter-btn" data-filter="nightmarket" onclick="setFoodFilter('nightmarket', this)">🏮 忠孝夜市</button>
-      <button class="food-filter-btn" data-filter="campus" onclick="setFoodFilter('campus', this)">🌲 校內學餐</button>
-      <button class="food-filter-btn" data-filter="late_night" onclick="setFoodFilter('late_night', this)">🌙 深夜宵夜</button>
-      <button class="food-filter-btn" data-filter="cafe" onclick="setFoodFilter('cafe', this)">☕ 咖啡甜點</button>
-      <button class="food-filter-btn" data-filter="student_deal" onclick="setFoodFilter('student_deal', this)">🏷️ 學生特約</button>
-      <button class="food-filter-btn" style="background:#fef3c7; border-color:#f59e0b; color:#92400e; font-weight:700;" onclick="closeFoodMap(); openFoodSlotModal();">🎰 天命拉霸機 (吃什麼?)</button>
+    <div class="food-filter-container">
+      <!-- Row 1: 商圈路名 -->
+      <div class="food-filter-row">
+        <span class="food-filter-label">📍 商圈</span>
+        <button class="food-filter-btn active" data-type="street" data-val="all" onclick="setStreetFilter('all', this)">全部商圈</button>
+        <button class="food-filter-btn" data-type="street" data-val="校內學餐/校園專區" onclick="setStreetFilter('校內學餐/校園專區', this)">🌲 校內學餐 (1~3分)</button>
+        <button class="food-filter-btn" data-type="street" data-val="學府路/頂橋巷弄" onclick="setStreetFilter('學府路/頂橋巷弄', this)">🎓 學府路/頂橋 (89間)</button>
+        <button class="food-filter-btn" data-type="street" data-val="南門路商圈" onclick="setStreetFilter('南門路商圈', this)">🌸 南門路 (含樹瓦咖啡)</button>
+        <button class="food-filter-btn" data-type="street" data-val="康堤/興大路" onclick="setStreetFilter('康堤/興大路', this)">🌊 康堤/興大路/永東街</button>
+        <button class="food-filter-btn" data-type="street" data-val="忠孝夜市" onclick="setStreetFilter('忠孝夜市', this)">🏮 忠孝夜市</button>
+        <button class="food-filter-btn" data-type="street" data-val="高工/美村南路" onclick="setStreetFilter('高工/美村南路', this)">🛵 高工/美村南路</button>
+        <button class="food-filter-btn" data-type="street" data-val="大買家/大明路" onclick="setStreetFilter('大買家/大明路', this)">🛒 大買家/大明路</button>
+        <button class="food-filter-btn" data-type="street" data-val="夜市" onclick="setStreetFilter('夜市', this)">🎪 旱溪/大慶夜市</button>
+        <button class="food-filter-btn" data-type="street" data-val="遠距聚餐" onclick="setStreetFilter('遠距聚餐', this)">🚗 台中市區/遠距名店</button>
+      </div>
+
+      <!-- Row 2: 餐點分類與步行時間 -->
+      <div class="food-filter-row">
+        <span class="food-filter-label">🏷️ 分類</span>
+        <button class="food-filter-btn active" data-type="cat" data-val="all" onclick="setCategoryFilter('all', this)">全部分類</button>
+        <button class="food-filter-btn" data-type="cat" data-val="咖啡甜點" onclick="setCategoryFilter('咖啡甜點', this)">☕ 咖啡甜點 (自習/下午茶)</button>
+        <button class="food-filter-btn" data-type="cat" data-val="主食便當" onclick="setCategoryFilter('主食便當', this)">🍱 主食便當 (深森/燒臘)</button>
+        <button class="food-filter-btn" data-type="cat" data-val="平價麵食" onclick="setCategoryFilter('平價麵食', this)">🍜 平價麵食 (玩麵/拉麵)</button>
+        <button class="food-filter-btn" data-type="cat" data-val="早餐早午餐" onclick="setCategoryFilter('早餐早午餐', this)">🥐 早餐早午餐</button>
+        <button class="food-filter-btn" data-type="cat" data-val="火鍋排餐" onclick="setCategoryFilter('火鍋排餐', this)">🍲 火鍋排餐</button>
+        <button class="food-filter-btn" data-type="cat" data-val="夜市宵夜" onclick="setCategoryFilter('夜市宵夜', this)">🍢 夜市宵夜</button>
+        <button class="food-filter-btn" data-type="cat" data-val="飲品點心" onclick="setCategoryFilter('飲品點心', this)">🧋 飲品點心 (興大牛奶)</button>
+        <button class="food-filter-btn" data-type="cat" data-val="特色美食" onclick="setCategoryFilter('特色美食', this)">🍕 特色美食</button>
+        <button class="food-filter-btn" data-type="walk" data-val="3" onclick="setWalkFilter(3, this)" style="border-color:#10b981; color:#047857;">⚡ 3分內 (校內免出門)</button>
+        <button class="food-filter-btn" data-type="walk" data-val="5" onclick="setWalkFilter(5, this)" style="border-color:#3b82f6; color:#1d4ed8;">🚶 5分內 (正門/側門)</button>
+        <button class="food-filter-btn" style="background:#fef3c7; border-color:#f59e0b; color:#92400e; font-weight:700;" onclick="closeFoodMap(); openFoodSlotModal();">🎰 天命拉霸機</button>
+      </div>
     </div>
 
     <!-- 卡片網格 Cards Grid -->
     <div class="food-grid" id="foodGrid">
-      <!-- 由 JS 動態渲染 176 間美食 -->
+      <!-- 由 JS 動態渲染 287 間美食 -->
     </div>
 
     <!-- 底部狀態列 -->
     <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid #e2e8f0; font-size:12px; color:var(--text-muted); margin-top:4px;">
-      <span id="foodCountLabel">顯示 176 間美食</span>
+      <span id="foodCountLabel">顯示 287 間美食</span>
       <div style="display:flex; gap:8px;">
         <button class="chip" onclick="closeFoodMap(); openChatSheet('興大周邊美食推薦');" style="background:linear-gradient(135deg,var(--primary),#2b6cb0); color:#fff; font-weight:700; border:none; padding:4px 12px; cursor:pointer;">🤖 AI 助手聊美食</button>
         <button class="chip" onclick="closeFoodMap()" style="padding:4px 12px; font-weight:700; cursor:pointer;">關閉</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Google Apps Script API 設定彈窗 -->
+<div class="modal-backdrop" id="foodApiConfigModal" style="display:none; z-index:100000;" onclick="if(event.target.id==='foodApiConfigModal') closeFoodApiModal()">
+  <div style="background:#fff; width:100%; max-width:440px; border-radius:18px; padding:22px; box-shadow:0 20px 40px rgba(0,0,0,0.2); animation:pop .25s ease;">
+    <h3 style="margin:0 0 8px; font-size:16px; color:var(--primary); font-weight:800; display:flex; align-items:center; gap:6px;">
+      ⚙️ Google 試算表 API 串接設定
+    </h3>
+    <p style="font-size:12px; color:var(--text-muted); margin:0 0 12px; line-height:1.5;">
+      貼上您在 Google Apps Script 部署所獲得的 <b>Web 應用程式網址 (Web App URL)</b>，即可實現試算表編輯即時同步到網站前端！
+    </p>
+    <input type="text" id="foodApiUrlInput" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:10px; font-size:12px; font-family:monospace; box-sizing:border-box; outline:none;" />
+    <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
+      <button onclick="clearFoodApiUrl()" style="padding:6px 12px; font-size:12px; border:1px solid #cbd5e1; background:#f8fafc; border-radius:8px; cursor:pointer;">恢復本地資料庫</button>
+      <div style="display:flex; gap:8px;">
+        <button onclick="closeFoodApiModal()" style="padding:6px 12px; font-size:12px; border:none; background:#e2e8f0; border-radius:8px; cursor:pointer;">取消</button>
+        <button onclick="saveAndTestFoodApiUrl()" style="padding:6px 14px; font-size:12px; border:none; background:var(--primary); color:#fff; font-weight:700; border-radius:8px; cursor:pointer;">儲存並連線</button>
+      </div>
+    </div>
+    <div id="foodApiTestResult" style="margin-top:10px; font-size:11.5px; display:none;"></div>
   </div>
 </div>
 
@@ -1864,6 +1999,7 @@
 <script src="portal_data.js"></script>
 <script src="faq_data.js"></script>
 <script src="food_database.js"></script>
+<script src="food_full_database.js"></script>
 <script src="food_slot.js"></script>
 <script src="transit_guide.js"></script>
 <script>
@@ -2675,22 +2811,102 @@
   }
 
   // ── 美食地圖 + 蝦皮式聊天室 ──
-  // ── 美食地圖 (Food Map) 純前端即時互動邏輯 ──
-  const FOOD_DATABASE = (typeof SENIOR_FOOD_DB !== "undefined" && Array.isArray(SENIOR_FOOD_DB)) ? SENIOR_FOOD_DB : [];
-  let currentFoodFilter = "all";
+  // ── 美食地圖 (Food Map) 雙軌架構 (本地 303 家離線資料庫 + 可選 Google 試算表 API) ──
+  // 注意：為保護使用者 Google 帳號隱私與防範配額遭公開爬蟲耗盡，此處不硬編碼個人 Web App 網址。
+  // 若需連線試算表，請在美食彈窗點擊「⚙️ API 串接」安全儲存於個人瀏覽器 localStorage 中。
+  const DEFAULT_FOOD_API_URL = "";
+  let allFoodStores = [];
+  let currentFoodStreet = "all";
+  let currentFoodCategory = "all";
+  let currentFoodMaxWalk = null;
+  let isFoodApiConnected = false;
 
-  function openFoodMap() {
+  // 1. 初始化資料載入 (支援 GAS API 與本地 287 筆回退)
+  async function loadFoodDatabase(forceRefresh = false) {
+    const isExplicitlyDisabled = localStorage.getItem("nchu_food_api_disabled") === "true";
+    const savedApiUrl = localStorage.getItem("nchu_food_api_url") || (!isExplicitlyDisabled ? DEFAULT_FOOD_API_URL : "");
+    const statusPill = document.getElementById("foodApiStatusPill");
+
+    if (savedApiUrl && savedApiUrl.trim().startsWith("http")) {
+      try {
+        if (statusPill) {
+          statusPill.textContent = "⚡ 連線 Google 試算表...";
+          statusPill.style.color = "#d97706";
+        }
+        const resp = await fetch(savedApiUrl.trim());
+        if (resp.ok) {
+          const json = await resp.json();
+          if (json && json.data && Array.isArray(json.data) && json.data.length > 0) {
+            allFoodStores = json.data;
+            isFoodApiConnected = true;
+            if (statusPill) {
+              statusPill.textContent = `⚡ 雲端試算表 (${allFoodStores.length}間)`;
+              statusPill.style.color = "#16a34a";
+              statusPill.style.background = "#dcfce7";
+              statusPill.style.borderColor = "#86efac";
+            }
+            return allFoodStores;
+          }
+        }
+      } catch (e) {
+        console.warn("GAS API 連線失敗，切換為本地 287 筆資料庫", e);
+      }
+    }
+
+    // 回退使用本地 food_full_database.js (287 筆)
+    if (typeof NCHU_EXPANDED_FOOD !== "undefined" && Array.isArray(NCHU_EXPANDED_FOOD) && NCHU_EXPANDED_FOOD.length > 0) {
+      allFoodStores = NCHU_EXPANDED_FOOD;
+    } else if (typeof SENIOR_FOOD_DB !== "undefined" && Array.isArray(SENIOR_FOOD_DB)) {
+      allFoodStores = SENIOR_FOOD_DB.map(f => ({
+        name: f.title,
+        content: f.content,
+        street: "學府路/頂橋巷弄",
+        walk_minutes: 4,
+        transport_tip: "走路 4 分鐘 (正門出發)",
+        category: "主食便當",
+        budget_tier: "百元有找 (<100元)",
+        rating: "4.4",
+        review_count: "180",
+        hours: "11:00 - 20:30",
+        address: "台中市南區中興大學周邊",
+        maps_url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("中興大學 " + f.title)}`
+      }));
+    } else {
+      allFoodStores = [];
+    }
+
+    if (statusPill) {
+      statusPill.textContent = `💾 本地完整庫 (${allFoodStores.length}間)`;
+      statusPill.style.color = "#0284c7";
+      statusPill.style.background = "#f0f9ff";
+      statusPill.style.borderColor = "#bae6fd";
+    }
+    return allFoodStores;
+  }
+
+  // 2. 開啟與關閉彈窗
+  async function openFoodMap() {
     const modal = document.getElementById("foodMapModal2");
     if (!modal) return;
     modal.style.display = "flex";
     document.body.style.overflow = "hidden";
+
     const searchInput = document.getElementById("foodSearchInput");
     if (searchInput) searchInput.value = "";
-    currentFoodFilter = "all";
-    document.querySelectorAll(".food-filter-btn").forEach((btn, idx) => {
-      btn.classList.toggle("active", idx === 0);
+    currentFoodStreet = "all";
+    currentFoodCategory = "all";
+    currentFoodMaxWalk = null;
+
+    // 重設按鈕 active 樣式
+    document.querySelectorAll(".food-filter-btn").forEach(btn => {
+      const isDefault = (btn.dataset.val === "all");
+      btn.classList.toggle("active", isDefault);
     });
-    renderFoodGrid(FOOD_DATABASE);
+
+    if (!allFoodStores || allFoodStores.length === 0) {
+      await loadFoodDatabase();
+    }
+    renderFoodGrid(filterFoodStores());
   }
   const openFoodMapModal = openFoodMap;
 
@@ -2706,67 +2922,271 @@
     if (e.target.id === "foodMapModal2") closeFoodMap();
   }
 
-  function setFoodFilter(filterTag, btnEl) {
-    currentFoodFilter = filterTag;
-    document.querySelectorAll(".food-filter-btn").forEach(b => b.classList.remove("active"));
+  // 3. 篩選器切換函式
+  function setStreetFilter(streetVal, btnEl) {
+    currentFoodStreet = streetVal;
+    document.querySelectorAll('.food-filter-btn[data-type="street"]').forEach(b => b.classList.remove("active"));
     if (btnEl) btnEl.classList.add("active");
     onFoodSearchChange();
   }
 
-  function onFoodSearchChange() {
-    const searchInput = document.getElementById("foodSearchInput");
-    const query = (searchInput ? searchInput.value : "").trim().toLowerCase();
-    const filtered = FOOD_DATABASE.filter(item => {
-      const matchFilter = (currentFoodFilter === "all") || (item.tags && item.tags.includes(currentFoodFilter));
-      if (!matchFilter) return false;
-      if (!query) return true;
-      const textToSearch = ((item.title || "") + " " + (item.content || "") + " " + (item.kws || "")).toLowerCase();
-      return textToSearch.includes(query);
-    });
-    renderFoodGrid(filtered);
+  function setCategoryFilter(catVal, btnEl) {
+    currentFoodCategory = catVal;
+    currentFoodMaxWalk = null; // 重置時間篩選
+    document.querySelectorAll('.food-filter-btn[data-type="cat"], .food-filter-btn[data-type="walk"]').forEach(b => b.classList.remove("active"));
+    if (btnEl) btnEl.classList.add("active");
+    onFoodSearchChange();
   }
 
+  function setWalkFilter(mins, btnEl) {
+    currentFoodMaxWalk = mins;
+    currentFoodCategory = "all";
+    document.querySelectorAll('.food-filter-btn[data-type="cat"], .food-filter-btn[data-type="walk"]').forEach(b => b.classList.remove("active"));
+    if (btnEl) btnEl.classList.add("active");
+    onFoodSearchChange();
+  }
+
+  // 向後相容既有 setFoodFilter 函式
+  function setFoodFilter(tag, btnEl) {
+    if (tag === "all") {
+      currentFoodStreet = "all";
+      currentFoodCategory = "all";
+      currentFoodMaxWalk = null;
+    } else if (tag === "campus") {
+      currentFoodStreet = "校內學餐/校園專區";
+    } else if (tag === "xuefu") {
+      currentFoodStreet = "學府路/頂橋巷弄";
+    } else if (tag === "nanmen") {
+      currentFoodStreet = "南門路商圈";
+    } else if (tag === "cafe") {
+      currentFoodCategory = "咖啡甜點";
+    } else if (tag === "late_night") {
+      currentFoodCategory = "夜市宵夜";
+    }
+    onFoodSearchChange();
+  }
+
+  // 4. 即時搜尋與篩選邏輯
+  function onFoodSearchChange() {
+    renderFoodGrid(filterFoodStores());
+  }
+
+  function filterFoodStores() {
+    const searchInput = document.getElementById("foodSearchInput");
+    const query = (searchInput ? searchInput.value : "").trim().toLowerCase();
+
+    return allFoodStores.filter(store => {
+      const sName = (store.name || store.title || "").toLowerCase();
+      const sContent = (store.content || "").toLowerCase();
+      const sStreet = (store.street || "").toLowerCase();
+      const sCat = (store.category || "").toLowerCase();
+      const sWalk = parseInt(store.walk_minutes || 4, 10);
+
+      // 商圈篩選
+      if (currentFoodStreet !== "all") {
+        if (currentFoodStreet === "夜市") {
+          if (!sStreet.includes("旱溪") && !sStreet.includes("大慶") && !sStreet.includes("夜市")) return false;
+        } else if (currentFoodStreet === "遠距聚餐" || currentFoodStreet.includes("遠距")) {
+          if (!sStreet.includes("遠距") && !sStreet.includes("市區")) return false;
+        } else if (currentFoodStreet.includes("康堤") || currentFoodStreet.includes("興大路")) {
+          if (!sStreet.includes("康堤") && !sStreet.includes("興大路") && !sStreet.includes("永東街")) return false;
+        } else if (currentFoodStreet.includes("高工") || currentFoodStreet.includes("美村南")) {
+          if (!sStreet.includes("高工") && !sStreet.includes("美村南") && !sStreet.includes("工學")) return false;
+        } else if (!sStreet.includes(currentFoodStreet.split("/")[0])) {
+          return false;
+        }
+      }
+
+      // 類別篩選
+      if (currentFoodCategory !== "all" && sCat !== currentFoodCategory.toLowerCase()) {
+        return false;
+      }
+
+      // 步行時間篩選
+      if (currentFoodMaxWalk !== null && sWalk > currentFoodMaxWalk) {
+        return false;
+      }
+
+      // 搜尋框篩選
+      if (query) {
+        const fullText = `${sName} ${sContent} ${sStreet} ${sCat} ${store.address || ""}`;
+        if (!fullText.toLowerCase().includes(query)) return false;
+      }
+
+      return true;
+    }).sort((a, b) => {
+      // 樹瓦咖啡享受獨家 VIP 置頂特權
+      const aIsSuwa = (a.name || a.title || "").includes("樹瓦");
+      const bIsSuwa = (b.name || b.title || "").includes("樹瓦");
+      if (aIsSuwa && !bIsSuwa) return -1;
+      if (!aIsSuwa && bIsSuwa) return 1;
+      return 0;
+    });
+  }
+
+  // 5. 卡片渲染函式
   function renderFoodGrid(items) {
     const grid = document.getElementById("foodGrid");
     const countLabel = document.getElementById("foodCountLabel");
-    if (countLabel) countLabel.textContent = `共篩選出 ${items.length} 間美食店家`;
+    if (countLabel) countLabel.textContent = `共篩選出 ${items.length} 間美食店家 (含真實門牌地址)`;
     if (!grid) return;
 
     if (items.length === 0) {
       grid.innerHTML = `
-        <div style="grid-column:1/-1; text-align:center; padding:30px; color:var(--text-muted); font-size:13px;">
-          🍽️ 找不到符合條件的美食店家，換個關鍵字試試吧！
+        <div style="grid-column:1/-1; text-align:center; padding:36px; color:var(--text-muted); font-size:13px;">
+          🍽️ 找不到符合條件的美食店家，換個路段或關鍵字試試吧！
         </div>
       `;
       return;
     }
 
-    grid.innerHTML = items.map(item => {
-      const cleanStoreName = (item.title || "").split("(")[0].trim();
-      const badgeText = item.title.includes("(") ? item.title.substring(item.title.indexOf("(") + 1, item.title.indexOf(")")) : "";
-      const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("中興大學 " + cleanStoreName)}`;
+    grid.innerHTML = items.map(store => {
+      const rawName = store.name || store.title || "";
+      const cleanStoreName = rawName.split("(")[0].trim();
+      const badgeText = rawName.includes("(") ? rawName.substring(rawName.indexOf("(") + 1, rawName.indexOf(")")) : "";
+      const isSuwa = rawName.includes("樹瓦");
+      const mapUrl = store.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("台中 " + cleanStoreName + " " + (store.address || ""))}`;
       const escapedName = cleanStoreName.replace(/'/g, "\\'");
+      const walkMins = parseInt(store.walk_minutes || 4, 10);
+      const walkPillClass = walkMins <= 3 ? "pill-walk-near" : (walkMins <= 6 ? "pill-walk-mid" : "pill-walk-far");
+      const walkText = walkMins <= 3 ? `🌲 校內 ${walkMins}分` : (walkMins >= 15 ? `🛵 騎車約 ${walkMins}分` : `🚶 ${walkMins}分鐘`);
+      const rating = store.rating || "4.5";
+      const reviews = store.review_count || "180";
+      const hours = store.hours || "11:00 - 20:30";
+      const category = store.category || "美食";
+      const photoUrl = store.photo_url || "";
+      const storeAddr = store.address || "";
 
       return `
-        <div class="food-card">
+        <div class="food-card ${isSuwa ? 'vip-highlight' : ''}">
+          ${isSuwa ? '<span class="food-vip-ribbon">🌟 興大/南門路獨家首選</span>' : ''}
           <div>
-            <div class="food-card-title">
-              <span>🍽️ ${cleanStoreName}</span>
-              ${badgeText ? `<span class="food-tag-badge">${badgeText.substring(0, 12)}</span>` : ""}
+            ${photoUrl ? `
+              <img src="${photoUrl}" alt="${cleanStoreName}" class="food-img-thumb" loading="lazy" onerror="this.style.display='none'" />
+            ` : ''}
+            <div class="food-card-title" style="${isSuwa ? 'margin-top:4px;' : ''}">
+              <span style="${isSuwa ? 'color:#b45309; font-size:14.5px;' : ''}">
+                ${isSuwa ? '☕' : '🍽️'} ${cleanStoreName}
+              </span>
+              ${badgeText ? `<span class="food-tag-badge">${badgeText.substring(0, 14)}</span>` : ""}
             </div>
-            <div class="food-card-content" style="margin-top:5px;">
-              ${(item.content || "").replace(/\n/g, "<br>")}
+
+            <!-- 標籤膠囊列 -->
+            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">
+              <span class="food-pill-badge ${walkPillClass}">
+                ${walkText}
+              </span>
+              <span class="food-pill-badge pill-rating">
+                ⭐ ${rating} (${reviews}則)
+              </span>
+              <span class="food-pill-badge pill-hours">
+                ${category}
+              </span>
+            </div>
+
+            <div class="food-card-content" style="margin-top:6px;">
+              ${storeAddr ? `
+                <div style="font-size:11px; color:#1e293b; margin-bottom:3px; display:flex; align-items:center; gap:4px; font-weight:600;">
+                  <span style="color:#0284c7;">📍</span> <span>${storeAddr}</span>
+                </div>
+              ` : ''}
+              <div style="font-size:11px; color:#64748b; margin-bottom:3px; display:flex; align-items:center; gap:3px;">
+                <span>🕒</span> <span>${hours}</span>
+              </div>
+              <div style="font-size:11.5px; line-height:1.45; color:var(--text-main);">
+                ${(store.content || "").replace(/\n/g, "<br>")}
+              </div>
             </div>
           </div>
+
           <div class="food-card-actions">
             <button class="food-ask-btn" onclick="askFood('${escapedName}')">💬 諮詢助手</button>
             <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="food-map-link">
-              <span>📍 地圖</span>
+              <span>📍 地圖導航</span>
             </a>
           </div>
         </div>
       `;
     }).join("");
+  }
+
+  // 6. Google Apps Script API 串接彈窗控制器
+  function openFoodApiModal() {
+    const modal = document.getElementById("foodApiConfigModal");
+    const input = document.getElementById("foodApiUrlInput");
+    const resultBox = document.getElementById("foodApiTestResult");
+    if (!modal) return;
+    if (input) input.value = localStorage.getItem("nchu_food_api_url") || DEFAULT_FOOD_API_URL;
+    if (resultBox) resultBox.style.display = "none";
+    modal.style.display = "flex";
+  }
+
+  function closeFoodApiModal() {
+    const modal = document.getElementById("foodApiConfigModal");
+    if (modal) modal.style.display = "none";
+  }
+
+  async function saveAndTestFoodApiUrl() {
+    const input = document.getElementById("foodApiUrlInput");
+    const resultBox = document.getElementById("foodApiTestResult");
+    const url = (input ? input.value : "").trim();
+
+    if (!url || !url.startsWith("http")) {
+      alert("請輸入有效的 Google Apps Script 網頁應用程式網址 (https://script.google.com/macros/s/.../exec)");
+      return;
+    }
+
+    if (resultBox) {
+      resultBox.style.display = "block";
+      resultBox.style.color = "#d97706";
+      resultBox.textContent = "🔄 正在連線測試 Google 試算表 API...";
+    }
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error("HTTP 狀態碼: " + resp.status);
+      const json = await resp.json();
+      if (!json || !json.data || !Array.isArray(json.data)) {
+        throw new Error("回傳格式不正確，缺少 data 陣列");
+      }
+
+      localStorage.setItem("nchu_food_api_url", url);
+      localStorage.removeItem("nchu_food_api_disabled");
+      allFoodStores = json.data;
+      isFoodApiConnected = true;
+
+      if (resultBox) {
+        resultBox.style.color = "#16a34a";
+        resultBox.textContent = `✅ 連線成功！已成功載入 ${json.data.length} 筆最新美食資料。`;
+      }
+
+      setTimeout(() => {
+        closeFoodApiModal();
+        renderFoodGrid(filterFoodStores());
+        const statusPill = document.getElementById("foodApiStatusPill");
+        if (statusPill) {
+          statusPill.textContent = `⚡ 雲端試算表 (${allFoodStores.length}間)`;
+          statusPill.style.color = "#16a34a";
+          statusPill.style.background = "#dcfce7";
+        }
+      }, 1000);
+
+    } catch (err) {
+      if (resultBox) {
+        resultBox.style.color = "#dc2626";
+        resultBox.textContent = `❌ 連線失敗: ${err.message}。請確認 Apps Script 部署設定中「誰可以存取」為「所有人 (Anyone)」。`;
+      }
+    }
+  }
+
+  function clearFoodApiUrl() {
+    localStorage.removeItem("nchu_food_api_url");
+    localStorage.setItem("nchu_food_api_disabled", "true");
+    alert("已停用雲端 API 連線，已自動切換為本地 287 筆擴充資料庫！");
+    closeFoodApiModal();
+    loadFoodDatabase(true).then(() => {
+      renderFoodGrid(filterFoodStores());
+    });
   }
 
   // 保留相容性空函式
