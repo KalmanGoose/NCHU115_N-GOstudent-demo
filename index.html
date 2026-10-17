@@ -84,24 +84,24 @@
     box-shadow: 0 4px 14px rgba(0,0,0,0.22);
   }
 
-  /* ── 🐱 往下拉發現很空時的橘貓背影與爪痕彩蛋 ── */
+  /* ── 🐱 往下拉發現很空時的守護黑貓背影與爪痕彩蛋 ── */
   .pull-cat-wrap {
     width: 100%;
     max-height: 0;
     opacity: 0;
     overflow: hidden;
-    background: linear-gradient(180deg, rgba(0, 75, 151, 0.08) 0%, rgba(240, 248, 255, 0) 100%);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.06) 0%, rgba(240, 248, 255, 0) 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.25, 1), opacity 0.35s ease, padding 0.35s ease;
+    transition: max-height 0.28s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.22s ease, padding 0.22s ease;
     user-select: none;
   }
   .pull-cat-wrap.revealed {
-    max-height: 270px;
+    max-height: 250px;
     opacity: 1;
-    padding: 16px 16px 8px;
+    padding: 14px 16px 6px;
   }
   .cat-easter-box {
     display: flex;
@@ -112,9 +112,9 @@
   }
   .cat-bubble {
     background: #ffffff;
-    color: #0f2745;
-    border: 1.5px solid #fed7aa;
-    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.15);
+    color: #0f172a;
+    border: 1.5px solid #cbd5e1;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
     border-radius: 14px;
     padding: 6px 14px;
     font-size: 12.5px;
@@ -893,32 +893,32 @@
 <body>
 
 <header class="site-header">
-  <a class="brand" href="index.html" onclick="toggleCatEasterEgg(event)" title="點擊召喚守護興大的胖橘貓 🐾">
+  <a class="brand" href="index.html" onclick="toggleCatEasterEgg(event)" title="點擊召喚守護興大的黑貓 🐾">
     <span class="brand-logo">🌲</span>新鮮人-興生FAQ問答指南(非官方)
   </a>
   <a class="header-cta" href="#" onclick="openChatSheet('');return false;">🤖 問 新鮮人-興生FAQ</a>
 </header>
 
-<!-- 🐱 往下拉發現很空時的經典圓滾滾橘貓＋爪痕彩蛋 -->
+<!-- 🐱 往下拉發現很空時的守護黑貓＋爪痕彩蛋 -->
 <div class="pull-cat-wrap" id="pullEasterEgg">
   <div class="cat-easter-box">
     <div class="cat-bubble">
-      <span>🐾</span> 喵～往下拉這麼用力做什麼？最上面空空如也喵～
+      <span>🐾</span> 喵～我是守護興大的黑貓！往下拉這麼用力做什麼？最上面空空如也喵～
     </div>
     <div style="position:relative; display:inline-block;">
       <svg width="220" height="190" viewBox="0 0 220 190" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- 爪痕 Scratch marks -->
-        <g class="claw-marks" opacity="0.85">
-          <path d="M35 30 Q30 65 24 95" stroke="#ea580c" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M47 25 Q43 68 38 102" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round"/>
-          <path d="M60 32 Q58 72 54 98" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
-          <path d="M72 40 Q71 68 68 90" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="36" cy="45" r="1.5" fill="#c2410c"/>
-          <circle cx="49" cy="80" r="2" fill="#ea580c"/>
-          <circle cx="63" cy="55" r="1.5" fill="#f59e0b"/>
+        <g class="claw-marks" opacity="0.8">
+          <path d="M35 30 Q30 65 24 95" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M47 25 Q43 68 38 102" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M60 32 Q58 72 54 98" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+          <path d="M72 40 Q71 68 68 90" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="36" cy="45" r="1.5" fill="#334155"/>
+          <circle cx="49" cy="80" r="2" fill="#1e293b"/>
+          <circle cx="63" cy="55" r="1.5" fill="#475569"/>
         </g>
         <!-- 粉紅肉球印 Paw print -->
-        <g class="paw-print" opacity="0.85" transform="translate(42, 115) rotate(-15)">
+        <g class="paw-print" opacity="0.9" transform="translate(42, 115) rotate(-15)">
           <ellipse cx="14" cy="16" rx="8" ry="6.5" fill="#f43f5e"/>
           <circle cx="5" cy="8" r="3" fill="#fb7185"/>
           <circle cx="11" cy="4" r="3.2" fill="#fb7185"/>
@@ -926,47 +926,61 @@
           <circle cx="23" cy="8" r="3" fill="#fb7185"/>
         </g>
         <!-- 貓咪陰影 -->
-        <ellipse cx="128" cy="172" rx="48" ry="10" fill="rgba(0,0,0,0.08)"/>
-        <!-- 貓尾巴 (左右擺動動態) -->
+        <ellipse cx="128" cy="172" rx="48" ry="10" fill="rgba(15,23,42,0.12)"/>
+        <!-- 黑貓尾巴 (左右擺動動態) -->
         <g class="cat-tail" style="transform-origin: 142px 148px; animation: tailWag 2.4s ease-in-out infinite;">
-          <path d="M142 150 C165 152 188 140 185 110 C182 85 160 88 162 98 C164 106 174 104 172 118 C170 132 152 140 138 142 Z" fill="url(#catOrangeGradient)"/>
-          <path d="M178 102 C181 96 172 92 165 95" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
-          <path d="M184 116 C186 112 176 110 172 114" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+          <path d="M142 150 C165 152 188 140 185 110 C182 85 160 88 162 98 C164 106 174 104 172 118 C170 132 152 140 138 142 Z" fill="url(#catBlackGradient)"/>
+          <path d="M178 102 C181 96 172 92 165 95" stroke="rgba(255,255,255,0.25)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M184 116 C186 112 176 110 172 114" stroke="rgba(255,255,255,0.2)" stroke-width="2.5" stroke-linecap="round"/>
         </g>
-        <!-- 圓滾滾橘貓胖身體 (背影) -->
-        <ellipse cx="128" cy="132" rx="46" ry="38" fill="url(#catOrangeGradient)"/>
-        <!-- 背部虎斑條紋 -->
-        <path d="M112 112 Q128 116 144 112" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
-        <path d="M106 128 Q128 133 150 128" stroke="#c2410c" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
-        <path d="M110 144 Q128 149 146 144" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
-        <!-- 貓咪小後腳與粉紅肉球 -->
-        <ellipse cx="94" cy="162" rx="13" ry="9" fill="#fed7aa"/>
-        <circle cx="94" cy="162" r="4" fill="#fb7185"/>
-        <ellipse cx="156" cy="162" rx="13" ry="9" fill="#fed7aa"/>
-        <circle cx="156" cy="162" r="4" fill="#fb7185"/>
+        <!-- 圓滾滾黑貓胖身體 (背影) -->
+        <ellipse cx="128" cy="132" rx="46" ry="38" fill="url(#catBlackGradient)"/>
+        <!-- 黑貓毛色絲滑立體光澤 (Back Sheen Highlights) -->
+        <path d="M112 114 Q128 118 144 114" stroke="rgba(255,255,255,0.16)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M106 128 Q128 133 150 128" stroke="rgba(255,255,255,0.22)" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M110 142 Q128 147 146 142" stroke="rgba(255,255,255,0.16)" stroke-width="3" stroke-linecap="round"/>
+        <!-- 經典紅項圈＋金色鈴鐺 -->
+        <path d="M106 102 Q128 107 150 102" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="128" cy="106" r="4.5" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+        <circle cx="128" cy="107.5" r="1.2" fill="#854d0e"/>
+        <!-- 黑小腳與粉紅肉球 -->
+        <ellipse cx="94" cy="162" rx="13" ry="9" fill="#1e293b"/>
+        <circle cx="94" cy="162" r="4.2" fill="#fb7185"/>
+        <circle cx="90" cy="157" r="1.8" fill="#fda4af"/>
+        <circle cx="94" cy="155" r="1.8" fill="#fda4af"/>
+        <circle cx="98" cy="157" r="1.8" fill="#fda4af"/>
+        <ellipse cx="156" cy="162" rx="13" ry="9" fill="#1e293b"/>
+        <circle cx="156" cy="162" r="4.2" fill="#fb7185"/>
+        <circle cx="152" cy="157" r="1.8" fill="#fda4af"/>
+        <circle cx="156" cy="155" r="1.8" fill="#fda4af"/>
+        <circle cx="160" cy="157" r="1.8" fill="#fda4af"/>
         <!-- 貓咪頭部 (背影) -->
-        <ellipse cx="128" cy="80" rx="34" ry="29" fill="url(#catOrangeGradient)"/>
-        <!-- 頭頂虎斑花紋 -->
-        <path d="M128 56 V68" stroke="#c2410c" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M118 60 Q122 66 120 72" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
-        <path d="M138 60 Q134 66 136 72" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
-        <!-- 貓耳朵 -->
-        <polygon points="98,72 108,42 122,62" fill="#ea580c"/>
-        <polygon points="102,68 110,48 119,62" fill="#fda4af"/>
-        <polygon points="158,72 148,42 134,62" fill="#ea580c"/>
-        <polygon points="154,68 146,48 137,62" fill="#fda4af"/>
+        <ellipse cx="128" cy="80" rx="34" ry="29" fill="url(#catBlackGradient)"/>
+        <!-- 頭頂絲滑毛流光澤 -->
+        <path d="M118 64 Q128 68 138 64" stroke="rgba(255,255,255,0.22)" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- 兩側俏皮白色鬍鬚 -->
+        <path d="M96 78 Q82 74 72 76" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M95 83 Q80 84 70 88" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M160 78 Q174 74 184 76" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M161 83 Q176 84 186 88" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- 貓耳朵 (黑耳外輪廓＋粉紅內耳) -->
+        <polygon points="98,72 108,42 122,62" fill="#0f172a"/>
+        <polygon points="102,68 110,48 119,62" fill="#fb7185"/>
+        <polygon points="158,72 148,42 134,62" fill="#0f172a"/>
+        <polygon points="154,68 146,48 137,62" fill="#fb7185"/>
         <!-- 漸層定義 -->
         <defs>
-          <linearGradient id="catOrangeGradient" x1="80" y1="50" x2="175" y2="170" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#fdba74"/>
-            <stop offset="45%" stop-color="#fb923c"/>
-            <stop offset="100%" stop-color="#ea580c"/>
+          <linearGradient id="catBlackGradient" x1="80" y1="45" x2="175" y2="170" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#334155"/>
+            <stop offset="35%" stop-color="#1e293b"/>
+            <stop offset="70%" stop-color="#0f172a"/>
+            <stop offset="100%" stop-color="#020617"/>
           </linearGradient>
         </defs>
       </svg>
     </div>
-    <div style="font-size:12px; color:#c2410c; margin-top:2px; font-weight:700;">
-      🐾 爪痕到此一遊！上面有很多實用新生 FAQ 快去看啦～
+    <div style="font-size:12px; color:#475569; margin-top:2px; font-weight:700;">
+      🐾 黑貓爪痕到此一遊！上面有很多實用新生 FAQ 快去看看啦～
     </div>
   </div>
 </div>
@@ -1201,8 +1215,8 @@
   <div class="faq-controls-bar">
     <div class="faq-controls-left">
       <span class="result-count" id="resultCount">共 40 篇問答指引</span>
-      <button class="faq-tool-btn faq-btn-add" onclick="openCustomFaqModal()" title="新增一筆本地自訂問答卡片（預留備用空間）">
-        <span>➕</span> 新增備用卡
+      <button class="faq-tool-btn faq-btn-add" onclick="openCustomFaqModal()" title="新增一筆本地自訂問答卡片">
+        <span>➕</span> 新增卡片
       </button>
       <button class="faq-tool-btn" onclick="exportCustomFaqs()" title="匯出所有自訂卡片 (JSON) 方便未來整理搜集">
         <span>💾</span> 匯出備份
@@ -1260,7 +1274,7 @@
   </div>
 </div>
 
-<!-- ✏️ 自訂問答卡片 / 備用空格編輯彈窗 -->
+<!-- ✏️ 自訂問答卡片編輯彈窗 -->
 <div class="modal-backdrop" id="customFaqModal" onclick="if(event.target===this)closeCustomFaqModal()">
   <div class="modal-card" style="max-width:520px; border-radius:20px; padding:24px;">
     <button class="modal-close" onclick="closeCustomFaqModal()">✕</button>
@@ -1268,7 +1282,7 @@
       <span style="font-size:24px;">📝</span>
       <div>
         <h3 id="customModalTitle" style="font-size:17.5px; font-weight:900; margin:0; color:var(--text-main);">新增自訂問答卡片</h3>
-        <p style="font-size:12px; color:var(--text-muted); margin:2px 0 0;">預留備用空間，內容儲存於本機瀏覽器，隨時可修改與匯出！</p>
+        <p style="font-size:12px; color:var(--text-muted); margin:2px 0 0;">內容安全儲存於本機瀏覽器，重新整理不遺失，隨時可修改與匯出！</p>
       </div>
     </div>
     
@@ -2180,38 +2194,23 @@
   let currentBoard = "all";
   let currentFaqSort = "default";
 
-  // ── 📝 預留給使用者的本地備用卡牌範本 ──
-  const DEFAULT_CUSTOM_FAQS = [
-    {
-      id: "custom_demo_1",
-      board: "course",
-      q: "📝 [預留備用 1] 我的系所選課必修避雷與教授攻略（點擊可修改）",
-      a: "這是為你預留的自訂問答卡牌空格！\n點擊右上角的「✏️」或點開此卡片，即可自由記錄：\n• 系上必修哪一堂最硬、考古題情報\n• 通識哪位老師給分甜、報告評分標準\n• 加簽寄 Email 給教授的禮貌範本\n所有筆記均安全保存在你的瀏覽器中，重新整理不會遺失！",
-      keywords: ["自訂筆記", "選課攻略", "避雷指南", "系所筆記"],
-      isCustom: true,
-      updatedAt: Date.now()
-    },
-    {
-      id: "custom_demo_2",
-      board: "dorm",
-      q: "📝 [預留備用 2] 我的中興校園私房愛店與生活秘笈（點擊可修改）",
-      a: "這是第二個為你預留的備用卡牌空格！\n你可以在此記錄：\n• 忠孝夜市私房宵夜、南門路最讚飲料店\n• 宿舍洗烘衣機離峰時段、生活採買推薦\n• 圖書館地下室或自習室最舒適安靜的角落\n點擊上方「💾 匯出備份」還能一次將筆記打包成 JSON 備份或分享！",
-      keywords: ["私房生活", "宿舍秘笈", "愛店名單", "私房攻略"],
-      isCustom: true,
-      updatedAt: Date.now()
-    }
-  ];
+  // ── 📝 使用者本地自訂問答卡片（預設為空，已砍掉預留備用卡） ──
+  const DEFAULT_CUSTOM_FAQS = [];
 
   function getCustomFaqs() {
     try {
       const stored = localStorage.getItem("nchu_custom_faqs");
-      if (!stored) {
-        localStorage.setItem("nchu_custom_faqs", JSON.stringify(DEFAULT_CUSTOM_FAQS));
-        return DEFAULT_CUSTOM_FAQS;
+      if (!stored) return [];
+      const parsed = JSON.parse(stored);
+      if (!Array.isArray(parsed)) return [];
+      // 自動清理舊有的預留備用卡 (如 custom_demo_1, custom_demo_2, custom_reserve_*)
+      const cleaned = parsed.filter(item => item && item.id && !item.id.startsWith("custom_demo_") && !item.id.startsWith("custom_reserve_"));
+      if (cleaned.length !== parsed.length) {
+        localStorage.setItem("nchu_custom_faqs", JSON.stringify(cleaned));
       }
-      return JSON.parse(stored);
+      return cleaned;
     } catch(e) {
-      return DEFAULT_CUSTOM_FAQS;
+      return [];
     }
   }
 
@@ -2286,7 +2285,7 @@
       }
     }
 
-    title.textContent = "➕ 新增自訂問答卡片（預留備用空間）";
+    title.textContent = "➕ 新增自訂問答卡片";
     document.getElementById("customFaqId").value = "";
     delBtn.style.display = "none";
     modal.style.display = "flex";
@@ -2491,7 +2490,7 @@
     const chips = [
       ["all", "✨ 全部"],
       ["starred", `⭐ 我的收藏 (${starCount})`],
-      ["custom", `📝 自訂備用 (${customCount})`]
+      ["custom", customCount > 0 ? `📝 我的筆記 (${customCount})` : "📝 我的筆記"]
     ].concat(Object.entries(BOARD_NAMES).filter(([k]) => k !== "custom"));
 
     chipBar.innerHTML = chips.map(([k, label]) =>
@@ -2517,63 +2516,75 @@
     const d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML;
   }
 
-  // ── 🐱 經典圓滾滾橘貓背影與爪痕彩蛋生成器 ──
-  function getOrangeCatSvgHtml(bubbleMsg, subMsg) {
+  // ── 🐱 守護黑貓背影與爪痕彩蛋生成器 (搜尋無結果與彩蛋通用) ──
+  function getBlackCatSvgHtml(bubbleMsg, subMsg) {
     return `
       <div class="empty-msg" style="padding:28px 16px 36px; grid-column:1/-1;">
         <div class="cat-easter-box">
           ${bubbleMsg ? `<div class="cat-bubble"><span>🐾</span> ${bubbleMsg}</div>` : ""}
           <div style="position:relative; display:inline-block; margin:6px 0;">
             <svg width="220" height="190" viewBox="0 0 220 190" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g class="claw-marks" opacity="0.85">
-                <path d="M35 30 Q30 65 24 95" stroke="#ea580c" stroke-width="3.5" stroke-linecap="round"/>
-                <path d="M47 25 Q43 68 38 102" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round"/>
-                <path d="M60 32 Q58 72 54 98" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
-                <path d="M72 40 Q71 68 68 90" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="36" cy="45" r="1.5" fill="#c2410c"/>
-                <circle cx="49" cy="80" r="2" fill="#ea580c"/>
-                <circle cx="63" cy="55" r="1.5" fill="#f59e0b"/>
+              <g class="claw-marks" opacity="0.8">
+                <path d="M35 30 Q30 65 24 95" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M47 25 Q43 68 38 102" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M60 32 Q58 72 54 98" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+                <path d="M72 40 Q71 68 68 90" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="36" cy="45" r="1.5" fill="#334155"/>
+                <circle cx="49" cy="80" r="2" fill="#1e293b"/>
+                <circle cx="63" cy="55" r="1.5" fill="#475569"/>
               </g>
-              <g class="paw-print" opacity="0.85" transform="translate(42, 115) rotate(-15)">
+              <g class="paw-print" opacity="0.9" transform="translate(42, 115) rotate(-15)">
                 <ellipse cx="14" cy="16" rx="8" ry="6.5" fill="#f43f5e"/>
                 <circle cx="5" cy="8" r="3" fill="#fb7185"/>
                 <circle cx="11" cy="4" r="3.2" fill="#fb7185"/>
                 <circle cx="18" cy="4" r="3.2" fill="#fb7185"/>
                 <circle cx="23" cy="8" r="3" fill="#fb7185"/>
               </g>
-              <ellipse cx="128" cy="172" rx="48" ry="10" fill="rgba(0,0,0,0.08)"/>
+              <ellipse cx="128" cy="172" rx="48" ry="10" fill="rgba(15,23,42,0.12)"/>
               <g class="cat-tail" style="transform-origin: 142px 148px; animation: tailWag 2.4s ease-in-out infinite;">
-                <path d="M142 150 C165 152 188 140 185 110 C182 85 160 88 162 98 C164 106 174 104 172 118 C170 132 152 140 138 142 Z" fill="url(#catOrangeGradientGrid)"/>
-                <path d="M178 102 C181 96 172 92 165 95" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
-                <path d="M184 116 C186 112 176 110 172 114" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+                <path d="M142 150 C165 152 188 140 185 110 C182 85 160 88 162 98 C164 106 174 104 172 118 C170 132 152 140 138 142 Z" fill="url(#catBlackGradientGrid)"/>
+                <path d="M178 102 C181 96 172 92 165 95" stroke="rgba(255,255,255,0.25)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M184 116 C186 112 176 110 172 114" stroke="rgba(255,255,255,0.2)" stroke-width="2.5" stroke-linecap="round"/>
               </g>
-              <ellipse cx="128" cy="132" rx="46" ry="38" fill="url(#catOrangeGradientGrid)"/>
-              <path d="M112 112 Q128 116 144 112" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
-              <path d="M106 128 Q128 133 150 128" stroke="#c2410c" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
-              <path d="M110 144 Q128 149 146 144" stroke="#c2410c" stroke-width="4.5" stroke-linecap="round" opacity="0.8"/>
-              <ellipse cx="94" cy="162" rx="13" ry="9" fill="#fed7aa"/>
-              <circle cx="94" cy="162" r="4" fill="#fb7185"/>
-              <ellipse cx="156" cy="162" rx="13" ry="9" fill="#fed7aa"/>
-              <circle cx="156" cy="162" r="4" fill="#fb7185"/>
-              <ellipse cx="128" cy="80" rx="34" ry="29" fill="url(#catOrangeGradientGrid)"/>
-              <path d="M128 56 V68" stroke="#c2410c" stroke-width="3.5" stroke-linecap="round"/>
-              <path d="M118 60 Q122 66 120 72" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
-              <path d="M138 60 Q134 66 136 72" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
-              <polygon points="98,72 108,42 122,62" fill="#ea580c"/>
-              <polygon points="102,68 110,48 119,62" fill="#fda4af"/>
-              <polygon points="158,72 148,42 134,62" fill="#ea580c"/>
-              <polygon points="154,68 146,48 137,62" fill="#fda4af"/>
+              <ellipse cx="128" cy="132" rx="46" ry="38" fill="url(#catBlackGradientGrid)"/>
+              <path d="M112 114 Q128 118 144 114" stroke="rgba(255,255,255,0.16)" stroke-width="3" stroke-linecap="round"/>
+              <path d="M106 128 Q128 133 150 128" stroke="rgba(255,255,255,0.22)" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M110 142 Q128 147 146 142" stroke="rgba(255,255,255,0.16)" stroke-width="3" stroke-linecap="round"/>
+              <path d="M106 102 Q128 107 150 102" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+              <circle cx="128" cy="106" r="4.5" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+              <circle cx="128" cy="107.5" r="1.2" fill="#854d0e"/>
+              <ellipse cx="94" cy="162" rx="13" ry="9" fill="#1e293b"/>
+              <circle cx="94" cy="162" r="4.2" fill="#fb7185"/>
+              <circle cx="90" cy="157" r="1.8" fill="#fda4af"/>
+              <circle cx="94" cy="155" r="1.8" fill="#fda4af"/>
+              <circle cx="98" cy="157" r="1.8" fill="#fda4af"/>
+              <ellipse cx="156" cy="162" rx="13" ry="9" fill="#1e293b"/>
+              <circle cx="156" cy="162" r="4.2" fill="#fb7185"/>
+              <circle cx="152" cy="157" r="1.8" fill="#fda4af"/>
+              <circle cx="156" cy="155" r="1.8" fill="#fda4af"/>
+              <circle cx="160" cy="157" r="1.8" fill="#fda4af"/>
+              <ellipse cx="128" cy="80" rx="34" ry="29" fill="url(#catBlackGradientGrid)"/>
+              <path d="M118 64 Q128 68 138 64" stroke="rgba(255,255,255,0.22)" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M96 78 Q82 74 72 76" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M95 83 Q80 84 70 88" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M160 78 Q174 74 184 76" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M161 83 Q176 84 186 88" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" stroke-linecap="round"/>
+              <polygon points="98,72 108,42 122,62" fill="#0f172a"/>
+              <polygon points="102,68 110,48 119,62" fill="#fb7185"/>
+              <polygon points="158,72 148,42 134,62" fill="#0f172a"/>
+              <polygon points="154,68 146,48 137,62" fill="#fb7185"/>
               <defs>
-                <linearGradient id="catOrangeGradientGrid" x1="80" y1="50" x2="175" y2="170" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#fdba74"/>
-                  <stop offset="45%" stop-color="#fb923c"/>
-                  <stop offset="100%" stop-color="#ea580c"/>
+                <linearGradient id="catBlackGradientGrid" x1="80" y1="45" x2="175" y2="170" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#334155"/>
+                  <stop offset="35%" stop-color="#1e293b"/>
+                  <stop offset="70%" stop-color="#0f172a"/>
+                  <stop offset="100%" stop-color="#020617"/>
                 </linearGradient>
               </defs>
             </svg>
           </div>
-          <div style="font-size:13.5px; color:#b45309; font-weight:800; margin-top:4px;">
-            ${subMsg || '爪痕到此一遊！上面有很多實用新生 FAQ 快去逛逛啦～ 🐾'}
+          <div style="font-size:13px; color:#475569; font-weight:700; margin-top:4px;">
+            ${subMsg || '黑貓爪痕到此一遊！上面有很多實用新生 FAQ 快去逛逛啦～ 🐾'}
           </div>
           <div style="margin-top:12px;">
             <a href="#" onclick="openChatSheet('');return false;" class="ai-btn" style="margin:0 auto; padding:8px 18px; font-size:13px; display:inline-flex;">🤖 直接詢問 AI 助手</a>
@@ -2582,6 +2593,7 @@
       </div>
     `;
   }
+  const getOrangeCatSvgHtml = getBlackCatSvgHtml;
 
   function renderGrid() {
     const query = (document.getElementById("faqSearch").value || "").trim().toLowerCase();
@@ -2610,7 +2622,7 @@
     const countEl = document.getElementById("resultCount");
     if (countEl) {
       const customTotal = getCustomFaqs().length;
-      countEl.textContent = `共 ${items.length} 篇問答指引${customTotal > 0 ? ` (含 ${customTotal} 筆自訂備用)` : ""}`;
+      countEl.textContent = `共 ${items.length} 篇問答指引${customTotal > 0 ? ` (含 ${customTotal} 筆自訂筆記)` : ""}`;
     }
 
     const grid = document.getElementById("faqGrid");
@@ -2625,24 +2637,24 @@
           <button class="chip active" onclick="setBoard('all')">瀏覽全部問答</button>
         </div>`;
       } else {
-        grid.innerHTML = getOrangeCatSvgHtml("喵～學長姐的資料庫裡找不到這個（抓頭 🐾）", "試試看其他關鍵字，或是直接點下方問 AI 助手！");
+        grid.innerHTML = getBlackCatSvgHtml("喵～學長姐的資料庫裡找不到這個（抓頭 🐾）", "試試看其他關鍵字，或是直接點下方問 AI 助手！");
       }
       return;
     }
 
-    const showSpareSlot = (currentBoard === "all" || currentBoard === "custom") && !query;
+    const showSpareSlot = currentBoard === "custom" && !query;
     const spareSlotHtml = showSpareSlot ? `
-      <article class="faq-card faq-spare-card" onclick="openCustomFaqModal()" title="點擊新增自訂備用卡片">
+      <article class="faq-card faq-spare-card" onclick="openCustomFaqModal()" title="點擊新增自訂筆記">
         <div class="faq-card-header">
-          <span class="faq-board-tag" style="background:rgba(234, 179, 8, 0.15); color:#b45309;">➕ 預留備用卡牌空格</span>
+          <span class="faq-board-tag" style="background:rgba(2, 132, 199, 0.12); color:#0284c7;">➕ 新增自訂筆記</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
           <div style="font-size:24px;">📝</div>
-          <h3 class="faq-q" style="margin:0; color:var(--primary);">點擊新增自訂問答卡片</h3>
+          <h3 class="faq-q" style="margin:0; color:var(--primary);">點擊新增自訂問答筆記</h3>
         </div>
-        <p class="faq-preview">預留給你的本地私房問答槽位！隨時記錄系所避雷、選課清單或生活筆記，自動持久化保存。</p>
+        <p class="faq-preview">記錄系所避雷、選課清單或私房生活筆記，安全保存在本機瀏覽器中。</p>
         <div class="faq-card-footer">
-          <span class="faq-more" style="color:var(--primary); font-weight:800;">＋ 點擊立即編輯備用卡牌 →</span>
+          <span class="faq-more" style="color:var(--primary); font-weight:800;">＋ 點擊立即編輯筆記 →</span>
         </div>
       </article>
     ` : "";
@@ -3491,7 +3503,7 @@
     openChatSheet(storeName);
   }
 
-  // ── 🐱 往下拉手勢彩蛋：觸發經典圓滾滾橘貓與爪痕 ──
+  // ── 🐱 往下拉手勢彩蛋：觸發守護黑貓與爪痕（放手即自然回彈，不特地卡住畫面） ──
   (function initCatPullEasterEgg() {
     let touchStartY = 0;
     let isAtTop = false;
@@ -3517,18 +3529,23 @@
           isTriggered = true;
           egg.classList.add("revealed");
         }
+      } else if (dy < 15 && isTriggered) {
+        egg.classList.remove("revealed");
+        isTriggered = false;
       }
     }, { passive: true });
 
-    window.addEventListener("touchend", function () {
+    const resetEgg = function () {
       if (isTriggered) {
-        setTimeout(function () {
-          egg.classList.remove("revealed");
-          isTriggered = false;
-        }, 3600);
+        // 放手立即自然彈性收合回彈，絕不特地卡住畫面
+        egg.classList.remove("revealed");
+        isTriggered = false;
       }
       isAtTop = false;
-    });
+    };
+
+    window.addEventListener("touchend", resetEgg, { passive: true });
+    window.addEventListener("touchcancel", resetEgg, { passive: true });
   })();
 
   function toggleCatEasterEgg(e) {
