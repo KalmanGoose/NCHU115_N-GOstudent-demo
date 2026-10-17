@@ -2,7 +2,11 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="興生FAQ">
+  <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/zh/thumb/1/15/National_Chung_Hsing_University_seal.svg/1200px-National_Chung_Hsing_University_seal.svg.png">
   <title>國立中興大學 (NCHU) 新生生活與行政問答 AI 助手</title>
   <!-- Google Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -479,14 +483,14 @@
 
     /* Modal (模式 B: 僅需設定使用者自備 API Key) */
     .modal-backdrop {
-      position: absolute;
+      position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(2px);
+      background: rgba(0, 0, 0, 0.52);
+      backdrop-filter: blur(3px);
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 100;
+      z-index: 9999;
       padding: 16px;
     }
 
@@ -1378,6 +1382,16 @@
       setTimeout(() => { sendMessage(); }, 350);
     }
   }
+  // ── 📜 自動跳出白皮書須知 (依照使用者指示：聊天室打開來應該要先跳出白皮書介紹) ──
+  setTimeout(() => {
+    openWhitepaperModal();
+  }, 350);
+
+  window.addEventListener("message", (e) => {
+    if (e.data && e.data.action === "openWhitepaper") {
+      openWhitepaperModal();
+    }
+  });
 </script>
 
 </body>

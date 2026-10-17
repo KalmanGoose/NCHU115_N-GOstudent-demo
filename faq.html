@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="興生FAQ" />
+<link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/zh/thumb/1/15/National_Chung_Hsing_University_seal.svg/1200px-National_Chung_Hsing_University_seal.svg.png" />
+<meta name="theme-color" content="#004B97" />
 <title>115中興大學興生入學生活與行政問答指南 | NCHU 興生助手</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
@@ -810,7 +815,12 @@
 </div>
 
 <section class="hero">
-  <span class="hero-badge">🌱 0 Token 快速解答 · 不用等 AI</span>
+  <div style="display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+    <span class="hero-badge" style="margin-bottom:0;">🌱 0 Token 快速解答 · 不用等 AI</span>
+    <button class="ios-install-badge-btn" onclick="openIosInstallModal()" title="查看 iPhone 加入主畫面教學">
+      📲 加到 iPhone 主畫面 (全螢幕 App 體驗)
+    </button>
+  </div>
   <h1>興生入學<em>生活與行政</em>問答指南</h1>
   <p>選課、宿舍、繳費、交通、獎助學金⋯高頻問題都有完整步驟解答。搜尋或點分類,點開卡片看詳細指引。(但別再問怎麼交女朋友交男朋友了)</p>
   <div class="search-wrap">
@@ -940,6 +950,65 @@
     <div style="display:flex; gap:10px;">
       <a id="pTipGoBtn" class="ai-btn" href="#" target="_blank" rel="noopener noreferrer" style="flex:1; margin:0; text-align:center; padding:10px;">🚀 前往官方網站</a>
       <button class="chip" style="margin:0; padding:10px 18px; font-weight:700;" onclick="closePortalTipModal()">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- 📲 iOS 加入主畫面 (全螢幕 App 體驗教學) 彈窗 -->
+<div class="modal-backdrop" id="iosInstallModal" onclick="if(event.target===this)closeIosInstallModal()">
+  <div class="modal-card" style="max-width: 480px; text-align: left; padding: 24px 20px;">
+    <button class="modal-close" onclick="closeIosInstallModal()">✕</button>
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+      <span style="display:inline-flex; width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg, #004B97, #0088cc); color:#fff; align-items:center; justify-content:center; font-size:22px; box-shadow:0 4px 12px rgba(0,75,151,0.25); flex-shrink:0;">📲</span>
+      <div>
+        <span class="faq-board-tag" style="background:rgba(0,75,151,0.1); color:#004B97; font-weight:700;">iOS 專屬推薦體驗</span>
+        <h2 style="font-size:18px; font-weight:900; color:var(--text-main); margin-top:2px;">將「興生FAQ」加入 iPhone 主畫面</h2>
+      </div>
+    </div>
+    
+    <p style="font-size:13.5px; color:#475569; line-height:1.6; margin-bottom:14px;">
+      為獲得最佳校園生活指引，強烈建議將本指南<b>加入手機主畫面</b>！享受<b>全螢幕無網址列干擾、極速秒開</b>的專屬 App 級體驗，查公車、選課與美食更隨手就來！
+    </p>
+
+    <!-- 步驟卡片 -->
+    <div style="display:flex; flex-direction:column; gap:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:14px;">
+      <div style="display:flex; align-items:flex-start; gap:12px;">
+        <span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#004B97; color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;">1</span>
+        <div style="font-size:13px; color:var(--text-main); line-height:1.5;">
+          點擊 Safari 下方工具列中央的<b>「分享」圖示</b>
+          <div style="margin-top:4px; display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:3px 10px; font-size:12px; color:#0f172a; font-weight:600;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+            分享按鈕 (下方工具列)
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:flex-start; gap:12px;">
+        <span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#004B97; color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;">2</span>
+        <div style="font-size:13px; color:var(--text-main); line-height:1.5;">
+          在選單中向下滑動，找到並點選<b>「加入主畫面」</b>
+          <div style="margin-top:4px; display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:3px 10px; font-size:12px; color:#0f172a; font-weight:600;">
+            <span style="font-size:14px;">➕</span> 加入主畫面 (Add to Home Screen)
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:flex-start; gap:12px;">
+        <span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#004B97; color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;">3</span>
+        <div style="font-size:13px; color:var(--text-main); line-height:1.5;">
+          點擊右上角的<b>「新增」</b>，桌面就會出現興生專屬圖示，點開即可全螢幕極速使用！
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部按鈕 -->
+    <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
+      <button class="ai-btn" onclick="closeIosInstallModal()" style="background:linear-gradient(135deg, #004B97, #003a75); margin-top:0; padding:12px; font-size:14px; font-weight:700;">
+        ✨ 我瞭解了，馬上試試看！
+      </button>
+      <button type="button" onclick="closeIosInstallModal()" style="background:transparent; border:none; color:#64748b; font-size:12.5px; padding:6px; cursor:pointer; text-decoration:underline;">
+        先逛逛網頁版
+      </button>
     </div>
   </div>
 </div>
@@ -1174,19 +1243,37 @@
   }
   .chat-sheet.open { display: flex; }
   .chat-sheet.dragging { transition: none; }
+  .chat-sheet.dragging iframe { pointer-events: none !important; }
   .chat-sheet.collapsed { height: 42px !important; }
   .chat-sheet.collapsed .chat-sheet-body { display: none; }
   .chat-sheet-header {
     position: relative; display: flex; align-items: center;
-    padding: 7px 18px; background: #fafaf7; color: var(--text-main);
+    padding: 10px 18px 12px; background: #fafaf7; color: var(--text-main);
     border-bottom: 1px solid #eceae4;
     border-radius: 20px 20px 0 0; cursor: grab; user-select: none; touch-action: none;
   }
   .chat-sheet-header::before {
     content: ""; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
-    width: 44px; height: 4px; border-radius: 2px; background: rgba(0,0,0,.15);
+    width: 48px; height: 5px; border-radius: 3px; background: rgba(0,0,0,.22);
   }
   .chat-sheet.dragging .chat-sheet-header { cursor: grabbing; }
+
+  /* 📲 iOS 加到主畫面提示按鈕 */
+  .ios-install-badge-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #ffffff; color: var(--primary);
+    border: 1.5px solid rgba(0, 75, 151, 0.28);
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 12.5px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 75, 151, 0.1);
+    transition: all 0.2s ease;
+  }
+  .ios-install-badge-btn:hover, .ios-install-badge-btn:active {
+    background: var(--primary); color: #ffffff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 75, 151, 0.25);
+  }
   /* macOS 紅綠燈按鈕(大熱區+小圓點,手機好點)*/
   .chat-lights { display: flex; gap: 4px; margin-right: 8px; }
   .chat-lights button {
@@ -2358,6 +2445,12 @@
         const ok = doc && doc.body && doc.body.innerText.trim().length > 0;
         msg.style.display = ok ? "none" : "flex";
         if (!ok) showFail();
+        if (frame.contentWindow) {
+          frame.contentWindow.postMessage({ action: "openWhitepaper" }, "*");
+          if (typeof frame.contentWindow.openWhitepaperModal === "function") {
+            frame.contentWindow.openWhitepaperModal();
+          }
+        }
       } catch (e) { msg.style.display = "none"; }
     };
     const src = "chat.html?v=" + Date.now() + (askText ? "&ask=" + encodeURIComponent(askText) : "");
@@ -2367,6 +2460,14 @@
       frame.src = src;
     } else {
       setTimeout(() => { msg.style.display = "none"; }, 600);
+      try {
+        if (frame.contentWindow) {
+          frame.contentWindow.postMessage({ action: "openWhitepaper" }, "*");
+          if (typeof frame.contentWindow.openWhitepaperModal === "function") {
+            frame.contentWindow.openWhitepaperModal();
+          }
+        }
+      } catch (e) {}
     }
   }
 
@@ -2379,7 +2480,7 @@
     const sheet = document.getElementById("chatSheet");
     sheet.classList.remove("collapsed");
     sheet.style.setProperty("--sheet-h", "62vh"); // 預設半高
-    sheet.dataset.stage = "half";
+    sheet.dataset.stage = "1";
     sheet.classList.add("open");
     document.getElementById("chatSheetTitle").textContent =
       askText === "__DEPT_LIST__" ? "🤖 新鮮人-興生FAQ · 115學年度 各系新生 LINE 群總覽" :
@@ -2390,6 +2491,15 @@
     } else {
       hideDeptListPanel();
       ensureChatLoaded(askText);
+      try {
+        const frame = document.getElementById("chatFrame");
+        if (frame && frame.contentWindow) {
+          frame.contentWindow.postMessage({ action: "openWhitepaper" }, "*");
+          if (typeof frame.contentWindow.openWhitepaperModal === "function") {
+            frame.contentWindow.openWhitepaperModal();
+          }
+        }
+      } catch (e) {}
     }
     document.body.style.overflow = "hidden";
   }
@@ -2472,37 +2582,107 @@
   (function () {
     const header = document.getElementById("sheetHeader");
     const sheet = document.getElementById("chatSheet");
-    let startY = 0, startH = 0, dragging = false;
+    let startY = 0, startH = 0, lastY = 0, dragging = false, startStage = 1;
+
+    function getPointerY(e) {
+      if (e.touches && e.touches.length > 0) return e.touches[0].clientY;
+      if (e.changedTouches && e.changedTouches.length > 0) return e.changedTouches[0].clientY;
+      return e.clientY;
+    }
+
     function onDown(e) {
       if (e.target.closest("button")) return;
       dragging = true;
       sheet.classList.add("dragging");
-      startY = e.touches ? e.touches[0].clientY : e.clientY;
+      startY = getPointerY(e);
+      lastY = startY;
       startH = sheet.getBoundingClientRect().height;
+      startStage = stageIndex(sheet);
     }
+
     function onMove(e) {
       if (!dragging) return;
-      const y = e.touches ? e.touches[0].clientY : e.clientY;
-      const h = Math.min(window.innerHeight * 0.94, Math.max(56, startH + (startY - y)));
+      lastY = getPointerY(e);
+      const dy = startY - lastY; // 正值表示向上拉，負值表示向下拉
+      const maxH = window.innerHeight * 0.94;
+      const minH = 50;
+      const h = Math.min(maxH, Math.max(minH, startH + dy));
       sheet.style.setProperty("--sheet-h", h + "px");
       if (e.cancelable) e.preventDefault();
     }
-    function onUp() {
+
+    function onUp(e) {
       if (!dragging) return;
       dragging = false;
-      const h = sheet.getBoundingClientRect().height, vh = window.innerHeight;
-      let stage = 1;
-      if (h < vh * 0.18) stage = 0;
-      else if (h >= vh * 0.76) stage = 2;
-      applyStage(sheet, stage);
+      sheet.classList.remove("dragging");
+      if (e) {
+        const y = getPointerY(e);
+        if (typeof y === "number" && !isNaN(y)) lastY = y;
+      }
+      const totalDy = lastY - startY; // 正值表示往下拉，負值表示往上推
+      const h = sheet.getBoundingClientRect().height;
+      const vh = window.innerHeight;
+
+      let targetStage = startStage;
+
+      if (startStage === 2) {
+        // 原本在最頂端 (92vh)
+        if (totalDy > 180 || h < vh * 0.40) {
+          targetStage = 0; // 大力往下拉到底 -> 收起
+        } else if (totalDy > 35 || h < vh * 0.85) {
+          targetStage = 1; // 往下拉超過35px -> 降回半高 62vh
+        } else {
+          targetStage = 2; // 微小晃動 -> 保持 92vh
+        }
+      } else if (startStage === 1) {
+        // 原本在半高 (62vh)
+        if (totalDy < -35 || h > vh * 0.75) {
+          targetStage = 2; // 往上推超過35px -> 展開到頂 92vh
+        } else if (totalDy > 45 || h < vh * 0.40) {
+          targetStage = 0; // 往下拉超過45px -> 收起
+        } else {
+          targetStage = 1; // 保持半高
+        }
+      } else {
+        // 原本收起 (stage 0)
+        if (totalDy < -160 || h > vh * 0.75) {
+          targetStage = 2;
+        } else if (totalDy < -30 || h > vh * 0.20) {
+          targetStage = 1;
+        } else {
+          targetStage = 0;
+        }
+      }
+
+      applyStage(sheet, targetStage);
     }
+
     header.addEventListener("mousedown", onDown);
     header.addEventListener("touchstart", onDown, { passive: true });
     window.addEventListener("mousemove", onMove);
     window.addEventListener("touchmove", onMove, { passive: false });
     window.addEventListener("mouseup", onUp);
     window.addEventListener("touchend", onUp);
+    window.addEventListener("touchcancel", onUp);
   })();
+
+  // ── 📲 iOS 加入主畫面教學彈窗 ──
+  function openIosInstallModal() {
+    const modal = document.getElementById("iosInstallModal");
+    if (modal) {
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+  }
+
+  function closeIosInstallModal() {
+    const modal = document.getElementById("iosInstallModal");
+    if (modal) {
+      modal.style.display = "none";
+      document.body.style.overflow = "";
+    }
+    localStorage.setItem("NCHU_IOS_PWA_GUIDE_SEEN", "1");
+  }
 
   function closeChatSheet() {
     document.getElementById("chatSheet").classList.remove("open");
