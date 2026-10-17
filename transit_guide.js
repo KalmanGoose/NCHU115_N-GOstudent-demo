@@ -16,62 +16,62 @@
   const CAMPUS_BUS_STOPS = {
     xuefu: {
       id: "xuefu",
-      name: "中興大學 (興大路 - 校門口)",
-      desc: "正門口圓環兩側站牌，往台中火車站、大慶車站、一中商圈、逢甲商圈主要樞紐",
+      name: "中興大學 (興大路 - 正門口)",
+      desc: "正門圓環站牌 · 往台中火車站、大慶高鐵、一中、逢甲商圈主要樞紐",
       gmapQuery: "中興大學(興大路)+公車站",
       routes: [
         {
           num: "33",
           operator: "台中客運",
-          dest: "往 台中火車站 / 大慶車站 / 高鐵台中站",
-          headsign: "僑光科技大學 ⇄ 高鐵台中站",
+          dest: "往 高鐵台中站 / 僑光科大",
+          via: "經 台中車站・大慶車站・逢甲夜市",
           intervalMins: 15,
           offset: 2,
-          tag: "🔥 返鄉首選",
+          tag: "🔥 返鄉/逢甲",
           url: "https://citybus.taichung.gov.tw/ebus/driving-map?operate=route-map&route=33",
           yunbus: "https://yunbus.tw/lite/route.php?id=TXG33"
         },
         {
           num: "35",
           operator: "台中客運",
-          dest: "往 台中火車站 / 一中街 / 逢甲夜市",
-          headsign: "南區區公所 ⇄ 文修停車場",
+          dest: "往 僑光科大 / 逢甲夜市",
+          via: "經 台中車站・一中商圈・文修停車場",
           intervalMins: 12,
           offset: 5,
-          tag: "逛街必搭",
+          tag: "🛍️ 逛街首選",
           url: "https://citybus.taichung.gov.tw/ebus/driving-map?operate=route-map&route=35",
           yunbus: "https://yunbus.tw/lite/route.php?id=TXG35"
         },
         {
           num: "73",
           operator: "統聯客運",
-          dest: "往 台中火車站 / 捷運大慶站 / 統聯轉運站",
-          headsign: "統聯轉運站 ⇄ 莒光新城",
+          dest: "往 統聯轉運站 / 莒光新城",
+          via: "經 台中車站・捷運大慶站・文心森林公園",
           intervalMins: 18,
           offset: 8,
-          tag: "客運接駁",
+          tag: "🚇 捷運轉運",
           url: "https://citybus.taichung.gov.tw/ebus/driving-map?operate=route-map&route=73",
           yunbus: "https://yunbus.tw/lite/route.php?id=TXG73"
         },
         {
           num: "52",
           operator: "中鹿客運",
-          dest: "忠明進化建成線 (環狀幹線，經中友、美術館)",
-          headsign: "忠明進化幹線環線",
+          dest: "忠明進化幹線 (市區環線)",
+          via: "經 中友百貨・國立台灣美術館・進化路",
           intervalMins: 20,
           offset: 11,
-          tag: "市區環線",
+          tag: "🔄 市區環線",
           url: "https://citybus.taichung.gov.tw/ebus/driving-map?operate=route-map&route=52",
           yunbus: "https://yunbus.tw/lite/route.php?id=TXG52"
         },
         {
           num: "23",
           operator: "統聯客運",
-          dest: "往 美村路生活圈 / 公益路商圈 / 中科",
-          headsign: "中科管理局 ⇄ 中興東南路口",
+          dest: "往 中科管理局 / 中興東南路口",
+          via: "經 美村路生活圈・公益路勤美・中科",
           intervalMins: 25,
           offset: 14,
-          tag: "生活美食",
+          tag: "☕ 勤美中科",
           url: "https://citybus.taichung.gov.tw/ebus/driving-map?operate=route-map&route=23",
           yunbus: "https://yunbus.tw/lite/route.php?id=TXG23"
         }
@@ -80,14 +80,14 @@
     guoguang: {
       id: "guoguang",
       name: "中興大學 (國光路 - 側門)",
-      desc: "國光路側門/獸醫教學醫院前，高鐵直達、大里霧峰與市區快速接駁站",
+      desc: "國光路側門/獸醫教學醫院前 · 高鐵直達、大里霧峰與市區快速接駁站",
       gmapQuery: "中興大學(國光路)+公車站",
       routes: [
         {
           num: "158",
           operator: "統聯客運",
-          dest: "往 高鐵台中站 (1F客運轉運層，市民卡 0 元直達)",
-          headsign: "高鐵台中站 ⇄ 朝陽科技大學",
+          dest: "往 高鐵台中站 (1F直達 0元)",
+          via: "【高鐵返鄉必備】經 大里・台中車站・朝陽科大",
           intervalMins: 18,
           offset: 3,
           tag: "🚄 高鐵直達",
@@ -97,44 +97,44 @@
         {
           num: "50",
           operator: "統聯客運",
-          dest: "往 台中火車站 / 一中商圈 / 文英兒童公園",
-          headsign: "921地震園區 ⇄ 文英兒童公園",
+          dest: "往 921地震園區 / 文英公園",
+          via: "經 台中車站・一中商圈・光復新村",
           intervalMins: 15,
           offset: 6,
-          tag: "市區幹線",
+          tag: "🏛️ 一中幹線",
           url: "https://citybus.taichung.gov.tw/ebus/driving-map?operate=route-map&route=50",
           yunbus: "https://yunbus.tw/lite/route.php?id=TXG50"
         },
         {
           num: "59",
           operator: "統聯客運",
-          dest: "往 台中火車站 / 舊社公園 / 大里",
-          headsign: "舊正 ⇄ 舊社公園",
+          dest: "往 台中車站 / 舊社公園",
+          via: "經 台中火車站・大里・舊社公園",
           intervalMins: 20,
           offset: 9,
-          tag: "大里火車站",
+          tag: "🚂 火車直達",
           url: "https://citybus.taichung.gov.tw/ebus/driving-map?operate=route-map&route=59",
           yunbus: "https://yunbus.tw/lite/route.php?id=TXG59"
         },
         {
           num: "65",
           operator: "全航客運",
-          dest: "往 台中車站 / 潭子 / 潭雅神綠園道",
-          headsign: "南區區公所 ⇄ 潭雅神綠園道",
+          dest: "往 潭雅神綠園道 / 南區公所",
+          via: "經 台中車站・一中商圈・潭子車站",
           intervalMins: 22,
           offset: 12,
-          tag: "跨區直通",
+          tag: "🚴 潭子直通",
           url: "https://citybus.taichung.gov.tw/ebus/driving-map?operate=route-map&route=65",
           yunbus: "https://yunbus.tw/lite/route.php?id=TXG65"
         },
         {
           num: "19",
           operator: "中台灣客運",
-          dest: "往 國立台灣美術館 / 向上民權路口",
-          headsign: "慈濟醫院 ⇄ 向上民權路口",
+          dest: "往 國立台灣美術館",
+          via: "經 向上市場・國美館・慈濟醫院",
           intervalMins: 30,
           offset: 16,
-          tag: "文藝休閒",
+          tag: "🎨 美術館線",
           url: "https://citybus.taichung.gov.tw/ebus/driving-map?operate=route-map&route=19",
           yunbus: "https://yunbus.tw/lite/route.php?id=TXG19"
         }
@@ -349,91 +349,79 @@
       background: #fff;
       border: 1.5px solid #e2e8f0;
       border-radius: 14px;
-      padding: 12px 14px;
+      padding: 10px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+      transition: all 0.18s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .live-bus-card:hover {
+      border-color: #0284c7;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+      transform: translateY(-1px);
+    }
+    .live-bus-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
-      transition: transform 0.15s, border-color 0.15s;
+      gap: 8px;
     }
-    .live-bus-card:hover {
-      border-color: #38bdf8;
-      transform: translateY(-1px);
-    }
-    .live-bus-left {
+    .live-bus-identity {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       min-width: 0;
+      flex: 1;
     }
     .live-route-badge {
-      width: 48px;
-      height: 48px;
+      min-width: 42px;
+      height: 32px;
+      padding: 0 8px;
       background: linear-gradient(135deg, #004b97 0%, #0284c7 100%);
       color: #fff;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
+      border-radius: 8px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 3px 8px rgba(0, 75, 151, 0.25);
-    }
-    .live-route-num {
       font-size: 16px;
       font-weight: 900;
-      line-height: 1.1;
-    }
-    .live-route-op {
-      font-size: 8.5px;
-      opacity: 0.9;
-    }
-    .live-route-info {
-      min-width: 0;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 5px rgba(0, 75, 151, 0.22);
+      flex-shrink: 0;
     }
     .live-route-dest {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 800;
       color: #0f2745;
+      line-height: 1.3;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-bottom: 2px;
-    }
-    .live-route-sub {
-      font-size: 11px;
-      color: #64748b;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
     }
     .live-tag-pill {
-      font-size: 9.5px;
+      font-size: 10px;
       font-weight: 700;
       background: #fef3c7;
       color: #92400e;
-      padding: 1px 5px;
-      border-radius: 4px;
-    }
-
-    .live-bus-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
+      padding: 1px 6px;
+      border-radius: 5px;
+      white-space: nowrap;
       flex-shrink: 0;
     }
     .live-eta-badge {
       font-size: 12px;
       font-weight: 800;
       padding: 4px 9px;
-      border-radius: 20px;
+      border-radius: 16px;
       display: inline-flex;
       align-items: center;
       gap: 4px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
     .eta-soon {
       background: #dcfce7;
@@ -451,12 +439,14 @@
       border: 1px solid #cbd5e1;
     }
     .eta-night {
-      background: #e2e8f0;
-      color: #475569;
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+      font-size: 11px;
     }
     .live-pulse {
-      width: 7px;
-      height: 7px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: #22c55e;
       box-shadow: 0 0 6px #22c55e;
@@ -466,20 +456,38 @@
       from { opacity: 0.4; transform: scale(0.8); }
       to { opacity: 1; transform: scale(1.2); }
     }
-    .live-actions-row {
+    .live-bus-bottom {
       display: flex;
-      gap: 4px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 5px;
+      border-top: 1px dashed #f1f5f9;
+      font-size: 11px;
+      color: #64748b;
+    }
+    .live-bus-via {
+      color: #475569;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
     }
     .live-gps-btn {
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 2px 7px;
+      padding: 2px 8px;
       border-radius: 6px;
       text-decoration: none;
       background: #f0f9ff;
       color: #0284c7;
       border: 1px solid #bae6fd;
-      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+      transition: all 0.15s;
     }
     .live-gps-btn:hover {
       background: #0284c7;
@@ -857,35 +865,39 @@
     const now = new Date();
     const hours = now.getHours();
     const mins = now.getMinutes();
-    const secs = now.getSeconds();
 
     // 深夜與清晨非營運時段 (23:00 ~ 05:45)
     if (hours >= 23 || hours < 5 || (hours === 5 && mins < 45)) {
       return {
         badgeClass: "eta-night",
-        text: "🌙 末班已過 (首班約 06:00)",
+        text: "🌙 今日收班 · 06:00首班",
         mins: null,
         isSoon: false
       };
     }
 
-    // 利用當前時間的絕對分鐘數計算動態剩餘進站分鐘
+    // 利用當前時間計算動態剩餘進站分鐘
     const totalMinutes = hours * 60 + mins;
     const cycle = route.intervalMins || 15;
     const seed = (route.offset || 0) * 3;
-    
-    // 計算模擬即時剩餘進站分鐘 (1 ~ cycle 分鐘)
     let remaining = cycle - ((totalMinutes + seed) % cycle);
     if (remaining === 0) remaining = cycle;
 
-    if (remaining <= 3) {
+    if (remaining <= 2) {
       return {
         badgeClass: "eta-soon",
-        text: `🟢 即將進站 (約 ${remaining} 分)`,
+        text: `⚡ 即將進站`,
         mins: remaining,
         isSoon: true
       };
-    } else if (remaining <= 7) {
+    } else if (remaining <= 6) {
+      return {
+        badgeClass: "eta-soon",
+        text: `🟢 約 ${remaining} 分鐘`,
+        mins: remaining,
+        isSoon: true
+      };
+    } else if (remaining <= 12) {
       return {
         badgeClass: "eta-med",
         text: `🟡 約 ${remaining} 分鐘`,
@@ -926,32 +938,24 @@
       const pulseHtml = eta.isSoon ? `<span class="live-pulse"></span>` : "";
 
       return `
-        <div class="live-bus-card">
-          <div class="live-bus-left">
-            <div class="live-route-badge">
-              <span class="live-route-num">${r.num}</span>
-              <span class="live-route-op">${r.operator}</span>
+        <div class="live-bus-card" onclick="window.open('${r.url}', '_blank')">
+          <div class="live-bus-top">
+            <div class="live-bus-identity">
+              <span class="live-route-badge">${r.num}</span>
+              <span class="live-route-dest">${r.dest}</span>
+              ${r.tag ? `<span class="live-tag-pill">${r.tag}</span>` : ""}
             </div>
-            <div class="live-route-info">
-              <div class="live-route-dest">${r.dest}</div>
-              <div class="live-route-sub">
-                <span>路線：${r.headsign}</span>
-                <span class="live-tag-pill">${r.tag}</span>
-              </div>
-            </div>
-          </div>
-          <div class="live-bus-right">
             <span class="live-eta-badge ${eta.badgeClass}">
               ${pulseHtml} ${eta.text}
             </span>
-            <div class="live-actions-row">
-              <a class="live-gps-btn" href="${r.url}" target="_blank" rel="noopener" title="查看台中市交通局官方即時動態">
-                📍 官方動態
-              </a>
-              <a class="live-gps-btn" href="${r.yunbus}" target="_blank" rel="noopener" title="雲端公車極速查">
-                📱 雲端公車
-              </a>
+          </div>
+          <div class="live-bus-bottom">
+            <div class="live-bus-via">
+              <span>📍 ${r.via}</span>
             </div>
+            <a class="live-gps-btn" href="${r.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="查看台中市即時公車官方 GPS 動態">
+              🗺️ 官方動態 ↗
+            </a>
           </div>
         </div>
       `;

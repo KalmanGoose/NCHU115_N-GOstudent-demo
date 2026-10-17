@@ -992,46 +992,6 @@
   </div>
 </section>
 
-<!-- 🌟 興大常用系統萌系快捷抽屜 (可收合/自動跳動展演) -->
-<section class="portal-drawer-section" id="portalSection">
-  <div class="portal-drawer-bar" id="portalDrawerBar" onclick="togglePortalDrawer(undefined, event)" title="點擊展開/收合常用系統快捷傳送門">
-    <div class="portal-drawer-left">
-      <span class="portal-drawer-sparkle">✨</span>
-      <span class="portal-drawer-title">興大常用系統萌系快捷傳送門</span>
-      <span class="portal-drawer-badge" id="portalDrawerBadge">10 大常用</span>
-      <span class="portal-drawer-hint" id="portalDrawerHint">🎒 選課/Portal/信箱直達</span>
-    </div>
-    <div class="portal-drawer-right">
-      <span class="portal-drawer-state-btn" id="portalDrawerBtn">
-        <span id="portalDrawerBtnText">展開抽屜</span>
-        <span class="portal-drawer-arrow" id="portalDrawerArrow">▾</span>
-      </span>
-    </div>
-  </div>
-
-  <div class="portal-drawer-content" id="portalDrawerContent">
-    <div class="portal-drawer-inner">
-      <div class="portal-title-wrap" style="margin-bottom:10px;">
-        <div class="portal-subtitle">選課、單一入口、公務信箱、學雜費、請假⋯不用到處找連結，一鍵直達＋帳密小抄！</div>
-        <div class="portal-cats">
-          <button class="portal-cat-btn active" onclick="filterPortal('all', this, event)">全部 🌟</button>
-          <button class="portal-cat-btn" onclick="filterPortal('academic', this, event)">課業選課 📚</button>
-          <button class="portal-cat-btn" onclick="filterPortal('life', this, event)">校園生活 🎒</button>
-          <button class="portal-cat-btn" onclick="filterPortal('system', this, event)">帳號網路 💻</button>
-        </div>
-      </div>
-      <div class="portal-grid" id="portalGrid">
-        <!-- 由 renderPortalCards() 動態生成 -->
-      </div>
-      <div class="portal-drawer-footer">
-        <button class="portal-drawer-close-pill" onclick="togglePortalDrawer(false, event)">
-          ▲ 收合萌系傳送門抽屜
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
-
 <div class="chip-bar" id="chipBar"></div>
 
 <!-- 🔥 熱門話題 -->
@@ -1580,7 +1540,7 @@
   }
 
   /* ── 興大美食地圖彈窗 (與聊天室同步的即時搜尋與篩選卡片) ── */
-  .food-modal-card {
+  .food-modal-card, .portal-modal-card {
     background: #ffffff;
     width: 100%;
     max-width: 800px;
@@ -1593,6 +1553,19 @@
     box-shadow: 0 10px 30px rgba(15,39,69,0.18);
     animation: pop .3s cubic-bezier(.2,.7,.3,1.15);
     position: relative;
+  }
+  .portal-modal-card .portal-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    gap: 12px !important;
+    padding: 6px 2px 24px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .portal-modal-card .portal-card {
+    flex: initial !important;
+    min-height: 120px;
   }
   .food-search-box {
     width: 100%;
@@ -1973,6 +1946,37 @@
   </div>
 </div>
 
+<!-- 🌟 興大常用系統快捷傳送門彈窗 (由底部導航列「常用系統」開啟) -->
+<div class="modal-backdrop" id="portalModal" style="display:none;" onclick="if(event.target.id==='portalModal') closePortalModal()">
+  <div class="portal-modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+      <div>
+        <h3 style="font-size:16px; color:var(--primary); font-weight:900; display:flex; align-items:center; gap:6px; margin:0;">
+          🎒 興大常用系統快捷傳送門
+          <span style="font-size:11px; background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;">10 大核心系統</span>
+        </h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:3px; margin-bottom:0;">
+          選課、單一入口、公務信箱、學雜費⋯一鍵直達＋帳密小抄！
+        </p>
+      </div>
+      <button class="modal-close" style="position:static; margin-left:2px; flex-shrink:0;" onclick="closePortalModal()">✕</button>
+    </div>
+
+    <!-- 分類切換按鈕 -->
+    <div class="portal-cats" style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+      <button class="portal-cat-btn active" onclick="filterPortal('all', this, event)">全部 🌟</button>
+      <button class="portal-cat-btn" onclick="filterPortal('academic', this, event)">課業選課 📚</button>
+      <button class="portal-cat-btn" onclick="filterPortal('life', this, event)">校園生活 🎒</button>
+      <button class="portal-cat-btn" onclick="filterPortal('system', this, event)">帳號網路 💻</button>
+    </div>
+
+    <!-- 傳送門卡片網格 -->
+    <div class="portal-grid" id="portalGrid" style="flex:1; overflow-y:auto; padding:4px 2px 10px; margin-top:4px;">
+      <!-- 由 renderPortalCards() 動態生成 -->
+    </div>
+  </div>
+</div>
+
 <!-- 蝦皮式底部聊天室(iframe 內嵌 新鮮人-興生FAQ)-->
 <div class="chat-sheet" id="chatSheet" style="position:fixed;">
   <div class="chat-sheet-header" id="sheetHeader">
@@ -2033,55 +2037,32 @@
     `).join('');
   }
 
-  // ── 🎒 興大常用系統萌系快捷抽屜控制 ──
-  let userInteractedWithPortalDrawer = false;
-  let portalAutoTimer = null;
+  // ── 🎒 興大常用系統快捷傳送門彈窗控制 ──
+  function openPortalModal() {
+    const modal = document.getElementById("portalModal");
+    if (!modal) return;
+    renderPortalCards(currentPortalCategory || 'all');
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closePortalModal() {
+    const modal = document.getElementById("portalModal");
+    if (modal) modal.style.display = "none";
+    document.body.style.overflow = "";
+    if (typeof resetBottomTabToHome === "function") resetBottomTabToHome();
+  }
 
   function togglePortalDrawer(forceState, e) {
-    if (e) {
-      e.stopPropagation();
-      userInteractedWithPortalDrawer = true;
-      if (portalAutoTimer) clearTimeout(portalAutoTimer);
-    }
-    const sec = document.getElementById("portalSection");
-    if (!sec) return;
-    const isOpen = typeof forceState === "boolean" ? forceState : !sec.classList.contains("open");
-    sec.classList.toggle("open", isOpen);
-
-    const btnText = document.getElementById("portalDrawerBtnText");
-    const hint = document.getElementById("portalDrawerHint");
-    if (btnText) {
-      btnText.textContent = isOpen ? "收合抽屜" : "展開抽屜";
-    }
-    if (hint) {
-      hint.textContent = isOpen ? "點擊右上角或下方可收合" : "🎒 選課/Portal/信箱直達";
+    if (forceState === false) {
+      closePortalModal();
+    } else {
+      openPortalModal();
     }
   }
 
-  // 🎬 首頁進入自動化展示腳本：秀出跳出 -> 跳兩下 -> 關閉收合
   function runPortalDrawerIntro() {
-    const sec = document.getElementById("portalSection");
-    if (!sec) return;
-
-    // 1. 頁面載入後自動滑開秀出來
-    setTimeout(() => {
-      if (userInteractedWithPortalDrawer) return;
-      togglePortalDrawer(true);
-
-      // 2. 展開後活潑跳兩下
-      setTimeout(() => {
-        if (userInteractedWithPortalDrawer) return;
-        sec.classList.add("bounce-peeking");
-
-        // 3. 跳兩下展示 1.5 秒後，自動縮回成精緻可愛抽屜
-        portalAutoTimer = setTimeout(() => {
-          sec.classList.remove("bounce-peeking");
-          if (!userInteractedWithPortalDrawer) {
-            togglePortalDrawer(false);
-          }
-        }, 1500);
-      }, 400);
-    }, 450);
+    // 首頁傳送門已依需求收納至底部導航「常用系統」彈窗，保持首頁清爽寬敞
   }
 
   function filterPortal(cat, btn, e) {
@@ -3558,7 +3539,7 @@
     }
   }
 
-  // ── 📱 LINE 風格底部四大功能導航列 (Option B) 互動切換 ──
+  // ── 📱 LINE 風格底部四大功能導航列互動切換 ──
   function switchBottomTab(tab) {
     document.querySelectorAll(".bottom-tab-bar .tab-item").forEach(btn => {
       btn.classList.remove("active");
@@ -3567,21 +3548,25 @@
     if (currentBtn) currentBtn.classList.add("active");
 
     if (tab === "home") {
+      closePortalModal();
+      if (typeof closeTransitModal === "function") closeTransitModal();
+      if (typeof closeFoodMap === "function") closeFoodMap();
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (tab === "portal") {
-      const p = document.getElementById("portalSection");
-      if (p) {
-        if (typeof togglePortalDrawer === "function") togglePortalDrawer(true);
-        const y = p.getBoundingClientRect().top + window.pageYOffset - 70;
-        window.scrollTo({ top: y, behavior: "smooth" });
-      }
+      if (typeof closeTransitModal === "function") closeTransitModal();
+      if (typeof closeFoodMap === "function") closeFoodMap();
+      openPortalModal();
     } else if (tab === "transit") {
+      closePortalModal();
+      if (typeof closeFoodMap === "function") closeFoodMap();
       if (typeof openTransitModal === "function") {
         openTransitModal("live");
       } else if (typeof openBusDynamicModal === "function") {
         openBusDynamicModal();
       }
     } else if (tab === "food") {
+      closePortalModal();
+      if (typeof closeTransitModal === "function") closeTransitModal();
       if (typeof openFoodMap === "function") {
         openFoodMap();
       }
@@ -3602,26 +3587,6 @@
     if (typeof origCloseTransitModal === "function") origCloseTransitModal();
     resetBottomTabToHome();
   };
-
-  // 監聽滾動以自動切換「首頁」與「常用系統」活耀狀態
-  window.addEventListener("scroll", () => {
-    const portal = document.getElementById("portalSection");
-    if (!portal) return;
-    const rect = portal.getBoundingClientRect();
-    const isPortalVisible = rect.top <= 140 && rect.bottom >= 150;
-    const isHome = window.scrollY < 200;
-
-    const tabHome = document.getElementById("tab-home");
-    const tabPortal = document.getElementById("tab-portal");
-
-    if (isHome && tabHome && !tabHome.classList.contains("active")) {
-      document.querySelectorAll(".bottom-tab-bar .tab-item").forEach(b => b.classList.remove("active"));
-      tabHome.classList.add("active");
-    } else if (isPortalVisible && tabPortal && !tabPortal.classList.contains("active")) {
-      document.querySelectorAll(".bottom-tab-bar .tab-item").forEach(b => b.classList.remove("active"));
-      tabPortal.classList.add("active");
-    }
-  }, { passive: true });
 
   // ── 🔒 鎖死手機端手勢縮放，防止跑版 ──
   document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
