@@ -58,20 +58,80 @@
   .chip:hover { transform: translateY(-2px); color: var(--primary); }
   .chip.active { background: var(--primary); color: #fff; }
   main { max-width: 1080px; margin: 0 auto; padding: 20px 24px 60px; }
-  .result-count { text-align:center; color:var(--text-muted); font-size:13px; margin: 10px 0 18px; }
+  .result-count { color: var(--text-muted); font-size: 13px; font-weight: 700; margin: 0; }
+  .faq-controls-bar {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    margin: 10px 0 16px; padding: 4px 2px;
+  }
+  .faq-controls-left, .faq-controls-right { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .faq-tool-btn {
+    border: 1px solid #e2e8f0; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700;
+    padding: 6px 12px; border-radius: var(--pill-radius); background: #fff; color: var(--text-main);
+    box-shadow: var(--shadow-sm); display: inline-flex; align-items: center; gap: 4px; transition: all .2s;
+  }
+  .faq-tool-btn:hover { transform: translateY(-2px); border-color: var(--mint); color: var(--primary); }
+  .faq-btn-add { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-color: #86efac; color: #166534; }
+  .faq-btn-add:hover { background: #bbf7d0; color: #14532d; }
+  .faq-sort-wrap { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); font-weight: 700; }
+  .faq-sort-select {
+    font-family: inherit; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: var(--pill-radius);
+    border: 1px solid #e2e8f0; background: #fff; color: var(--text-main); outline: none; cursor: pointer; box-shadow: var(--shadow-sm);
+  }
+  .layout-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); font-weight: 700; }
+  .layout-toggle button {
+    border: none; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700;
+    padding: 6px 12px; border-radius: var(--pill-radius); background: #fff; color: var(--text-muted);
+    box-shadow: var(--shadow-sm); transition: .2s;
+  }
+  .layout-toggle button.active { background: var(--primary); color: #fff; }
   .faq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
   .faq-card {
     background: #fff; border-radius: var(--card-radius); padding: 20px; cursor: pointer;
     box-shadow: var(--shadow-sm); transition: all .28s cubic-bezier(.2,.7,.3,1.1);
     display: flex; flex-direction: column; gap: 10px; border: 1px solid transparent;
-    animation: reveal .5s ease backwards;
+    animation: reveal .5s ease backwards; position: relative;
   }
   @keyframes reveal { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
   .faq-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: var(--mint); }
-  .faq-board-tag { align-self: flex-start; font-size: 11px; font-weight: 700; color: var(--primary); background: rgba(171,218,213,.3); padding: 3px 10px; border-radius: var(--pill-radius); }
+  .faq-card-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .faq-board-tag { font-size: 11px; font-weight: 700; color: var(--primary); background: rgba(171,218,213,.3); padding: 3px 10px; border-radius: var(--pill-radius); }
+  .faq-custom-tag { font-size: 10.5px; font-weight: 800; color: #7c3aed; background: rgba(124, 58, 237, 0.12); padding: 2px 8px; border-radius: var(--pill-radius); }
+  .faq-star-btn {
+    border: none; background: rgba(241, 245, 249, 0.85); cursor: pointer; font-size: 17px; line-height: 1;
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: #94a3b8; transition: all .2s cubic-bezier(.34, 1.56, .64, 1); padding: 0; flex-shrink: 0;
+  }
+  .faq-star-btn:hover { transform: scale(1.22); background: #fef08a; color: #ca8a04; }
+  .faq-star-btn.starred {
+    background: #fef9c3; color: #eab308; filter: drop-shadow(0 2px 4px rgba(234, 179, 8, 0.35));
+    transform: scale(1.08); animation: starPop .32s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  @keyframes starPop {
+    0% { transform: scale(0.7); }
+    50% { transform: scale(1.35); }
+    100% { transform: scale(1.08); }
+  }
+  .faq-spare-card {
+    border: 2px dashed #93c5fd !important; background: linear-gradient(145deg, #f8fafc 0%, #eff6ff 100%) !important;
+  }
+  .faq-spare-card:hover { border-color: #3b82f6 !important; background: #eff6ff !important; transform: translateY(-5px); }
   .faq-q { font-size: 15px; font-weight: 700; line-height: 1.55; }
   .faq-preview { font-size: 13px; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .faq-more { font-size: 12px; font-weight: 700; color: var(--primary); margin-top: auto; }
+  .faq-card-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 4px; }
+  .faq-more { font-size: 12px; font-weight: 700; color: var(--primary); }
+  .faq-card-actions { display: flex; align-items: center; gap: 4px; }
+  .faq-action-btn {
+    border: 1px solid #e2e8f0; background: #f8fafc; color: var(--text-muted); border-radius: 8px;
+    cursor: pointer; font-size: 12px; padding: 4px 8px; transition: all .2s; line-height: 1;
+  }
+  .faq-action-btn:hover { background: #fff; border-color: var(--mint); color: var(--primary); transform: translateY(-1px); }
+  .faq-action-del:hover { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
+  .modal-star-btn {
+    border: 1px solid #e2e8f0; background: #fff; color: #475569; border-radius: var(--pill-radius);
+    cursor: pointer; font-size: 12px; font-weight: 700; padding: 5px 12px; transition: all .2s;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .modal-star-btn.starred { background: #fef9c3; border-color: #fde047; color: #a16207; font-weight: 800; }
   .empty-msg { grid-column: 1/-1; text-align: center; padding: 48px 0; color: var(--text-muted); }
   /* ── 🔥 熱門話題 ── */
   .hot-topic-bar { max-width: 1080px; margin: 0 auto; padding: 4px 24px 0; }
@@ -121,19 +181,157 @@
   }
   @media (max-width: 640px) { .source-banner { margin:10px 16px -4px; font-size:11px; } }
   @media (max-width: 640px) {
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    * {
+      box-sizing: border-box;
+    }
     .site-header { padding: 12px 16px; }
     .brand { font-size: 13px; gap: 6px; }
     .brand-logo { width: 24px; height: 24px; font-size: 12px; }
     .header-cta { font-size: 12px; padding: 8px 12px; white-space: nowrap; }
     .hero { padding: 38px 16px 22px; }
-    main { padding: 12px 16px 44px; }
-    /* 📱 手機預設兩張並排 */
-    .faq-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .faq-card { padding: 12px; gap: 6px; border-radius: 12px; }
-    .faq-q { font-size: 13px; line-height: 1.5; }
-    .faq-preview { font-size: 11.5px; -webkit-line-clamp: 2; }
-    .faq-more { font-size: 11px; }
-    .faq-board-tag { font-size: 9.5px; padding: 2px 7px; }
+    main { padding: 12px 16px 44px; width: 100%; overflow: hidden; box-sizing: border-box; }
+
+    /* 📱 手機預設兩張並排 - 嚴防炸框 */
+    .faq-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 10px !important;
+      width: 100%;
+    }
+    .faq-card {
+      padding: 12px 9px !important;
+      gap: 6px !important;
+      border-radius: 14px !important;
+      min-width: 0 !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+    }
+    .faq-card-header {
+      min-width: 0;
+      gap: 4px;
+    }
+    .faq-board-tag {
+      font-size: 9.5px !important;
+      padding: 2px 6px !important;
+      max-width: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .faq-custom-tag {
+      font-size: 9px !important;
+      padding: 2px 5px !important;
+      white-space: nowrap;
+    }
+    .faq-star-btn {
+      width: 26px !important;
+      height: 26px !important;
+      font-size: 14px !important;
+    }
+    .faq-q {
+      font-size: 12.5px !important;
+      line-height: 1.45 !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+    }
+    .faq-preview {
+      font-size: 11px !important;
+      -webkit-line-clamp: 2 !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+    }
+    /* 關鍵解決炸框：footer 在手機雙欄垂直排列，確保按鈕不會破出右邊界 */
+    .faq-card-footer {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 5px !important;
+      min-width: 0 !important;
+      width: 100% !important;
+      padding-top: 2px !important;
+    }
+    .faq-more {
+      font-size: 10.5px !important;
+      white-space: nowrap;
+    }
+    .faq-card-actions {
+      width: 100% !important;
+      justify-content: flex-end !important;
+      gap: 4px !important;
+    }
+    .faq-action-btn {
+      font-size: 10.5px !important;
+      padding: 2px 6px !important;
+      line-height: 1.2 !important;
+    }
+
+    /* 單欄模式下還原為水平排列 */
+    body.cols-1 .faq-grid {
+      grid-template-columns: 1fr !important;
+    }
+    body.cols-1 .faq-card-footer {
+      flex-direction: row !important;
+      align-items: center !important;
+    }
+    body.cols-1 .faq-board-tag {
+      max-width: none;
+    }
+
+    /* 關鍵解決工具列炸框：控制列手機優化 */
+    .faq-controls-bar {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 8px !important;
+      width: 100% !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+    }
+    .faq-controls-left {
+      width: 100% !important;
+      justify-content: space-between !important;
+      gap: 6px !important;
+    }
+    .result-count {
+      font-size: 12px !important;
+      width: 100% !important;
+      text-align: left !important;
+      margin-bottom: 2px !important;
+    }
+    .faq-tool-btn {
+      font-size: 10.5px !important;
+      padding: 4px 8px !important;
+    }
+    .faq-controls-right {
+      width: 100% !important;
+      justify-content: space-between !important;
+      gap: 6px !important;
+    }
+    .faq-sort-wrap {
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      gap: 4px !important;
+      font-size: 11px !important;
+    }
+    .faq-sort-select {
+      font-size: 11px !important;
+      padding: 4px 6px !important;
+      max-width: 105px !important;
+      flex: 1 1 auto !important;
+    }
+    .layout-toggle {
+      flex-shrink: 0 !important;
+      gap: 4px !important;
+      font-size: 11px !important;
+    }
+    .layout-toggle button {
+      font-size: 10.5px !important;
+      padding: 4px 8px !important;
+    }
+
     .modal-card { padding: 24px 14px; }
     /* 美食地圖 mini 卡也兩張並排 */
     .food-modal-list { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
@@ -142,14 +340,459 @@
     .food-mini-name span[style*="border-radius:999px"] { display:inline-block; margin-top:3px; font-size:9px !important; padding:1px 6px !important; }
     .food-mini-desc { font-size: 10.5px; line-height: 1.45; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
     .food-mini-btn { font-size: 11px !important; padding: 6px 0 !important; }
-    /* 使用者自選單欄時覆蓋 */
-    body.cols-1 .faq-grid { grid-template-columns: 1fr; }
     body.cols-1 .food-modal-list { grid-template-columns: 1fr !important; }
     body.cols-1 .food-mini-desc { -webkit-line-clamp: unset; }
-    /* 排版切換器 */
-    .layout-toggle { display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:12px; font-size:12px; color:var(--text-muted); }
-    .layout-toggle button { border:none; cursor:pointer; font-family:inherit; font-size:12px; font-weight:700; padding:6px 14px; border-radius:var(--pill-radius); background:#fff; color:var(--text-muted); box-shadow:var(--shadow-sm); transition:.2s; }
-    .layout-toggle button.active { background:var(--primary); color:#fff; }
+  }
+
+  /* ── 🌟 興大常用系統萌系快捷抽屜 (可收合/自動展演) ── */
+  .portal-drawer-section {
+    max-width: 1080px;
+    margin: 12px auto 6px;
+    padding: 0 24px;
+    position: relative;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+  }
+  .portal-drawer-bar {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+    border: 1.5px solid #bfdbfe;
+    border-radius: 18px;
+    padding: 11px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+    transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    user-select: none;
+    box-sizing: border-box;
+  }
+  .portal-drawer-bar:hover {
+    transform: translateY(-2px);
+    border-color: #60a5fa;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.16);
+  }
+  .portal-drawer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+  .portal-drawer-sparkle {
+    font-size: 18px;
+    display: inline-block;
+    animation: cuteBounce 2.4s infinite cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes cuteBounce {
+    0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+    50% { transform: translateY(-3px) scale(1.15) rotate(10deg); }
+  }
+  .portal-drawer-title {
+    font-size: 14.5px;
+    font-weight: 900;
+    color: #1e3a8a;
+    letter-spacing: -0.2px;
+  }
+  .portal-drawer-badge {
+    font-size: 11px;
+    font-weight: 800;
+    color: #2563eb;
+    background: rgba(37, 99, 235, 0.12);
+    padding: 2px 8px;
+    border-radius: var(--pill-radius);
+  }
+  .portal-drawer-hint {
+    font-size: 11.5px;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .portal-drawer-right {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .portal-drawer-state-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #2563eb;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 5px 12px;
+    border-radius: var(--pill-radius);
+    transition: all 0.2s;
+  }
+  .portal-drawer-bar:hover .portal-drawer-state-btn {
+    background: #2563eb;
+    color: #ffffff;
+  }
+  .portal-drawer-arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    font-size: 12px;
+    line-height: 1;
+  }
+  .portal-drawer-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: max-height 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+                opacity 0.35s ease,
+                transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-sizing: border-box;
+  }
+  .portal-drawer-section.open .portal-drawer-content {
+    max-height: 1400px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .portal-drawer-section.open .portal-drawer-bar {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-color: #3b82f6;
+    background: #ffffff;
+  }
+  .portal-drawer-section.open .portal-drawer-arrow {
+    transform: rotate(180deg);
+  }
+  .portal-drawer-inner {
+    background: #ffffff;
+    border: 1.5px solid #dbeafe;
+    border-top: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 14px 16px 16px;
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.08);
+    box-sizing: border-box;
+  }
+  .portal-drawer-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 14px;
+  }
+  .portal-drawer-close-pill {
+    border: none;
+    cursor: pointer;
+    background: #f1f5f9;
+    color: #64748b;
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: var(--pill-radius);
+    transition: all 0.2s;
+  }
+  .portal-drawer-close-pill:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+  }
+  .portal-drawer-section.bounce-peeking {
+    animation: portalPeekDoubleBounce 1.2s cubic-bezier(0.28, 0.84, 0.42, 1);
+  }
+  @keyframes portalPeekDoubleBounce {
+    0% { transform: translateY(0); }
+    22% { transform: translateY(-10px); }
+    44% { transform: translateY(0); }
+    66% { transform: translateY(-7px); }
+    85% { transform: translateY(0); }
+    100% { transform: translateY(0); }
+  }
+  .portal-title-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .portal-subtitle {
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .portal-cats {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .portal-cat-btn {
+    border: 1.5px solid rgba(0, 75, 151, 0.12);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: var(--pill-radius);
+    background: #ffffff;
+    color: var(--text-muted);
+    box-shadow: 0 2px 6px rgba(15, 39, 69, 0.05);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .portal-cat-btn:hover {
+    transform: translateY(-2px);
+    color: var(--primary);
+    border-color: var(--mint);
+    box-shadow: 0 4px 10px rgba(0, 75, 151, 0.1);
+  }
+  .portal-cat-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(0, 75, 151, 0.22);
+  }
+
+  .portal-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+  }
+  .portal-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 15px 13px;
+    box-shadow: 0 4px 14px rgba(15, 39, 69, 0.05), 0 1px 3px rgba(15, 39, 69, 0.03);
+    border: 1px solid rgba(171, 218, 213, 0.35);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+    user-select: none;
+  }
+  .portal-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 24px rgba(15, 39, 69, 0.12);
+    border-color: var(--mint);
+  }
+  .portal-card:hover .portal-icon-box {
+    transform: scale(1.1) rotate(6deg);
+  }
+
+  .portal-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .portal-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+  }
+  .portal-tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--pill-radius);
+    white-space: nowrap;
+  }
+  .portal-name {
+    font-size: 14.5px;
+    font-weight: 900;
+    color: var(--text-main);
+    line-height: 1.35;
+    margin-bottom: 2px;
+  }
+  .portal-alias {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.3;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .portal-desc {
+    font-size: 11.5px;
+    color: #4a5568;
+    line-height: 1.45;
+    margin-bottom: 12px;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .portal-actions {
+    display: flex;
+    gap: 5px;
+    margin-top: auto;
+  }
+  .portal-btn {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    border-radius: 10px;
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+  .portal-btn:active {
+    transform: scale(0.95);
+  }
+  .portal-btn-go {
+    flex: 1;
+    background: linear-gradient(135deg, var(--primary), #1e69b8);
+    color: #ffffff;
+    font-size: 11.5px;
+    padding: 7px 4px;
+    box-shadow: 0 2px 6px rgba(0, 75, 151, 0.2);
+  }
+  .portal-btn-go:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 75, 151, 0.3);
+  }
+  .portal-btn-copy {
+    background: #f1f5f9;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 7px 8px;
+    border: 1px solid #e2e8f0;
+  }
+  .portal-btn-copy:hover {
+    background: #e2e8f0;
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+  .portal-btn-tip {
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 12px;
+    padding: 7px 8px;
+    border: 1px solid #fde68a;
+  }
+  .portal-btn-tip:hover {
+    background: #fde68a;
+    color: #78350f;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 1024px) {
+    .portal-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .portal-drawer-section {
+      padding: 0 16px;
+      margin: 6px auto 10px;
+    }
+    .portal-drawer-bar {
+      padding: 9px 12px;
+      border-radius: 14px;
+    }
+    .portal-drawer-title {
+      font-size: 12.5px;
+    }
+    .portal-drawer-hint {
+      display: none;
+    }
+    .portal-drawer-state-btn {
+      font-size: 11px;
+      padding: 4px 8px;
+    }
+    .portal-drawer-inner {
+      padding: 10px 10px 14px;
+      border-radius: 0 0 16px 16px;
+    }
+    .portal-title-wrap {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .portal-subtitle {
+      font-size: 12px;
+    }
+    .portal-cats {
+      width: 100%;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .portal-cats::-webkit-scrollbar {
+      display: none;
+    }
+    .portal-cat-btn {
+      font-size: 12px;
+      padding: 5px 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .portal-grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 12px;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .portal-grid::-webkit-scrollbar {
+      height: 4px;
+    }
+    .portal-grid::-webkit-scrollbar-thumb {
+      background: rgba(0, 75, 151, 0.2);
+      border-radius: 4px;
+    }
+    .portal-card {
+      flex: 0 0 170px;
+      scroll-snap-align: start;
+      padding: 12px 10px;
+      border-radius: 16px;
+    }
+    .portal-icon-box {
+      width: 42px;
+      height: 42px;
+      font-size: 20px;
+      border-radius: 12px;
+    }
+    .portal-tag {
+      font-size: 9.5px;
+      padding: 2px 6px;
+    }
+    .portal-name {
+      font-size: 13px;
+    }
+    .portal-alias {
+      font-size: 10px;
+    }
+    .portal-desc {
+      font-size: 11px;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .portal-actions {
+      gap: 4px;
+    }
+    .portal-btn-go {
+      font-size: 11px;
+      padding: 5px 4px;
+    }
+    .portal-btn-copy {
+      font-size: 11px;
+      padding: 5px 7px;
+    }
+    .portal-btn-tip {
+      font-size: 11px;
+      padding: 5px 6px;
+    }
   }
 </style>
 </head>
@@ -176,6 +819,46 @@
   </div>
 </section>
 
+<!-- 🌟 興大常用系統萌系快捷抽屜 (可收合/自動跳動展演) -->
+<section class="portal-drawer-section" id="portalSection">
+  <div class="portal-drawer-bar" id="portalDrawerBar" onclick="togglePortalDrawer(undefined, event)" title="點擊展開/收合常用系統快捷傳送門">
+    <div class="portal-drawer-left">
+      <span class="portal-drawer-sparkle">✨</span>
+      <span class="portal-drawer-title">興大常用系統萌系快捷傳送門</span>
+      <span class="portal-drawer-badge" id="portalDrawerBadge">10 大常用</span>
+      <span class="portal-drawer-hint" id="portalDrawerHint">🎒 選課/Portal/信箱直達</span>
+    </div>
+    <div class="portal-drawer-right">
+      <span class="portal-drawer-state-btn" id="portalDrawerBtn">
+        <span id="portalDrawerBtnText">展開抽屜</span>
+        <span class="portal-drawer-arrow" id="portalDrawerArrow">▾</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="portal-drawer-content" id="portalDrawerContent">
+    <div class="portal-drawer-inner">
+      <div class="portal-title-wrap" style="margin-bottom:10px;">
+        <div class="portal-subtitle">選課、單一入口、公務信箱、學雜費、請假⋯不用到處找連結，一鍵直達＋帳密小抄！</div>
+        <div class="portal-cats">
+          <button class="portal-cat-btn active" onclick="filterPortal('all', this, event)">全部 🌟</button>
+          <button class="portal-cat-btn" onclick="filterPortal('academic', this, event)">課業選課 📚</button>
+          <button class="portal-cat-btn" onclick="filterPortal('life', this, event)">校園生活 🎒</button>
+          <button class="portal-cat-btn" onclick="filterPortal('system', this, event)">帳號網路 💻</button>
+        </div>
+      </div>
+      <div class="portal-grid" id="portalGrid">
+        <!-- 由 renderPortalCards() 動態生成 -->
+      </div>
+      <div class="portal-drawer-footer">
+        <button class="portal-drawer-close-pill" onclick="togglePortalDrawer(false, event)">
+          ▲ 收合萌系傳送門抽屜
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div class="chip-bar" id="chipBar"></div>
 
 <!-- 🔥 熱門話題 -->
@@ -185,8 +868,21 @@
     <div class="hot-card hot-line" onclick="openLineModal()">
       <div style="font-size:30px;">💬</div>
       <div>
-        <div style="font-weight:900; font-size:14px;">新生 LINE 群總整理</div>
-        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">找系群、認識同學,點開看加入方式(有洋蔥🥲)</div>
+        <div style="font-weight:900; font-size:14px; display:flex; align-items:center; gap:6px;">
+          新生 LINE 群總整理
+          <span style="font-size:11px; background:#e0f2fe; color:#0369a1; padding:1px 6px; border-radius:6px; font-weight:700;">115學年度</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">【115學年度】17 系群快速加入，找系群、提早認識同學！(有洋蔥🥲)</div>
+      </div>
+    </div>
+    <div class="hot-card hot-transit" onclick="openTransitModal()" style="border-color:#38bdf8;">
+      <div style="font-size:30px;">🚄</div>
+      <div>
+        <div style="font-weight:900; font-size:14px; display:flex; align-items:center; gap:6px;">
+          返鄉與交通全攻略 🚌
+          <span style="font-size:11px; background:#fef3c7; color:#b45309; padding:1px 6px; border-radius:6px; font-weight:700;">高鐵·台鐵·公車·捷運</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">高鐵158直達、火車站公車、大慶捷運、市民卡10公里免費與Ubike！</div>
       </div>
     </div>
     <div class="hot-card hot-star" onclick="openModal('faq_club_star')">
@@ -213,22 +909,57 @@
   </div>
 </section>
 
+<!-- 💡 常用系統帳密登入小抄彈窗 -->
+<div class="modal-backdrop" id="portalTipModal" onclick="if(event.target===this)closePortalTipModal()">
+  <div class="modal-card" style="max-width:480px; border-radius:20px; padding:26px;">
+    <button class="modal-close" onclick="closePortalTipModal()">✕</button>
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+      <div id="pTipIcon" style="width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 4px 10px rgba(0,0,0,0.08); flex-shrink:0;">💡</div>
+      <div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <h3 id="pTipTitle" style="font-size:18px; font-weight:900; margin:0; color:var(--text-main);">系統名稱</h3>
+          <span id="pTipTag" class="faq-board-tag" style="margin:0;">核心入口</span>
+        </div>
+        <div id="pTipAlias" style="font-size:12px; color:var(--text-muted); margin-top:2px;">別名</div>
+      </div>
+    </div>
+    
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px; margin-bottom:14px;">
+      <div style="font-size:12px; font-weight:700; color:var(--primary); margin-bottom:6px; display:flex; align-items:center; gap:4px;">
+        💡 帳號與登入小抄提示
+      </div>
+      <p id="pTipBody" style="font-size:13.5px; line-height:1.75; color:var(--text-main); margin:0; white-space:pre-wrap;"></p>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+      <span style="font-size:12px; color:var(--text-muted); flex-shrink:0;">官方網址：</span>
+      <input id="pTipUrlInput" type="text" readonly style="flex:1; font-size:12px; padding:6px 10px; border:1px solid #cbd5e1; border-radius:8px; background:#fff; color:var(--text-muted); outline:none;" />
+      <button id="pTipCopyBtn" class="chip" style="font-size:12px; padding:6px 12px; margin:0; flex-shrink:0;" onclick="copyPortalTipUrl()">📋 複製</button>
+    </div>
+
+    <div style="display:flex; gap:10px;">
+      <a id="pTipGoBtn" class="ai-btn" href="#" target="_blank" rel="noopener noreferrer" style="flex:1; margin:0; text-align:center; padding:10px;">🚀 前往官方網站</a>
+      <button class="chip" style="margin:0; padding:10px 18px; font-weight:700;" onclick="closePortalTipModal()">關閉</button>
+    </div>
+  </div>
+</div>
+
 <!-- 新生 LINE 群彈窗 -->
 <div class="modal-backdrop" id="lineModal" onclick="if(event.target===this)closeLineModal()">
   <div class="modal-card">
     <button class="modal-close" onclick="closeLineModal()">✕</button>
-    <span class="faq-board-tag">💬 新生 LINE 群</span>
-    <h2 style="font-size:19px; font-weight:900; margin-top:10px;">先跟大家說聲抱歉 🙇</h2>
+    <span class="faq-board-tag">💬 115學年度 新生 LINE 群</span>
+    <h2 style="font-size:19px; font-weight:900; margin-top:10px;">115學年度 各系新生 LINE 群總整理 🙇</h2>
     <p style="font-size:13.5px; line-height:1.9; color:var(--text-main); margin-top:10px;">
-      各系的 LINE 群連結目前<b>只有資工系是「點了直接加入」</b>,其他科系的連結都是 QR Code 圖片形式,
-      沒辦法在網頁上直接按~真的不能怪我 ==ㄏㄏ。請用新鮮人-興生FAQ輸入你的科系,就會拿到該系的加入方式!
+      本整理專屬 <b>115 學年度（119級）</b> 新生！各系的 LINE 群連結目前<b>只有資工系是「點了直接加入」</b>，其他科系的連結都是 QR Code 圖片形式，
+      沒辦法在網頁上直接按~真的不能怪我 ==ㄏㄏ。請用新鮮人-興生FAQ輸入你的科系，就會拿到該系的加入方式！
     </p>
     <a class="ai-btn" href="https://line.me/ti/g2/YYKlpGLCC_dcEwyjuuCmaIqMysJ8nJ5Q2OWZ2w" target="_blank" rel="noopener"
-       style="background:linear-gradient(135deg,#06C755,#04a344);text-decoration:none;">✅ 我是資工系,點我直接加入新生群!(LINE OpenChat)</a>
+       style="background:linear-gradient(135deg,#06C755,#04a344);text-decoration:none;">✅ 我是資工系，點我直接加入新生群！(LINE OpenChat)</a>
     <a class="ai-btn" href="#" onclick="closeLineModal();openChatSheet('__DEPT_LIST__');return false;"
-       style="background:var(--primary);">🔍 其他科系:直接看各系新生群連結列表</a>
+       style="background:var(--primary);">🔍 其他科系：直接看 115 學年度各系新生群連結列表</a>
     <p style="font-size:12px; color:var(--text-muted); margin-top:12px; text-align:center;">
-      已收錄科系:環工、應數、農藝、昆蟲、應經、台文、電資、食生、資工、材料、獸醫、生機、企管、中文、外文、會計、水保
+      已收錄科系（115學年度）：環工、應數、農藝、昆蟲、應經、台文、電資、食生、資工、材料、獸醫、生機、企管、中文、外文、會計、水保
     </p>
   </div>
 </div>
@@ -275,25 +1006,57 @@
 </div>
 
 <main>
-  <div class="layout-toggle" id="layoutToggle">
-    <span>📐 排版</span>
-    <button id="lt2" class="active" onclick="setLayout(2)">▦ 兩張並排</button>
-    <button id="lt1" onclick="setLayout(1)">☰ 單欄</button>
+  <div class="faq-controls-bar">
+    <div class="faq-controls-left">
+      <span class="result-count" id="resultCount">共 40 篇問答指引</span>
+      <button class="faq-tool-btn faq-btn-add" onclick="openCustomFaqModal()" title="新增一筆本地自訂問答卡片（預留備用空間）">
+        <span>➕</span> 新增備用卡
+      </button>
+      <button class="faq-tool-btn" onclick="exportCustomFaqs()" title="匯出所有自訂卡片 (JSON) 方便未來整理搜集">
+        <span>💾</span> 匯出備份
+      </button>
+      <button class="faq-tool-btn" onclick="openImportModal()" title="貼上 JSON 匯入自訂卡片">
+        <span>📥</span> 匯入
+      </button>
+    </div>
+    <div class="faq-controls-right">
+      <div class="faq-sort-wrap">
+        <span class="faq-sort-label">🔀 排序：</span>
+        <select id="faqSortSelect" class="faq-sort-select" onchange="changeFaqSort(this.value)">
+          <option value="default">預設排序</option>
+          <option value="starred">⭐ 收藏優先</option>
+          <option value="custom">📝 自訂優先</option>
+        </select>
+      </div>
+      <div class="layout-toggle" id="layoutToggle">
+        <span>📐 排版</span>
+        <button id="lt2" class="active" onclick="setLayout(2)">▦ 雙欄</button>
+        <button id="lt1" onclick="setLayout(1)">☰ 單欄</button>
+      </div>
+    </div>
   </div>
-  <div class="result-count" id="resultCount"></div>
   <div class="faq-grid" id="faqGrid"></div>
 </main>
 
 <div class="modal-backdrop" id="faqModal" onclick="if(event.target===this)closeModal()">
   <div class="modal-card">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <span class="faq-board-tag" id="mBoard"></span>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+      <span class="faq-board-tag" id="mBoard"></span>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <button id="mEditBtn" class="chip" style="display:none; font-size:11.5px; padding:4px 10px; margin:0;" onclick="editCurrentModalFaq()">✏️ 編輯</button>
+        <button id="mStarBtn" class="modal-star-btn" onclick="toggleModalStar()">⭐ 收藏</button>
+      </div>
+    </div>
     <h2 id="mQ" style="font-size:19px; font-weight:900; line-height:1.5; margin-top:10px;"></h2>
     <div class="answer-body" id="mA"></div>
     <div class="kw-row" id="mKw"></div>
     <div id="mVerify" style="margin-top:14px; font-size:11.5px; color:#7a5c10; background:#fdf6e3; border:1px solid #f0e0b0; border-radius:10px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
       <span>⚠️ 內容由官方公告與學長姐經驗整理,可能隨學年度變動,重要事項請以官網為準。</span>
       <a href="#" onclick="reportIssue(); return false;" style="white-space:nowrap; font-weight:700; color:#b8860b;">🐛 回報這題有誤</a>
+    </div>
+    <div style="display:flex; gap:8px; margin-top:10px;">
+      <button class="chip" style="flex:1; margin:0; padding:9px 12px; font-size:12.5px; font-weight:700;" onclick="copyCurrentModalFaq(this)">📋 複製完整問答</button>
     </div>
     <div class="official-links">
       <a href="https://oaa.nchu.edu.tw/" target="_blank" rel="noopener">教務處</a>
@@ -302,6 +1065,90 @@
       <a href="https://www.nchu.edu.tw/" target="_blank" rel="noopener">學校首頁</a>
     </div>
     <a class="ai-btn" href="#" onclick="askFood('興大周邊美食推薦');return false;">🤖 打開 AI 聊天室隨便聊美食</a>
+  </div>
+</div>
+
+<!-- ✏️ 自訂問答卡片 / 備用空格編輯彈窗 -->
+<div class="modal-backdrop" id="customFaqModal" onclick="if(event.target===this)closeCustomFaqModal()">
+  <div class="modal-card" style="max-width:520px; border-radius:20px; padding:24px;">
+    <button class="modal-close" onclick="closeCustomFaqModal()">✕</button>
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+      <span style="font-size:24px;">📝</span>
+      <div>
+        <h3 id="customModalTitle" style="font-size:17.5px; font-weight:900; margin:0; color:var(--text-main);">新增自訂問答卡片</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin:2px 0 0;">預留備用空間，內容儲存於本機瀏覽器，隨時可修改與匯出！</p>
+      </div>
+    </div>
+    
+    <form id="customFaqForm" onsubmit="saveCustomFaq(event)" style="display:flex; flex-direction:column; gap:12px;">
+      <input type="hidden" id="customFaqId" value="" />
+      
+      <div>
+        <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;">
+          📌 問答標題／主題（必填）
+        </label>
+        <input type="text" id="customFaqQ" required placeholder="例如：資工系大一必修選課避雷、男宿洗衣離峰時間..." 
+               style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:13px; border:1.5px solid #cbd5e1; border-radius:10px; outline:none;" />
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;">
+            🏷️ 所屬分類
+          </label>
+          <select id="customFaqBoard" style="width:100%; box-sizing:border-box; padding:9px 10px; font-size:12.5px; border:1.5px solid #cbd5e1; border-radius:10px; outline:none; background:#fff;">
+            <option value="course">📚 選課與學分</option>
+            <option value="dorm">🏠 宿舍生活</option>
+            <option value="register">💰 註冊與學雜費</option>
+            <option value="transport">🛵 交通與周邊</option>
+            <option value="admin">🏛️ 獎助與行政</option>
+            <option value="club">🎉 社團與活動</option>
+            <option value="custom" selected>📝 私房備忘筆記</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;">
+            🏷️ 標籤關鍵字（逗號分隔）
+          </label>
+          <input type="text" id="customFaqKw" placeholder="例如：避雷, 必修, 教授" 
+                 style="width:100%; box-sizing:border-box; padding:9px 10px; font-size:12.5px; border:1.5px solid #cbd5e1; border-radius:10px; outline:none;" />
+        </div>
+      </div>
+
+      <div>
+        <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;">
+          💬 詳細內容與步驟解答（必填）
+        </label>
+        <textarea id="customFaqA" required rows="5" placeholder="輸入詳細說明、避雷心得、推薦技巧或待辦提醒..." 
+                  style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:13px; line-height:1.6; border:1.5px solid #cbd5e1; border-radius:10px; outline:none; font-family:inherit; resize:vertical;"></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+        <button type="button" id="customFaqDeleteBtn" onclick="deleteCustomFaqFromModal()" 
+                style="display:none; background:#fee2e2; color:#dc2626; border:none; padding:7px 12px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;">
+          🗑️ 刪除卡片
+        </button>
+        <div style="display:flex; gap:8px; margin-left:auto;">
+          <button type="button" class="chip" onclick="closeCustomFaqModal()" style="margin:0; padding:7px 14px;">取消</button>
+          <button type="submit" class="ai-btn" style="margin:0; padding:7px 18px; font-size:13px; font-weight:700; background:linear-gradient(135deg, #004B97, #2563eb);">💾 儲存卡片</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 📥 匯入自訂卡片彈窗 -->
+<div class="modal-backdrop" id="importFaqModal" onclick="if(event.target===this)closeImportModal()">
+  <div class="modal-card" style="max-width:480px; border-radius:20px; padding:22px;">
+    <button class="modal-close" onclick="closeImportModal()">✕</button>
+    <h3 style="font-size:17px; font-weight:900; margin-bottom:6px;">📥 匯入自訂問答卡片 (JSON)</h3>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">將先前匯出或好友分享的 JSON 資料貼在下方即可自動匯入：</p>
+    <textarea id="importJsonInput" rows="6" placeholder='[{"id":"custom_1", "board":"course", "q":"...", "a":"..."}]' 
+              style="width:100%; box-sizing:border-box; padding:9px; font-size:11.5px; font-family:monospace; border:1.5px solid #cbd5e1; border-radius:10px; outline:none; resize:vertical;"></textarea>
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
+      <button class="chip" onclick="closeImportModal()" style="margin:0;">取消</button>
+      <button class="ai-btn" onclick="executeImportFaq()" style="margin:0; padding:7px 16px; font-size:12.5px;">確認匯入</button>
+    </div>
   </div>
 </div>
 
@@ -314,6 +1161,7 @@
   }
   .fab:hover { transform: scale(1.08); }
   .fab-food { background: #fff; }
+  .fab-bus { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff; font-size: 24px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45); }
   .fab-chat { background: var(--primary); color: #fff; font-size: 24px; }
 
   /* ── 蝦皮式底部聊天室(三段高度 + 拖曳)── */
@@ -359,156 +1207,241 @@
     flex-direction: column; gap: 10px; color: var(--text-muted); font-size: 13px; pointer-events: none;
   }
 
-  /* ── 美食地圖彈窗 ── */
-  .food-modal-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 16px; }
-  .food-mini-card { background: var(--bg); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
-  .food-mini-name { font-weight: 900; font-size: 14.5px; color: var(--primary-dark); }
-  .food-mini-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
-  .food-mini-btn {
-    margin-top: auto; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 12.5px;
-    background: var(--primary); color: #fff; padding: 9px; border-radius: var(--pill-radius); transition: .2s;
+  /* ── 興大美食地圖彈窗 (與聊天室同步的即時搜尋與篩選卡片) ── */
+  .food-modal-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 800px;
+    max-height: 88vh;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(15,39,69,0.18);
+    animation: pop .3s cubic-bezier(.2,.7,.3,1.15);
+    position: relative;
   }
-  .food-mini-btn:hover { opacity: .88; transform: translateY(-1px); }
-  /* ── 🎓 學長姐精選(比照 新鮮人-興生FAQ美食地圖卡片風格)── */
-  .senior-grid { margin-top:12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:10px; max-height:52vh; overflow-y:auto; padding:2px; }
-  @media (max-width:640px){
-    .senior-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
-    body.cols-1 .senior-grid { grid-template-columns:1fr; }
+  .food-search-box {
+    width: 100%;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-family: inherit;
+    border: 1.5px solid #d1d5db;
+    border-radius: 12px;
+    outline: none;
+    transition: all 0.2s;
+    background: #f8fafc;
   }
-  .sp-card {
-    background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:10px;
-    display:flex; flex-direction:column; gap:6px; cursor:pointer; transition:all .15s ease;
-    box-shadow:0 1px 2px rgba(0,0,0,.03);
+  .food-search-box:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(0,75,151,0.12);
   }
-  .sp-card:hover { border-color:var(--mint); box-shadow:var(--shadow-md); transform:translateY(-1px); }
-  .sp-card.expanded { grid-column:1/-1; cursor:default; border-color:var(--mint); }
-  .sp-head { font-size:12.5px; font-weight:900; color:var(--primary-dark); display:flex; justify-content:space-between; align-items:center; gap:4px; flex-wrap:wrap; }
-  .sp-dcard { font-size:9.5px; padding:1px 6px; border-radius:4px; background:linear-gradient(135deg,#006aa6,#0a84d0); color:#fff; font-weight:700; white-space:nowrap; box-shadow:0 1px 3px rgba(0,106,166,.3); }
-  .sp-tag { align-self:flex-start; font-size:10px; padding:1px 6px; border-radius:4px; background:rgba(171,218,213,.35); color:var(--primary-dark); font-weight:700; white-space:nowrap; }
-  .sp-desc { font-size:11px; line-height:1.5; color:#333; flex:1; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-  .sp-card.expanded .sp-desc { -webkit-line-clamp:unset; max-height:42vh; overflow-y:auto; }
-  .sp-more { font-size:10.5px; color:var(--primary); font-weight:700; text-align:center; }
-  .sp-card.expanded .sp-more { display:none; }
-  .sp-actions { display:none; gap:6px; padding-top:6px; border-top:1px dashed #edf2f7; }
-  .sp-card.expanded .sp-actions { display:flex; }
-  .sp-nav { flex:1; text-align:center; text-decoration:none; font-size:11.5px; font-weight:700; padding:7px 0; border-radius:8px; background:linear-gradient(135deg,#c5a059,#b8860b); color:#fff; }
-  .sp-ask { flex:1; margin:0 !important; }
+  .food-filter-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px 2px 6px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex-shrink: 0;
+  }
+  .food-filter-bar::-webkit-scrollbar { display: none; }
+  .food-filter-btn {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-family: inherit;
+    border: 1px solid #dbe7f3;
+    background: #f8fafc;
+    color: var(--text-main);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+  .food-filter-btn:hover {
+    background: #eef4fa;
+    border-color: #cbd5e1;
+  }
+  .food-filter-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0,75,151,0.25);
+  }
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 10px;
+    overflow-y: auto;
+    padding: 4px 2px;
+    flex: 1;
+    max-height: 52vh;
+  }
+  .food-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .food-card:hover {
+    border-color: var(--mint);
+    box-shadow: 0 4px 14px rgba(0,75,151,0.1);
+    transform: translateY(-1px);
+  }
+  .food-card-title {
+    font-size: 13.5px;
+    font-weight: 900;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .food-tag-badge {
+    font-size: 10.5px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: rgba(171,218,213,0.35);
+    color: var(--primary-dark);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .food-card-content {
+    font-size: 12px;
+    color: var(--text-main);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .food-card-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+    border-top: 1px dashed #edf2f7;
+  }
+  .food-map-link {
+    font-size: 11.5px;
+    color: #166534;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 4px 9px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .food-map-link:hover {
+    background: #dcfce7;
+  }
+  .food-ask-btn {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 4px 9px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .food-ask-btn:hover {
+    background: #e2e8f0;
+    color: var(--text-main);
+  }
+  @media (max-width: 640px) {
+    .food-modal-card { padding: 14px 10px; max-height: 92vh; border-radius: 16px; }
+    .food-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .food-card { padding: 8px; }
+    .food-card-title { font-size: 12px; }
+    .food-card-content { font-size: 11px; }
+    .food-ask-btn, .food-map-link { font-size: 10px; padding: 3px 6px; }
+
+    /* 📱 手機單欄模式強制生效 */
+    body.cols-1 .faq-grid { grid-template-columns: 1fr !important; }
+    body.cols-1 .food-grid { grid-template-columns: 1fr !important; }
+    body.cols-1 .food-card { padding: 12px; }
+    body.cols-1 .food-card-title { font-size: 13.5px; }
+    body.cols-1 .food-card-content { font-size: 12px; line-height: 1.55; }
+    body.cols-1 .food-ask-btn, body.cols-1 .food-map-link { font-size: 11px; padding: 4px 8px; }
+  }
 </style>
 <!-- 浮動按鈕 -->
 <div class="fab-stack">
+  <button class="fab fab-bus" id="busFab" title="興大公車即時動態與返鄉交通" onclick="openBusDynamicModal()">🚌</button>
   <button class="fab fab-food" title="興大美食地圖" onclick="openFoodMap()">🍜</button>
   <button class="fab" id="topFab" title="回到頂端" style="display:none; background:#e8f5ee;" onclick="event.stopPropagation(); window.scrollTo({top:0, behavior:'smooth'});">⬆️</button>
   <button class="fab" id="tourFab" title="自動導覽" style="background:#fffaf0;" onclick="toggleTour()">🎬</button>
   <button class="fab fab-chat" title="AI 聊天室" onclick="toggleChatSheet()">💬</button>
 </div>
 
-<!-- 美食地圖彈窗 -->
-<div class="modal-backdrop" id="foodMapModal2" onclick="if(event.target===this)closeFoodMap()">
-  <div class="modal-card">
-    <button class="modal-close" onclick="closeFoodMap()">✕</button>
-    <span class="faq-board-tag">🍜 興大美食地圖</span>
-    <h2 style="font-size:19px; font-weight:900; margin-top:10px;">今天想吃什麼?</h2>
-    <p style="font-size:13px; color:var(--text-muted); margin-top:6px;">點店家卡片,新鮮人-興生FAQ會直接幫你介紹與推薦!</p>
-    <div style="display:flex; gap:8px; margin-top:14px;" id="foodCatBar">
-      <button class="chip active" data-fcat="all" onclick="filterFoodCat('all', this)">✨ 全部</button>
-      <button class="chip" data-fcat="food" onclick="filterFoodCat('food', this)">🍚 吃飽</button>
-      <button class="chip" data-fcat="drink" onclick="filterFoodCat('drink', this)">🥤 飲料</button>
-      <button class="chip" style="background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(197,160,89,.35);" onclick="openSeniorPicks()" title="開啟 新鮮人-興生FAQ的完整美食地圖(178間,含Dcard學長姐分享)">🎓 學長姐精選</button>
-    </div>
-    <div class="food-modal-list" id="foodModalList">
-      <div class="food-mini-card" data-cat="food" style="border:2px solid #f6ad3c; background:linear-gradient(135deg,#fffaf0,#fff);">
-        <span class="food-mini-name">🍚 揚州炒飯 <span style="background:linear-gradient(135deg,#f6ad3c,#e53e3e); color:#fff; font-size:10.5px; font-weight:900; padding:2px 8px; border-radius:999px; vertical-align:middle;">⭐ 十顆星必吃</span></span>
-        <img src="images/yangzhou_fried_rice.jpg" alt="揚州炒飯"
-             style="width:100%; aspect-ratio:4/3; height:auto; object-fit:cover; border-radius:10px;"
-             onerror="this.outerHTML='<div style=&quot;width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:64px;background:#fdf3e3;border-radius:10px;&quot;>🍛</div>';">
-        <span class="food-mini-desc"><b>超級好吃,必須要吃!</b>份量巨大免費加飯,肉絲炒飯超推,百元有找,開到晚上九點。學長姐十顆星滿分認證,不吃會後悔!</span>
-        <button class="food-mini-btn" style="background:linear-gradient(135deg,#f6ad3c,#e53e3e);" onclick="askFood('揚州炒飯')">💬 問 AI 聊聊這家</button>
+<!-- 美食地圖彈窗 (0 Token 成本純前端即時瀏覽，與聊天室同款) -->
+<div class="modal-backdrop" id="foodMapModal2" onclick="closeFoodMapModalOnBackdrop(event)">
+  <div class="food-modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+      <div>
+        <h3 style="font-size:16px; color:var(--primary); font-weight:900; display:flex; align-items:center; gap:6px; margin:0;">
+          🍜 興大校園與周邊美食地圖
+          <span style="font-size:11px; background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;">176 間精選</span>
+        </h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:3px; margin-bottom:0;">
+          ⚡ 0 Token 成本純前端即時瀏覽！收錄學府路、南門路、高工美村、忠孝夜市與台中名店。
+        </p>
       </div>
-      <div class="food-mini-card" data-cat="drink">
-        <span class="food-mini-name">🧋 紅線茶舖 <span style="background:var(--mint); color:var(--primary-dark); font-size:10.5px; font-weight:900; padding:2px 8px; border-radius:999px; vertical-align:middle;">🐦 鳥老闆認證</span></span>
-        <span class="food-mini-desc"><b>⭐ 特別解說:必點「西藏奶茶」!</b>裡面加了<b>蜂蜜、胚芽</b>等一堆料,記不住沒關係——跟老闆說「要一杯西藏奶茶」就對了!<br>興大過橋那條路,<b>小倫敦斜對面、早安廚房旁</b>。茶每天早上現煮、茶葉超講究,<b>加珍珠免錢、外帶扣 5 元、自帶杯子再扣 5 元</b>,大杯百元有找!紅茶濃到發財,隨便點不踩雷。<b>重點是店裡養一堆鳥🦜</b>,等飲料的時候直接開始賞鳥,去一次就回不去了。</span>
-        <a class="food-mini-btn" href="#" onclick="navFood('紅線茶舖');return false;" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">📍 開啟導航</a>
-      </div>
-      <div class="food-mini-card" data-cat="drink">
-        <span class="food-mini-name">🍍 阿義鳳梨冰沙</span>
-        <span class="food-mini-desc">南門路古早味鳳梨冰沙,酸甜透心涼,還有十餘種自製天然彩色珍珠!</span>
-        <a class="food-mini-btn" href="#" onclick="navFood('阿義鳳梨冰沙');return false;" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">📍 開啟導航</a>
-      </div>
-      <div class="food-mini-card" data-cat="drink">
-        <span class="food-mini-name">🍵 Who's Tea 鬍子茶(美村南店) <span style="background:var(--mint); color:var(--primary-dark); font-size:10.5px; font-weight:900; padding:2px 8px; border-radius:999px; vertical-align:middle;">Google 4.2★</span></span>
-        <span class="food-mini-desc">美村南路商圈手搖霸主,學生放學直接排一排!招牌<b>「黑鬍子」巧克力奶蓋+OREO 碎屑</b>根本邪教,濃到以為在喝甜點;怕負擔就點「白鬍子」鹹甜奶蓋,順到不自覺喝完一整杯。進階玩法是<b>梔子花青茶+鮮乳</b>,花香配乳香超級上頭,期末被當預警後來一杯直接被治癒。還有檸檬梔子花蜜凍可以嚼、雙Q奶茶給你嚼到飽,晚上 9:30 才關,趕報告的續命首選。</span>
-        <a class="food-mini-btn" href="#" onclick="navFood('Who&#39;s Tea 鬍子茶 台中美村南店');return false;" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">📍 開啟導航</a>
-      </div>
-      <div class="food-mini-card" data-cat="food">
-        <span class="food-mini-name">🥣 小陳肉羹麵線</span>
-        <span class="food-mini-desc">百元有找!晚上不餓時來一碗熱呼呼肉羹麵線,支援 LINE Pay。</span>
-        <a class="food-mini-btn" href="#" onclick="navFood('小陳肉羹麵線');return false;" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">📍 開啟導航</a>
-      </div>
-      <div class="food-mini-card">
-        <span class="food-mini-name">🍚 雲軒麵食</span>
-        <span class="food-mini-desc">55 元超狂蝦仁貢丸魯肉飯,CP 值頂天!</span>
-        <a class="food-mini-btn" href="#" onclick="navFood('雲軒麵食');return false;" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">📍 開啟導航</a>
-      </div>
-      <div class="food-mini-card" data-cat="food">
-        <span class="food-mini-name">🥟 肉汁餃子軒</span>
-        <span class="food-mini-desc">日式爆汁煎餃,冰花酥脆,宵夜首選。</span>
-        <a class="food-mini-btn" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:flex; align-items:center; justify-content:center;" href="https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E8%88%88%E5%A4%A7%E5%AD%B8%20%E8%82%89%E6%B1%81%E9%A5%BA%E5%AD%90%E8%BB%92">📍 開啟導航</a>
-      </div>
-      <div class="food-mini-card">
-        <span class="food-mini-name">🏮 忠孝夜市</span>
-        <span class="food-mini-desc">步行 10-15 分鐘,天天營業:麵線糊、臭豆腐、豆花、牛排。</span>
-        <a class="food-mini-btn" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:flex; align-items:center; justify-content:center;" href="https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E8%88%88%E5%A4%A7%E5%AD%B8%20%E5%BF%A0%E5%AD%9D%E5%A4%9C%E5%B8%82">📍 開啟導航</a>
-      </div>
-    </div>
-    <!-- 🎓 學長姐精選(來自 新鮮人-興生FAQ美食資料庫,178 間) -->
-    <div id="seniorPicksSection" style="display:none; margin-top:16px; border-top:2px dashed var(--mint,#abdad5); padding-top:14px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
-        <span style="font-weight:900; font-size:15px;">🎓 學長姐精選 <span id="seniorCount" style="font-size:11.5px; color:var(--text-muted); font-weight:700;"></span></span>
-        <input id="seniorSearch" type="text" placeholder="🔍 搜尋店名/菜色/關鍵字..." oninput="renderSeniorPicks(this.value)" style="flex:1; min-width:160px; max-width:280px; padding:7px 12px; font-size:12.5px; font-family:inherit; border-radius:999px; border:1.5px solid transparent; box-shadow:var(--shadow-sm,0 1px 3px rgba(0,0,0,.08)); outline:none;" />
-      </div>
-      <div id="seniorGrid" class="senior-grid"></div>
-    </div>
-    <a class="ai-btn" href="#" onclick="askFood('興大周邊美食推薦');return false;">🤖 打開 AI 聊天室隨便聊美食</a>
-  </div>
-</div>
-
-<!-- 🎯 興大午餐吃什麼？幸運大轉盤 Modal -->
-<div class="modal-backdrop" id="lunchWheelModal" onclick="if(event.target===this)closeLunchWheelModal()">
-  <div class="modal-card" style="max-width:440px; text-align:center; border-radius:20px; padding:24px 20px;">
-    <button class="modal-close" onclick="closeLunchWheelModal()">✕</button>
-    <div style="text-align:left; border-bottom:1px solid #f1f5f9; padding-bottom:8px; margin-bottom:12px;">
-      <h3 style="font-size:17px; color:var(--primary); font-weight:900; display:flex; align-items:center; gap:6px; margin:0;">
-        🎯 興大午餐吃什麼？幸運大轉盤
-      </h3>
-      <p style="font-size:12px; color:var(--text-muted); margin-top:4px; margin-bottom:0;">
-        排除晚上夜市！精選學府路、圓廳學餐、南門路中午營業必吃與爆笑彩蛋！
-      </p>
-    </div>
-
-    <!-- Canvas Wheel -->
-    <div style="position:relative; width:280px; height:280px; margin:14px auto 10px auto;">
-      <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); z-index:10; width:0; height:0; border-left:12px solid transparent; border-right:12px solid transparent; border-top:22px solid #E63946; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.35)); pointer-events:none;"></div>
-      <canvas id="wheelCanvas" width="280" height="280" style="border-radius:50%; box-shadow:0 6px 20px rgba(0,0,0,0.12); cursor:pointer;" onclick="spinLunchWheel()"></canvas>
-      <div onclick="spinLunchWheel()" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:44px; height:44px; background:#ffffff; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:bold; color:var(--primary); border:3px solid var(--primary); cursor:pointer; user-select:none;">
-        🌲
+      <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+        <div class="layout-toggle" style="margin:0; padding:0; display:flex;" title="切換美食地圖雙欄/單欄排版">
+          <button id="foodLt2" class="active" onclick="setLayout(2)" style="padding:4px 8px; font-size:11px;">▦ 雙欄</button>
+          <button id="foodLt1" onclick="setLayout(1)" style="padding:4px 8px; font-size:11px;">☰ 單欄</button>
+        </div>
+        <button class="modal-close" style="position:static; margin-left:2px; flex-shrink:0;" onclick="closeFoodMap()">✕</button>
       </div>
     </div>
 
-    <!-- Spin Button -->
-    <div style="margin-top:8px; width:100%; display:flex; justify-content:center;">
-      <button id="spinBtn" class="ai-btn" style="margin:0; padding:10px 32px; font-size:14px; cursor:pointer;" onclick="spinLunchWheel()">
-        🎲 點我轉動！由命運決定！
-      </button>
+    <!-- 搜尋框 -->
+    <div style="margin-top:6px;">
+      <input type="text" id="foodSearchInput" class="food-search-box" placeholder="🔍 搜尋店名、菜色（如：炒飯、煎餃、咖哩、宵夜、牛肉麵、甜點、加飯）..." oninput="onFoodSearchChange()" />
     </div>
 
-    <!-- Result Box -->
-    <div id="wheelResultBox" style="display:none; width:100%; background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:12px; margin-top:12px; text-align:center;">
-      <div style="font-size:11px; color:#c5a059; font-weight:700; letter-spacing:1px;" id="wheelResultTag">✨ 今日推薦</div>
-      <div style="font-size:16px; font-weight:900; color:var(--primary); margin:4px 0;" id="wheelResultTitle">揚州炒飯</div>
-      <p style="font-size:12.5px; color:var(--text-main); margin-bottom:10px; line-height:1.5;" id="wheelResultDesc">...</p>
-      <div style="display:flex; justify-content:center; gap:8px;">
-        <button class="chip" style="font-size:12px; padding:6px 14px;" onclick="spinLunchWheel()">🔄 再抽一次</button>
-        <button class="ai-btn" style="margin:0; font-size:12px; padding:6px 16px;" id="wheelAskBtn" onclick="askAboutWheelResult()">💬 問學長姐這家</button>
+    <!-- 快速分類標籤 Filter Chips -->
+    <div class="food-filter-bar">
+      <button class="food-filter-btn active" data-filter="all" onclick="setFoodFilter('all', this)">全部 (All)</button>
+      <button class="food-filter-btn" data-filter="budget" onclick="setFoodFilter('budget', this)">💰 百元平價</button>
+      <button class="food-filter-btn" data-filter="xuefu" onclick="setFoodFilter('xuefu', this)">🎓 大門/學府路</button>
+      <button class="food-filter-btn" data-filter="nanmen" onclick="setFoodFilter('nanmen', this)">🌸 女宿/南門路</button>
+      <button class="food-filter-btn" data-filter="gaogong" onclick="setFoodFilter('gaogong', this)">🛵 男宿/高工美村</button>
+      <button class="food-filter-btn" data-filter="nightmarket" onclick="setFoodFilter('nightmarket', this)">🏮 忠孝夜市</button>
+      <button class="food-filter-btn" data-filter="campus" onclick="setFoodFilter('campus', this)">🌲 校內學餐</button>
+      <button class="food-filter-btn" data-filter="late_night" onclick="setFoodFilter('late_night', this)">🌙 深夜宵夜</button>
+      <button class="food-filter-btn" data-filter="cafe" onclick="setFoodFilter('cafe', this)">☕ 咖啡甜點</button>
+      <button class="food-filter-btn" data-filter="student_deal" onclick="setFoodFilter('student_deal', this)">🏷️ 學生特約</button>
+      <button class="food-filter-btn" style="background:#fef3c7; border-color:#f59e0b; color:#92400e; font-weight:700;" onclick="closeFoodMap(); openFoodSlotModal();">🎰 天命拉霸機 (吃什麼?)</button>
+    </div>
+
+    <!-- 卡片網格 Cards Grid -->
+    <div class="food-grid" id="foodGrid">
+      <!-- 由 JS 動態渲染 176 間美食 -->
+    </div>
+
+    <!-- 底部狀態列 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid #e2e8f0; font-size:12px; color:var(--text-muted); margin-top:4px;">
+      <span id="foodCountLabel">顯示 176 間美食</span>
+      <div style="display:flex; gap:8px;">
+        <button class="chip" onclick="closeFoodMap(); openChatSheet('興大周邊美食推薦');" style="background:linear-gradient(135deg,var(--primary),#2b6cb0); color:#fff; font-weight:700; border:none; padding:4px 12px; cursor:pointer;">🤖 AI 助手聊美食</button>
+        <button class="chip" onclick="closeFoodMap()" style="padding:4px 12px; font-weight:700; cursor:pointer;">關閉</button>
       </div>
     </div>
   </div>
@@ -533,13 +1466,189 @@
 </div>
 
 <footer>
-  國立中興大學新生助手 · 靜態知識庫由 1,066 筆官方規章與學長姐智慧蒸餾而成<br />
+  國立中興大學新生助手 · 靜態知識庫由 789 筆官方規章與學長姐智慧蒸餾而成（經去敏與去重驗證）<br />
   資訊僅供參考,最新規定請以各處室官方公告為準
 </footer>
 
+<script src="portal_data.js"></script>
 <script src="faq_data.js"></script>
 <script src="food_database.js"></script>
+<script src="food_slot.js"></script>
+<script src="transit_guide.js"></script>
 <script>
+  // ── 🌟 興大新生專屬常用系統快捷傳送門 ──
+  let currentPortalCategory = 'all';
+
+  function renderPortalCards(cat = 'all') {
+    const grid = document.getElementById('portalGrid');
+    if (!grid || typeof PORTAL_DATA === 'undefined') return;
+    const filtered = cat === 'all' 
+      ? PORTAL_DATA 
+      : PORTAL_DATA.filter(item => item.category === cat);
+      
+    grid.innerHTML = filtered.map(item => `
+      <div class="portal-card" data-cat="${item.category}">
+        <div class="portal-card-top">
+          <div class="portal-icon-box" style="background:${item.gradient};">
+            ${item.icon}
+          </div>
+          <span class="portal-tag" style="background:${item.tagBg}; color:${item.tagColor};">${item.tag}</span>
+        </div>
+        <div class="portal-name">${item.name}</div>
+        <div class="portal-alias">${item.alias}</div>
+        <p class="portal-desc">${item.desc}</p>
+        <div class="portal-actions">
+          <a class="portal-btn portal-btn-go" href="${item.url}" target="_blank" rel="noopener noreferrer" title="直達系統">🚀 前往</a>
+          <button class="portal-btn portal-btn-copy" onclick="copyPortalUrl('${item.url}', this)" title="複製網址">🔗</button>
+          <button class="portal-btn portal-btn-tip" onclick="openPortalTipModal('${item.id}')" title="帳密登入小抄">💡</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── 🎒 興大常用系統萌系快捷抽屜控制 ──
+  let userInteractedWithPortalDrawer = false;
+  let portalAutoTimer = null;
+
+  function togglePortalDrawer(forceState, e) {
+    if (e) {
+      e.stopPropagation();
+      userInteractedWithPortalDrawer = true;
+      if (portalAutoTimer) clearTimeout(portalAutoTimer);
+    }
+    const sec = document.getElementById("portalSection");
+    if (!sec) return;
+    const isOpen = typeof forceState === "boolean" ? forceState : !sec.classList.contains("open");
+    sec.classList.toggle("open", isOpen);
+
+    const btnText = document.getElementById("portalDrawerBtnText");
+    const hint = document.getElementById("portalDrawerHint");
+    if (btnText) {
+      btnText.textContent = isOpen ? "收合抽屜" : "展開抽屜";
+    }
+    if (hint) {
+      hint.textContent = isOpen ? "點擊右上角或下方可收合" : "🎒 選課/Portal/信箱直達";
+    }
+  }
+
+  // 🎬 首頁進入自動化展示腳本：秀出跳出 -> 跳兩下 -> 關閉收合
+  function runPortalDrawerIntro() {
+    const sec = document.getElementById("portalSection");
+    if (!sec) return;
+
+    // 1. 頁面載入後自動滑開秀出來
+    setTimeout(() => {
+      if (userInteractedWithPortalDrawer) return;
+      togglePortalDrawer(true);
+
+      // 2. 展開後活潑跳兩下
+      setTimeout(() => {
+        if (userInteractedWithPortalDrawer) return;
+        sec.classList.add("bounce-peeking");
+
+        // 3. 跳兩下展示 1.5 秒後，自動縮回成精緻可愛抽屜
+        portalAutoTimer = setTimeout(() => {
+          sec.classList.remove("bounce-peeking");
+          if (!userInteractedWithPortalDrawer) {
+            togglePortalDrawer(false);
+          }
+        }, 1500);
+      }, 400);
+    }, 450);
+  }
+
+  function filterPortal(cat, btn, e) {
+    if (e) e.stopPropagation();
+    currentPortalCategory = cat;
+    document.querySelectorAll('.portal-cat-btn').forEach(b => b.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    } else {
+      const target = document.querySelector(`.portal-cat-btn[onclick*="'${cat}'"]`);
+      if (target) target.classList.add('active');
+    }
+    renderPortalCards(cat);
+  }
+
+  function copyPortalUrl(url, btn) {
+    const originalText = btn.innerHTML;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        btn.innerHTML = "✅";
+        setTimeout(() => { btn.innerHTML = originalText; }, 1500);
+      }).catch(() => {
+        fallbackCopy(url, btn, originalText);
+      });
+    } else {
+      fallbackCopy(url, btn, originalText);
+    }
+  }
+
+  function fallbackCopy(text, btn, originalText) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+      btn.innerHTML = "✅";
+    } catch(e) {
+      btn.innerHTML = "❌";
+    }
+    document.body.removeChild(ta);
+    setTimeout(() => { btn.innerHTML = originalText; }, 1500);
+  }
+
+  function copyPortalTipUrl() {
+    const urlInput = document.getElementById("pTipUrlInput");
+    const copyBtn = document.getElementById("pTipCopyBtn");
+    if (!urlInput) return;
+    copyPortalUrl(urlInput.value, copyBtn);
+  }
+
+  function openPortalTipModal(id) {
+    if (typeof PORTAL_DATA === 'undefined') return;
+    const item = PORTAL_DATA.find(x => x.id === id);
+    if (!item) return;
+    
+    const modal = document.getElementById("portalTipModal");
+    if (!modal) return;
+    
+    const iconEl = document.getElementById("pTipIcon");
+    const titleEl = document.getElementById("pTipTitle");
+    const tagEl = document.getElementById("pTipTag");
+    const aliasEl = document.getElementById("pTipAlias");
+    const bodyEl = document.getElementById("pTipBody");
+    const urlInput = document.getElementById("pTipUrlInput");
+    const goBtn = document.getElementById("pTipGoBtn");
+    
+    if (iconEl) {
+      iconEl.textContent = item.icon;
+      iconEl.style.background = item.gradient;
+    }
+    if (titleEl) titleEl.textContent = item.name;
+    if (tagEl) {
+      tagEl.textContent = item.tag;
+      tagEl.style.background = item.tagBg;
+      tagEl.style.color = item.tagColor;
+    }
+    if (aliasEl) aliasEl.textContent = item.alias;
+    if (bodyEl) bodyEl.textContent = item.tip;
+    if (urlInput) urlInput.value = item.url;
+    if (goBtn) goBtn.href = item.url;
+    
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closePortalTipModal() {
+    const modal = document.getElementById("portalTipModal");
+    if (modal) modal.style.display = "none";
+    document.body.style.overflow = "";
+  }
+
   // ── 📌 資料來源聲明橫幅(點 ✕ 當日不再顯示)──
   function dismissBanner(){
     document.getElementById("sourceBanner").style.display = "none";
@@ -557,32 +1666,342 @@
 
   const BOARD_NAMES = {
     course: "📚 選課與學分", dorm: "🏠 宿舍生活", register: "💰 註冊與學雜費",
-    transport: "🛵 交通與周邊", admin: "🏛️ 獎助與行政", club: "🎉 社團與活動"
+    transport: "🛵 交通與周邊", admin: "🏛️ 獎助與行政", club: "🎉 社團與活動",
+    custom: "📝 私房備忘"
   };
   let currentBoard = "all";
+  let currentFaqSort = "default";
 
-  const chipBar = document.getElementById("chipBar");
-  const chips = [["all", "✨ 全部"]].concat(Object.entries(BOARD_NAMES));
-  chipBar.innerHTML = chips.map(([k, label], i) =>
-    `<button class="chip${i === 0 ? " active" : ""}" data-b="${k}" onclick="setBoard('${k}', this)">${label}</button>`).join("") +
-    `<button class="chip" style="background:linear-gradient(135deg, #005a36 0%, #007849 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(0,90,54,.35);" onmouseover="this.style.background='linear-gradient(135deg, #004127 0%, #005a36 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #005a36 0%, #007849 100%)'" onclick="openLunchWheelModal()" title="興大午餐吃什麼？幸運大轉盤 (學府路/圓廳/揚州炒飯)">🎯 午餐吃什麼轉盤</button>` +
-    `<button class="chip" style="background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(197,160,89,.35);" onmouseover="this.style.background='linear-gradient(135deg, #b8860b 0%, #996515 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #c5a059 0%, #b8860b 100%)'" onclick="openFoodMap()" title="開啟興大美食地圖 (0 Token 快速瀏覽)">🍜 興大美食地圖</button>` +
-    `<button class="chip" style="background:var(--mint, #abdad5); color:var(--primary-dark, #0f2745); border-color:transparent;" onclick="openPickleModal(this)" title="匹克球學習社群(114-2 開始)">🏓 匹克球社群</button>`;
+  // ── 📝 預留給使用者的本地備用卡牌範本 ──
+  const DEFAULT_CUSTOM_FAQS = [
+    {
+      id: "custom_demo_1",
+      board: "course",
+      q: "📝 [預留備用 1] 我的系所選課必修避雷與教授攻略（點擊可修改）",
+      a: "這是為你預留的自訂問答卡牌空格！\n點擊右上角的「✏️」或點開此卡片，即可自由記錄：\n• 系上必修哪一堂最硬、考古題情報\n• 通識哪位老師給分甜、報告評分標準\n• 加簽寄 Email 給教授的禮貌範本\n所有筆記均安全保存在你的瀏覽器中，重新整理不會遺失！",
+      keywords: ["自訂筆記", "選課攻略", "避雷指南", "系所筆記"],
+      isCustom: true,
+      updatedAt: Date.now()
+    },
+    {
+      id: "custom_demo_2",
+      board: "dorm",
+      q: "📝 [預留備用 2] 我的中興校園私房愛店與生活秘笈（點擊可修改）",
+      a: "這是第二個為你預留的備用卡牌空格！\n你可以在此記錄：\n• 忠孝夜市私房宵夜、南門路最讚飲料店\n• 宿舍洗烘衣機離峰時段、生活採買推薦\n• 圖書館地下室或自習室最舒適安靜的角落\n點擊上方「💾 匯出備份」還能一次將筆記打包成 JSON 備份或分享！",
+      keywords: ["私房生活", "宿舍秘笈", "愛店名單", "私房攻略"],
+      isCustom: true,
+      updatedAt: Date.now()
+    }
+  ];
 
-  // ── 🏓 匹克球學習社群(自肥預留區,等資訊填入)──
-  function openPickleModal(el) {
-    document.getElementById("pickleModal").style.display = "flex";
+  function getCustomFaqs() {
+    try {
+      const stored = localStorage.getItem("nchu_custom_faqs");
+      if (!stored) {
+        localStorage.setItem("nchu_custom_faqs", JSON.stringify(DEFAULT_CUSTOM_FAQS));
+        return DEFAULT_CUSTOM_FAQS;
+      }
+      return JSON.parse(stored);
+    } catch(e) {
+      return DEFAULT_CUSTOM_FAQS;
+    }
+  }
+
+  function getAllFaqItems() {
+    const custom = getCustomFaqs();
+    return [...custom, ...(typeof FAQ_DATA !== "undefined" ? FAQ_DATA : [])];
+  }
+
+  // ── ⭐ 收藏星星功能 ──
+  function getStarredIds() {
+    try {
+      return JSON.parse(localStorage.getItem("nchu_faq_stars") || "[]");
+    } catch(e) {
+      return [];
+    }
+  }
+
+  function isStarred(id) {
+    return getStarredIds().includes(id);
+  }
+
+  function toggleStarFaq(id, e) {
+    if (e) e.stopPropagation();
+    let stars = getStarredIds();
+    const idx = stars.indexOf(id);
+    if (idx > -1) {
+      stars.splice(idx, 1);
+    } else {
+      stars.push(id);
+    }
+    localStorage.setItem("nchu_faq_stars", JSON.stringify(stars));
+    renderGrid();
+    updateChipBar();
+    updateModalStarBtn(id);
+  }
+
+  function updateModalStarBtn(id) {
+    const btn = document.getElementById("mStarBtn");
+    if (!btn) return;
+    const starred = isStarred(id);
+    btn.className = `modal-star-btn ${starred ? "starred" : ""}`;
+    btn.innerHTML = starred ? "⭐ 已收藏" : "☆ 收藏";
+  }
+
+  function toggleModalStar() {
+    if (!currentFaq) return;
+    toggleStarFaq(currentFaq.id);
+  }
+
+  // ── ✏️ 自訂卡牌 CRUD ──
+  function openCustomFaqModal(id, e) {
+    if (e) e.stopPropagation();
+    const modal = document.getElementById("customFaqModal");
+    const form = document.getElementById("customFaqForm");
+    const title = document.getElementById("customModalTitle");
+    const delBtn = document.getElementById("customFaqDeleteBtn");
+    form.reset();
+
+    if (id) {
+      const it = getCustomFaqs().find(x => x.id === id);
+      if (it) {
+        title.textContent = "✏️ 編輯自訂問答卡片";
+        document.getElementById("customFaqId").value = it.id;
+        document.getElementById("customFaqQ").value = it.q;
+        document.getElementById("customFaqBoard").value = it.board || "custom";
+        document.getElementById("customFaqA").value = it.a;
+        document.getElementById("customFaqKw").value = (it.keywords || []).join(", ");
+        delBtn.style.display = "inline-block";
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+        return;
+      }
+    }
+
+    title.textContent = "➕ 新增自訂問答卡片（預留備用空間）";
+    document.getElementById("customFaqId").value = "";
+    delBtn.style.display = "none";
+    modal.style.display = "flex";
     document.body.style.overflow = "hidden";
   }
-  function closePickleModal() {
-    document.getElementById("pickleModal").style.display = "none";
+
+  function closeCustomFaqModal() {
+    const modal = document.getElementById("customFaqModal");
+    if (modal) modal.style.display = "none";
+    if (!document.getElementById("faqModal") || document.getElementById("faqModal").style.display !== "flex") {
+      document.body.style.overflow = "";
+    }
+  }
+
+  function saveCustomFaq(e) {
+    if (e) e.preventDefault();
+    const id = document.getElementById("customFaqId").value.trim();
+    const q = document.getElementById("customFaqQ").value.trim();
+    const board = document.getElementById("customFaqBoard").value;
+    const a = document.getElementById("customFaqA").value.trim();
+    const kwRaw = document.getElementById("customFaqKw").value.trim();
+    const keywords = kwRaw ? kwRaw.split(/[,，\s]+/).map(s => s.trim()).filter(Boolean) : ["自訂筆記"];
+
+    if (!q || !a) {
+      alert("請填寫問答標題與詳細內容！");
+      return;
+    }
+
+    let customList = getCustomFaqs();
+    if (id) {
+      const idx = customList.findIndex(x => x.id === id);
+      if (idx > -1) {
+        customList[idx] = {
+          ...customList[idx],
+          q, board, a, keywords,
+          updatedAt: Date.now()
+        };
+      }
+    } else {
+      const newCard = {
+        id: "custom_" + Date.now(),
+        board,
+        q,
+        a,
+        keywords,
+        isCustom: true,
+        createdAt: Date.now()
+      };
+      customList.unshift(newCard);
+    }
+
+    localStorage.setItem("nchu_custom_faqs", JSON.stringify(customList));
+    closeCustomFaqModal();
+    updateChipBar();
+    renderGrid();
+  }
+
+  function deleteCustomFaq(id, e) {
+    if (e) e.stopPropagation();
+    if (!confirm("確定要刪除這張自訂問答卡片嗎？")) return;
+    let customList = getCustomFaqs().filter(x => x.id !== id);
+    localStorage.setItem("nchu_custom_faqs", JSON.stringify(customList));
+    let stars = getStarredIds().filter(x => x !== id);
+    localStorage.setItem("nchu_faq_stars", JSON.stringify(stars));
+    closeModal();
+    closeCustomFaqModal();
+    updateChipBar();
+    renderGrid();
+  }
+
+  function deleteCustomFaqFromModal() {
+    const id = document.getElementById("customFaqId").value;
+    if (id) deleteCustomFaq(id);
+  }
+
+  function editCurrentModalFaq() {
+    if (!currentFaq || !currentFaq.isCustom) return;
+    const id = currentFaq.id;
+    closeModal();
+    openCustomFaqModal(id);
+  }
+
+  // ── 💾 匯出與匯入資料（搜集備份） ──
+  function exportCustomFaqs() {
+    const list = getCustomFaqs();
+    if (list.length === 0) {
+      alert("目前尚無任何自訂卡片可匯出！");
+      return;
+    }
+    const jsonStr = JSON.stringify(list, null, 2);
+    navigator.clipboard?.writeText(jsonStr);
+    
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `nchu_custom_faqs_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    alert(`🎉 已成功匯出 ${list.length} 筆自訂問答卡片！\n檔案已自動下載，且完整 JSON 資料已複製到你的剪貼簿。`);
+  }
+
+  function openImportModal() {
+    document.getElementById("importFaqModal").style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+  function closeImportModal() {
+    document.getElementById("importFaqModal").style.display = "none";
     document.body.style.overflow = "";
+  }
+  function executeImportFaq() {
+    const raw = (document.getElementById("importJsonInput").value || "").trim();
+    if (!raw) {
+      alert("請貼入要匯入的 JSON 內容！");
+      return;
+    }
+    try {
+      let data = JSON.parse(raw);
+      if (!Array.isArray(data)) data = [data];
+      
+      let existing = getCustomFaqs();
+      let importedCount = 0;
+      data.forEach(item => {
+        if (!item.q || !item.a) return;
+        const newId = item.id || ("custom_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6));
+        const idx = existing.findIndex(x => x.id === newId || x.q === item.q);
+        const cardObj = {
+          id: newId,
+          board: item.board || "custom",
+          q: item.q,
+          a: item.a,
+          keywords: Array.isArray(item.keywords) ? item.keywords : ["自訂筆記"],
+          isCustom: true,
+          updatedAt: Date.now()
+        };
+        if (idx > -1) {
+          existing[idx] = cardObj;
+        } else {
+          existing.unshift(cardObj);
+        }
+        importedCount++;
+      });
+
+      localStorage.setItem("nchu_custom_faqs", JSON.stringify(existing));
+      closeImportModal();
+      updateChipBar();
+      renderGrid();
+      alert(`🎉 成功匯入 ${importedCount} 筆卡片！`);
+    } catch(err) {
+      alert("匯入失敗：JSON 格式無效，請檢查內容後重試！");
+    }
+  }
+
+  // ── 📋 快捷複製 ──
+  function quickCopyFaq(id, e) {
+    if (e) e.stopPropagation();
+    const it = getAllFaqItems().find(x => x.id === id);
+    if (!it) return;
+    const text = `【興大新生指南】${it.q}\n\n${it.a}`;
+    const btn = e ? e.currentTarget : null;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        if (btn) {
+          const orig = btn.innerHTML;
+          btn.innerHTML = "✅";
+          btn.title = "已複製！";
+          setTimeout(() => { btn.innerHTML = orig; btn.title = "複製問題與解答"; }, 1500);
+        }
+      });
+    }
+  }
+
+  function copyCurrentModalFaq(btn) {
+    if (!currentFaq) return;
+    const text = `【興大新生指南】${currentFaq.q}\n\n${currentFaq.a}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        if (btn) {
+          const orig = btn.innerHTML;
+          btn.innerHTML = "✅ 已複製到剪貼簿！";
+          setTimeout(() => { btn.innerHTML = orig; }, 1800);
+        }
+      });
+    }
+  }
+
+  // ── 🔀 排序與分類 ──
+  function changeFaqSort(val) {
+    currentFaqSort = val;
+    renderGrid();
+  }
+
+  const chipBar = document.getElementById("chipBar");
+
+  function updateChipBar() {
+    const starCount = getStarredIds().length;
+    const customCount = getCustomFaqs().length;
+
+    const chips = [
+      ["all", "✨ 全部"],
+      ["starred", `⭐ 我的收藏 (${starCount})`],
+      ["custom", `📝 自訂備用 (${customCount})`]
+    ].concat(Object.entries(BOARD_NAMES).filter(([k]) => k !== "custom"));
+
+    chipBar.innerHTML = chips.map(([k, label]) =>
+      `<button class="chip${currentBoard === k ? " active" : ""}" data-b="${k}" onclick="setBoard('${k}', this)">${label}</button>`).join("") +
+      `<button class="chip" style="background:linear-gradient(135deg, #b45309 0%, #f59e0b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(245,158,11,.35);" onmouseover="this.style.background='linear-gradient(135deg, #d97706 0%, #b45309 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #b45309 0%, #f59e0b 100%)'" onclick="openFoodSlotModal()" title="興大美食天命拉霸機 (100% 來自真實 176 間學長姐推薦)">🎰 美食拉霸機</button>` +
+      `<button class="chip" style="background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(197,160,89,.35);" onmouseover="this.style.background='linear-gradient(135deg, #b8860b 0%, #996515 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #c5a059 0%, #b8860b 100%)'" onclick="openFoodMap()" title="開啟興大美食地圖 (0 Token 快速瀏覽)">🍜 興大美食地圖</button>` +
+      `<button class="chip" style="background:var(--mint, #abdad5); color:var(--primary-dark, #0f2745); border-color:transparent;" onclick="openPickleModal(this)" title="匹克球學習社群(114-2 開始)">🏓 匹克球社群</button>`;
   }
 
   function setBoard(b, el) {
     currentBoard = b;
     document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    if (el) el.classList.add("active");
+    if (el) {
+      el.classList.add("active");
+    } else {
+      const target = document.querySelector(`.chip[data-b="${b}"]`);
+      if (target) target.classList.add("active");
+    }
     renderGrid();
   }
 
@@ -592,38 +2011,122 @@
 
   function renderGrid() {
     const query = (document.getElementById("faqSearch").value || "").trim().toLowerCase();
-    const items = FAQ_DATA.filter(item => {
+    const allItems = getAllFaqItems();
+    
+    let items = allItems.filter(item => {
+      if (currentBoard === "starred") return isStarred(item.id);
+      if (currentBoard === "custom") return item.isCustom;
       if (currentBoard !== "all" && item.board !== currentBoard) return false;
-      if (!query) return true;
-      return (item.q + " " + item.a + " " + item.keywords.join(" ")).toLowerCase().includes(query);
+      return true;
     });
-    document.getElementById("resultCount").textContent = `共 ${items.length} 篇問答指引`;
+
+    if (query) {
+      items = items.filter(item => {
+        const fullText = (item.q + " " + item.a + " " + (item.keywords || []).join(" ") + " " + (BOARD_NAMES[item.board] || "")).toLowerCase();
+        return fullText.includes(query);
+      });
+    }
+
+    if (currentFaqSort === "starred") {
+      items.sort((a, b) => (isStarred(b.id) ? 1 : 0) - (isStarred(a.id) ? 1 : 0));
+    } else if (currentFaqSort === "custom") {
+      items.sort((a, b) => (b.isCustom ? 1 : 0) - (a.isCustom ? 1 : 0));
+    }
+
+    const countEl = document.getElementById("resultCount");
+    if (countEl) {
+      const customTotal = getCustomFaqs().length;
+      countEl.textContent = `共 ${items.length} 篇問答指引${customTotal > 0 ? ` (含 ${customTotal} 筆自訂備用)` : ""}`;
+    }
+
     const grid = document.getElementById("faqGrid");
+    if (!grid) return;
+
     if (items.length === 0) {
-      grid.innerHTML = `<div class="empty-msg">🔍 找不到相關問答,換個關鍵字試試,或直接<a href="#" onclick="openChatSheet('');return false;" style="color:var(--primary);font-weight:700;">問 AI 助手</a>!</div>`;
+      if (currentBoard === "starred") {
+        grid.innerHTML = `<div class="empty-msg" style="padding:48px 16px;">
+          <div style="font-size:36px; margin-bottom:8px;">⭐</div>
+          <div style="font-weight:700; font-size:15px; margin-bottom:6px;">尚未收藏任何問答卡片</div>
+          <p style="font-size:13px; color:var(--text-muted); margin:0 0 16px;">點擊任何卡片右上角的「☆」即可將重要指引加入個人收藏！</p>
+          <button class="chip active" onclick="setBoard('all')">瀏覽全部問答</button>
+        </div>`;
+      } else {
+        grid.innerHTML = `<div class="empty-msg">🔍 找不到相關問答,換個關鍵字試試,或直接<a href="#" onclick="openChatSheet('');return false;" style="color:var(--primary);font-weight:700;">問 AI 助手</a>!</div>`;
+      }
       return;
     }
-    grid.innerHTML = items.map((it, i) => `
-      <article class="faq-card" style="animation-delay:${Math.min(i * 45, 400)}ms" onclick="openModal('${it.id}')">
-        <span class="faq-board-tag">${BOARD_NAMES[it.board] || it.board}</span>
-        <h3 class="faq-q">${esc(it.q)}</h3>
-        <p class="faq-preview">${esc(String(it.a).replace(/\n/g, " ").replace(/[*#]/g, ""))}</p>
-        <span class="faq-more">查看完整步驟解答 →</span>
-      </article>`).join("");
+
+    const showSpareSlot = (currentBoard === "all" || currentBoard === "custom") && !query;
+    const spareSlotHtml = showSpareSlot ? `
+      <article class="faq-card faq-spare-card" onclick="openCustomFaqModal()" title="點擊新增自訂備用卡片">
+        <div class="faq-card-header">
+          <span class="faq-board-tag" style="background:rgba(234, 179, 8, 0.15); color:#b45309;">➕ 預留備用卡牌空格</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="font-size:24px;">📝</div>
+          <h3 class="faq-q" style="margin:0; color:var(--primary);">點擊新增自訂問答卡片</h3>
+        </div>
+        <p class="faq-preview">預留給你的本地私房問答槽位！隨時記錄系所避雷、選課清單或生活筆記，自動持久化保存。</p>
+        <div class="faq-card-footer">
+          <span class="faq-more" style="color:var(--primary); font-weight:800;">＋ 點擊立即編輯備用卡牌 →</span>
+        </div>
+      </article>
+    ` : "";
+
+    const cardsHtml = items.map((it, i) => {
+      const starred = isStarred(it.id);
+      return `
+        <article class="faq-card ${it.isCustom ? 'faq-custom-card' : ''}" style="animation-delay:${Math.min(i * 35, 300)}ms" onclick="openModal('${it.id}')">
+          <div class="faq-card-header">
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <span class="faq-board-tag">${BOARD_NAMES[it.board] || it.board}</span>
+              ${it.isCustom ? `<span class="faq-custom-tag">✏️ 自訂</span>` : ''}
+            </div>
+            <button class="faq-star-btn ${starred ? 'starred' : ''}" onclick="toggleStarFaq('${it.id}', event)" title="${starred ? '取消收藏' : '加入收藏星星'}">
+              ${starred ? '⭐' : '☆'}
+            </button>
+          </div>
+          <h3 class="faq-q">${esc(it.q)}</h3>
+          <p class="faq-preview">${esc(String(it.a).replace(/\n/g, " ").replace(/[*#]/g, ""))}</p>
+          <div class="faq-card-footer">
+            <span class="faq-more">查看解答 →</span>
+            <div class="faq-card-actions">
+              <button class="faq-action-btn" onclick="quickCopyFaq('${it.id}', event)" title="複製問題與解答">📋</button>
+              ${it.isCustom ? `
+                <button class="faq-action-btn" onclick="openCustomFaqModal('${it.id}', event)" title="編輯此卡片">✏️</button>
+                <button class="faq-action-btn faq-action-del" onclick="deleteCustomFaq('${it.id}', event)" title="刪除此卡片">🗑️</button>
+              ` : ''}
+            </div>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    grid.innerHTML = spareSlotHtml + cardsHtml;
   }
 
   let currentFaq = null;
   function openModal(id) {
-    const it = FAQ_DATA.find(x => x.id === id);
+    const all = getAllFaqItems();
+    const it = all.find(x => x.id === id);
     if (!it) return;
     currentFaq = it;
     document.getElementById("mBoard").textContent = BOARD_NAMES[it.board] || it.board;
     document.getElementById("mQ").textContent = it.q;
     document.getElementById("mA").textContent = it.a;
     document.getElementById("mKw").innerHTML = (it.keywords || []).slice(0, 8).map(k => `<span class="kw">#${esc(k)}</span>`).join("");
+    
+    updateModalStarBtn(it.id);
+
+    const editBtn = document.getElementById("mEditBtn");
+    if (editBtn) {
+      editBtn.style.display = it.isCustom ? "inline-block" : "none";
+    }
+
     document.getElementById("faqModal").style.display = "flex";
     document.body.style.overflow = "hidden";
   }
+
   // 🐛 回報資料有誤:有表單就帶著問題開表單;沒設定就把問題複製到剪貼簿
   function reportIssue() {
     const q = currentFaq ? currentFaq.q : "";
@@ -637,13 +2140,25 @@
       );
     }
   }
+
   function closeModal() {
     document.getElementById("faqModal").style.display = "none";
     document.body.style.overflow = "";
   }
-  document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      closeModal();
+      closePortalTipModal();
+      closeCustomFaqModal();
+      closeImportModal();
+    }
+  });
+
+  updateChipBar();
+  renderPortalCards('all');
   renderGrid();
+  runPortalDrawerIntro();
 
   // ── 🎬 導覽模式(手動逐步):按 →/空白鍵/點🎬 跳下一張,Esc 停止 ──
   let tourRunning = false;
@@ -703,98 +2218,136 @@
   }
 
   // ── 美食地圖 + 蝦皮式聊天室 ──
+  // ── 美食地圖 (Food Map) 純前端即時互動邏輯 ──
+  const FOOD_DATABASE = (typeof SENIOR_FOOD_DB !== "undefined" && Array.isArray(SENIOR_FOOD_DB)) ? SENIOR_FOOD_DB : [];
+  let currentFoodFilter = "all";
+
   function openFoodMap() {
-    document.getElementById("foodMapModal2").style.display = "flex";
+    const modal = document.getElementById("foodMapModal2");
+    if (!modal) return;
+    modal.style.display = "flex";
     document.body.style.overflow = "hidden";
-  }
-  // 🎓 學長姐精選 → 在本頁彈窗內展開 新鮮人-興生FAQ的完整美食資料庫
-  let seniorVisible = false;
-  function openSeniorPicks() {
-    seniorVisible = !seniorVisible;
-    const sec = document.getElementById("seniorPicksSection");
-    sec.style.display = seniorVisible ? "block" : "none";
-    if (seniorVisible) {
-      renderSeniorPicks(document.getElementById("seniorSearch").value || "");
-      sec.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-  }
-  function renderSeniorPicks(query) {
-    const grid = document.getElementById("seniorGrid");
-    const label = document.getElementById("seniorCount");
-    const q = (query || "").trim().toLowerCase();
-    seniorFiltered = (typeof SENIOR_FOOD_DB !== "undefined" ? SENIOR_FOOD_DB : []).filter(it => {
-      if (!q) return true;
-      return ((it.title || "") + " " + (it.content || "") + " " + (it.kws || "")).toLowerCase().includes(q);
+    const searchInput = document.getElementById("foodSearchInput");
+    if (searchInput) searchInput.value = "";
+    currentFoodFilter = "all";
+    document.querySelectorAll(".food-filter-btn").forEach((btn, idx) => {
+      btn.classList.toggle("active", idx === 0);
     });
-    if (label) label.textContent = `共 ${seniorFiltered.length} 間(資料來源:新鮮人-興生FAQ美食庫)`;
-    if (!seniorFiltered.length) {
-      grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">🍽️ 找不到符合的店家,換個關鍵字試試!</div>`;
+    renderFoodGrid(FOOD_DATABASE);
+  }
+  const openFoodMapModal = openFoodMap;
+
+  function closeFoodMap() {
+    const modal = document.getElementById("foodMapModal2");
+    if (modal) modal.style.display = "none";
+    document.body.style.overflow = "";
+  }
+  const closeFoodMapModal = closeFoodMap;
+
+  function closeFoodMapModalOnBackdrop(e) {
+    if (e.target.id === "foodMapModal2") closeFoodMap();
+  }
+
+  function setFoodFilter(filterTag, btnEl) {
+    currentFoodFilter = filterTag;
+    document.querySelectorAll(".food-filter-btn").forEach(b => b.classList.remove("active"));
+    if (btnEl) btnEl.classList.add("active");
+    onFoodSearchChange();
+  }
+
+  function onFoodSearchChange() {
+    const searchInput = document.getElementById("foodSearchInput");
+    const query = (searchInput ? searchInput.value : "").trim().toLowerCase();
+    const filtered = FOOD_DATABASE.filter(item => {
+      const matchFilter = (currentFoodFilter === "all") || (item.tags && item.tags.includes(currentFoodFilter));
+      if (!matchFilter) return false;
+      if (!query) return true;
+      const textToSearch = ((item.title || "") + " " + (item.content || "") + " " + (item.kws || "")).toLowerCase();
+      return textToSearch.includes(query);
+    });
+    renderFoodGrid(filtered);
+  }
+
+  function renderFoodGrid(items) {
+    const grid = document.getElementById("foodGrid");
+    const countLabel = document.getElementById("foodCountLabel");
+    if (countLabel) countLabel.textContent = `共篩選出 ${items.length} 間美食店家`;
+    if (!grid) return;
+
+    if (items.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1; text-align:center; padding:30px; color:var(--text-muted); font-size:13px;">
+          🍽️ 找不到符合條件的美食店家，換個關鍵字試試吧！
+        </div>
+      `;
       return;
     }
-    grid.innerHTML = seniorFiltered.map((item, idx) => {
-      const cleanName = item.title.split("(")[0].trim();
+
+    grid.innerHTML = items.map(item => {
+      const cleanStoreName = (item.title || "").split("(")[0].trim();
       const badgeText = item.title.includes("(") ? item.title.substring(item.title.indexOf("(") + 1, item.title.indexOf(")")) : "";
-      const isDcard = /dcard/i.test(item.kws || "") || /dcard/i.test(item.content || "");
-      const mapUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("中興大學 " + cleanName);
-      const expanded = idx === seniorExpandedIdx;
+      const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("中興大學 " + cleanStoreName)}`;
+      const escapedName = cleanStoreName.replace(/'/g, "\\'");
+
       return `
-        <div class="sp-card${expanded ? " expanded" : ""}" onclick="toggleSenior(${idx})">
-          <div class="sp-head">
-            <span>🍽️ ${cleanName}</span>
-            ${isDcard ? `<span class="sp-dcard" title="此推薦來自 Dcard 中興板學長姐的分享">🎓 Dcard 分享</span>` : ""}
+        <div class="food-card">
+          <div>
+            <div class="food-card-title">
+              <span>🍽️ ${cleanStoreName}</span>
+              ${badgeText ? `<span class="food-tag-badge">${badgeText.substring(0, 12)}</span>` : ""}
+            </div>
+            <div class="food-card-content" style="margin-top:5px;">
+              ${(item.content || "").replace(/\n/g, "<br>")}
+            </div>
           </div>
-          ${badgeText ? `<span class="sp-tag">${badgeText.substring(0, 12)}</span>` : ""}
-          <div class="sp-desc">${item.content.replace(/\n/g, "<br>")}</div>
-          <div class="sp-more">👇 點一下看完整介紹</div>
-          <div class="sp-actions">
-            <a class="sp-nav" href="${mapUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">📍 導航</a>
-            <button class="food-mini-btn sp-ask" onclick="event.stopPropagation();askFood('${cleanName.replace(/'/g, "\\'")}')">🤖 問 AI</button>
+          <div class="food-card-actions">
+            <button class="food-ask-btn" onclick="askFood('${escapedName}')">💬 諮詢助手</button>
+            <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="food-map-link">
+              <span>📍 地圖</span>
+            </a>
           </div>
-        </div>`;
+        </div>
+      `;
     }).join("");
   }
-  let seniorExpandedIdx = -1;
-  let seniorFiltered = [];
-  function toggleSenior(idx) {
-    seniorExpandedIdx = (idx === seniorExpandedIdx) ? -1 : idx;
-    renderSeniorPicks(document.getElementById("seniorSearch").value || "");
-    if (seniorExpandedIdx >= 0) {
-      const el = document.querySelectorAll("#seniorGrid .sp-card")[idx];
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-  }
+
+  // 保留相容性空函式
+  function openSeniorPicks() {}
+  function renderSeniorPicks() {}
+  function toggleSenior() {}
+
 
   // ── 📐 排版設定(1 欄/2 欄,存 localStorage)──
   function setLayout(cols) {
     document.body.classList.toggle("cols-1", cols === 1);
     localStorage.setItem("faq_layout", String(cols));
-    const b1 = document.getElementById("lt1"), b2 = document.getElementById("lt2");
-    if (b1 && b2) { b1.classList.toggle("active", cols === 1); b2.classList.toggle("active", cols === 2); }
+    ["lt1", "foodLt1"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle("active", cols === 1);
+    });
+    ["lt2", "foodLt2"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle("active", cols === 2);
+    });
   }
   (function initLayout() {
-    // 手機預設兩欄;使用者選過就尊重選擇。桌面上切換器隱藏(桌面本來就是多欄)
+    // 手機預設兩欄;使用者選過就尊重選擇。
     const saved = parseInt(localStorage.getItem("faq_layout") || "0", 10);
     const isMobile = window.matchMedia("(max-width: 640px)").matches;
-    if (saved === 1 || (!isMobile && saved === 1)) setLayout(saved);
-    if (!isMobile) document.getElementById("layoutToggle").style.display = "none";
+    if (saved === 1 || (!isMobile && saved === 1)) {
+      setLayout(saved);
+    } else {
+      setLayout(2);
+    }
+    if (!isMobile) {
+      const lt = document.getElementById("layoutToggle");
+      if (lt) lt.style.display = "none";
+    }
   })();
   // 📍 店家卡片導航(比照 新鮮人-興生FAQ美食地圖的 Google Maps 行為)
   function navFood(name) {
     window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("中興大學 " + name), "_blank");
   }
-  function closeFoodMap() {
-    document.getElementById("foodMapModal2").style.display = "none";
-    document.body.style.overflow = "";
-  }
-  // ── 美食地圖分類過濾(全部/吃飽/飲料)──
-  function filterFoodCat(cat, el) {
-    document.querySelectorAll("#foodCatBar .chip").forEach(c => c.classList.remove("active"));
-    if (el) el.classList.add("active");
-    document.querySelectorAll("#foodModalList .food-mini-card").forEach(card => {
-      card.style.display = (cat === "all" || card.dataset.cat === cat) ? "" : "none";
-    });
-  }
-
   function ensureChatLoaded(askText) {
     const frame = document.getElementById("chatFrame");
     const msg = document.getElementById("chatLoadMsg");
@@ -831,7 +2384,7 @@
     sheet.dataset.stage = "half";
     sheet.classList.add("open");
     document.getElementById("chatSheetTitle").textContent =
-      askText === "__DEPT_LIST__" ? "🤖 新鮮人-興生FAQ · 各系新生 LINE 群總覽" :
+      askText === "__DEPT_LIST__" ? "🤖 新鮮人-興生FAQ · 115學年度 各系新生 LINE 群總覽" :
       askText ? "🤖 新鮮人-興生FAQ · 正在問:「" + askText + "」" : "🤖 新鮮人-興生FAQ";
     if (askText === "__DEPT_LIST__") {
       // 直接由本頁渲染科系列表,不經過 iframe(0 Token、不會白畫面)
@@ -873,8 +2426,8 @@
     msg.style.display = "none";
     panel.style.display = "block";
     panel.innerHTML =
-      `<div style="font-weight:900; font-size:15px; margin-bottom:4px;">各系新生 LINE 群連結總覽 📋</div>
-       <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">點卡片直接加入!連結為學長姐流傳,若失效請告知我們更新 🙏</div>` +
+      `<div style="font-weight:900; font-size:15px; margin-bottom:4px;">115學年度 各系新生 LINE 群連結總覽 📋</div>
+       <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">【115學年度專屬】點卡片直接加入！連結為學長姐流傳，若失效請告知我們更新 🙏</div>` +
       DEPT_LINKS.map(([name, url]) =>
         `<a href="${url}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:space-between; gap:8px; text-decoration:none; background:#f2f7fb; border-radius:10px; padding:10px 14px; font-size:13.5px; color:var(--primary-dark); font-weight:700; margin-bottom:6px; transition:.2s;" onmouseover="this.style.background='var(--mint)'" onmouseout="this.style.background='#f2f7fb'"><span>#${name}</span><span style="color:var(--primary); font-size:12px;">加入 →</span></a>`).join("") +
       `<div style="font-size:12px; color:var(--text-muted); margin-top:8px; text-align:center;">找不到你的系?到新生社群留言詢問,或自己開一個號召同學!</div>`;
@@ -967,151 +2520,11 @@
     document.body.style.overflow = "";
   }
 
-  // ── 🎯 興大午餐吃什麼？幸運大轉盤 (Lunch Wheel) ──
-  const LUNCH_OPTIONS = [
-    { name: "揚州炒飯", tag: "🏆 人上人等級必吃！", color: "#005a36", textColor: "#ffffff", desc: "位於忠明南路與北區路，招牌傳統揚州炒飯，份量天花板！大一不吃會後悔！人上人等級超頂的啦！", query: "揚州炒飯" },
-    { name: "圓廳學餐 1-2F", tag: "🌲 免出校門超大冷氣", color: "#007849", textColor: "#ffffff", desc: "校內圓廳 1F-2F 自助餐、快餐、便當、鍋燒意麵任選！中午下課不用出校門曬太陽，吹冷氣省時首選！", query: "圓廳學餐" },
-    { name: "東港味", tag: "🌸 女宿後門人氣王", color: "#c5a059", textColor: "#ffffff", desc: "南門路人氣平價小吃！學長姐強烈推薦「乾麵加豆乾」與「肉絲炒飯加辣」！尖峰建議先打電話訂餐。", query: "東港味" },
-    { name: "沼澤咖哩", tag: "🍛 學生心中台中No.1", color: "#e67e22", textColor: "#ffffff", desc: "學府路高人氣濃郁咖哩！香濃醇厚，返鄉前必吃的儀式感美食，學生內用現折 50 元優惠！", query: "沼澤咖哩" },
-    { name: "大吃小算", tag: "🍲 平價大碗鍋燒意麵", color: "#d35400", textColor: "#ffffff", desc: "學府路老字號台南鍋燒意麵與肉燥飯，加麵加湯超澎湃，月底省錢救星，午餐吃超飽！", query: "大吃小算" },
-    { name: "隨便義大利麵", tag: "🍝 蛤蜊山爆量麵食", color: "#16a085", textColor: "#ffffff", desc: "學府路超人氣義大利麵！蛤蜊多到像一座小山，份量大到吃不完，同學小聚推薦首選。", query: "隨便義大利麵" },
-    { name: "佳味中西簡餐", tag: "🍱 學府路經典快餐", color: "#27ae60", textColor: "#ffffff", desc: "學府路經典老牌簡餐！大雞腿便當、酥炸豬排飯，出餐快速、份量實在，趕下午上課的最佳選擇。", query: "佳味中西簡餐" },
-    { name: "八方/梁社漢", tag: "🥟 不想思考的安全牌", color: "#f39c12", textColor: "#ffffff", desc: "學府路上永遠不踩雷的安全牌！招牌鍋貼、炸排骨飯、水餃，快速出餐立刻吃完趕上下午第一堂課！", query: "八方雲集" },
-    { name: "小叮噹牛排", tag: "🥩 平價鐵板肉食族", color: "#8e44ad", textColor: "#ffffff", desc: "學府路高CP值鐵板牛排！平價牛排附鐵板麵、荷包蛋、紅茶與玉米濃湯無限暢飲，想大口吃肉就選它！", query: "小叮噹牛排" },
-    { name: "中興湖看鵝吹風", tag: "🦢【大笑彩蛋！中獎啦】", color: "#2980b9", textColor: "#ffffff", desc: "⚠️【開玩笑的！中興湖嚴禁捕魚或喝水！】大白鵝超級兇！湖水不能吃！請立即點擊下方按鈕重新再抽一次 🤣", query: "中興湖" }
-  ];
-
-  let wheelRotation = 0;
-  let isWheelSpinning = false;
-  let currentWheelResult = null;
-
-  function openLunchWheelModal() {
-    document.getElementById("lunchWheelModal").style.display = "flex";
-    document.body.style.overflow = "hidden";
-    setTimeout(() => { drawWheel(wheelRotation); }, 50);
-  }
-
-  function closeLunchWheelModal() {
-    document.getElementById("lunchWheelModal").style.display = "none";
-    document.body.style.overflow = "";
-  }
-
-  function drawWheel(rotationAngle) {
-    const canvas = document.getElementById("wheelCanvas");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const numSlices = LUNCH_OPTIONS.length;
-    const arc = (2 * Math.PI) / numSlices;
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
-    const radius = cx - 4;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rotationAngle);
-
-    for (let i = 0; i < numSlices; i++) {
-      const angle = i * arc;
-      ctx.beginPath();
-      ctx.fillStyle = LUNCH_OPTIONS[i].color;
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, radius, angle, angle + arc);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      ctx.save();
-      ctx.rotate(angle + arc / 2);
-      ctx.textAlign = "right";
-      ctx.fillStyle = LUNCH_OPTIONS[i].textColor;
-      ctx.font = "bold 11px sans-serif";
-      ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
-      ctx.shadowBlur = 3;
-      ctx.fillText(LUNCH_OPTIONS[i].name, radius - 16, 4);
-      ctx.restore();
-    }
-    ctx.restore();
-  }
-
-  function spinLunchWheel() {
-    if (isWheelSpinning) return;
-    isWheelSpinning = true;
-    const spinBtn = document.getElementById("spinBtn");
-    if (spinBtn) spinBtn.disabled = true;
-    document.getElementById("wheelResultBox").style.display = "none";
-
-    const numSlices = LUNCH_OPTIONS.length;
-    const sliceAngle = (2 * Math.PI) / numSlices;
-    const targetIndex = Math.floor(Math.random() * numSlices);
-    const targetSliceCenter = targetIndex * sliceAngle + sliceAngle / 2;
-    const baseTargetRotation = (3 * Math.PI / 2) - targetSliceCenter;
-    const extraSpins = (5 + Math.floor(Math.random() * 3)) * 2 * Math.PI;
-    const startRotation = wheelRotation % (2 * Math.PI);
-    const finalRotation = wheelRotation + extraSpins + ((baseTargetRotation - (startRotation % (2 * Math.PI)) + 4 * Math.PI) % (2 * Math.PI));
-
-    const startTime = performance.now();
-    const duration = 3800;
-
-    function animate(time) {
-      const elapsed = time - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      wheelRotation = startRotation + (finalRotation - startRotation) * ease;
-      drawWheel(wheelRotation);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        isWheelSpinning = false;
-        if (spinBtn) spinBtn.disabled = false;
-        currentWheelResult = LUNCH_OPTIONS[targetIndex];
-        showWheelResult(currentWheelResult);
-      }
-    }
-    requestAnimationFrame(animate);
-  }
-
-  function showWheelResult(result) {
-    const box = document.getElementById("wheelResultBox");
-    const tag = document.getElementById("wheelResultTag");
-    const title = document.getElementById("wheelResultTitle");
-    const desc = document.getElementById("wheelResultDesc");
-    const askBtn = document.getElementById("wheelAskBtn");
-
-    tag.textContent = result.tag;
-    title.textContent = result.name;
-    desc.textContent = result.desc;
-
-    if (result.name.includes("中興湖")) {
-      box.style.background = "#fff1f2";
-      box.style.borderColor = "#fecdd3";
-      tag.style.color = "#e11d48";
-      title.style.color = "#be123c";
-      askBtn.textContent = "🦢 問學長姐中興湖傳奇";
-    } else {
-      box.style.background = "#f8fafc";
-      box.style.borderColor = "#e2e8f0";
-      tag.style.color = "#c5a059";
-      title.style.color = "var(--primary)";
-      askBtn.textContent = "💬 問學長姐這家";
-    }
-    box.style.display = "block";
-  }
-
-  function askAboutWheelResult() {
-    if (!currentWheelResult) return;
-    const q = currentWheelResult.query || currentWheelResult.name;
-    closeLunchWheelModal();
-    askFood(q);
-  }
-
+  // ── 🎰 興大美食天命拉霸機 (已升級為 100% 真實 176 筆資料，取代舊陽春轉盤) ──
   function askFood(storeName) {
     closeFoodMap();
     closeModal();
+    if (typeof closeFoodSlotModal === "function") closeFoodSlotModal();
     openChatSheet(storeName);
   }
 

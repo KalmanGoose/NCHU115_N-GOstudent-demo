@@ -1,0 +1,25 @@
+# macOS & IDE
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+.gradio/
+
+# Raw unredacted datasets & competition private docs
+資料集/
+興程式競賽2/
+*.bak
+telemetry_logs.jsonl
+
+# Model weights, embeddings & large training bundles
+*.zip
+*.pt
+*.bin
+*.safetensors
+nchu_bge_small_model/
+nchu_bge_small_model_v1/
+nchu_qwen_adapter/
+nchu_qwen3b_adapter/
+train_*.jsonl
+eval_*.jsonl
