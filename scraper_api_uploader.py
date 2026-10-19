@@ -16,23 +16,24 @@
 ==============================================================================
 """
 
+import os
 import sys
 import json
 import csv
 import requests
 
 # ============================
-# ⚙️ 後端連線配置 (請依需求填寫)
+# ⚙️ 後端連線配置 (優先讀取環境變數，避免金鑰外洩)
 # ============================
-BACKEND_MODE = "supabase"  # 可選: "supabase" 或 "gas"
+BACKEND_MODE = os.environ.get("BACKEND_MODE", "gas")  # 可選: "supabase" 或 "gas"
 
-# 方案 A: Supabase 配置
-SUPABASE_URL = "https://your-project-id.supabase.co"
-SUPABASE_SERVICE_ROLE_KEY = "your-service-role-key-here"  # 具有完全寫入權限的金鑰
+# 方案 A: Supabase 配置 (由環境變數讀取)
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 
-# 方案 B: Google Apps Script 配置
-GAS_WEB_APP_URL = "https://script.google.com/macros/s/your-gas-id/exec"
-GAS_ADMIN_TOKEN = "nchu2026_admin"
+# 方案 B: Google Apps Script 配置 (由環境變數讀取)
+GAS_WEB_APP_URL = os.environ.get("GAS_WEB_APP_URL", "")
+GAS_ADMIN_TOKEN = os.environ.get("GAS_ADMIN_TOKEN", "")
 
 
 def upload_to_supabase(stores_list):

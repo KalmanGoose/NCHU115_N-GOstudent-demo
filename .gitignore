@@ -23,3 +23,10 @@ nchu_qwen_adapter/
 nchu_qwen3b_adapter/
 train_*.jsonl
 eval_*.jsonl
+
+# Security & Credentials
+.env
+.env.*
+*.key
+*.pem
+secrets/

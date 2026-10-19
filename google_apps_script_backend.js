@@ -1,26 +1,32 @@
 /**
  * ==============================================================================
- * 國立中興大學 (NCHU) 新生美食地圖 - Google Apps Script (GAS) 升級版後端
+ * 國立中興大學 (NCHU) 新生美食地圖 - Google Apps Script (GAS) 安全後端 Web App
  * ==============================================================================
  * 
- * 【特色】
- * 1. 同時支援「訪客免登入查詢」與「管理員 Token 授權管理」。
- * 2. 支援前端學生即時提交「幽靈店家 / 資訊錯誤」回報，自動記錄至 Reports 工作表。
- * 3. 支援後台審核一鍵將店家標記為停業 (is_active = FALSE)。
- * 4. 支援 Python 爬蟲與後台面板「批次 Upsert (新增或覆寫)」店家資料。
- * 5. 全面支援 CORS，無跨域障礙。
- * 
- * 【預設管理金鑰】
- * 在下方 ADMIN_SECRET_TOKEN 自訂你的管理密碼 (預設: nchu2026_admin)。
+ * 🔒【資安防護規範 - 零硬編碼安全架構】
+ * 1. 嚴禁在程式碼中寫死任何管理員密碼或金鑰！
+ * 2. 管理員金鑰存放在 Google Apps Script 雲端專屬的「指令碼屬性 (Script Properties)」中：
+ *    - 設定路徑：GAS 編輯器左側選單 ->「專案設定 (齒輪圖示)」->「指令碼屬性 (Script Properties)」
+ *    - 屬性名稱：ADMIN_SECRET_TOKEN
+ *    - 屬性值：填入你自訂的高強度管理密碼 (例：MyNCHU_Secret_Pass_2026!)
+ * 3. 訪客端僅能執行查詢 (doGet) 與提交回報 (action=report)，無法偽造或越權存取管理功能。
+ * 4. 所有管理操作 (審核回報、上下架、爬蟲寫入) 皆嚴格校驗傳入的 Token 是否與雲端屬性一致。
  * ==============================================================================
  */
 
-const ADMIN_SECRET_TOKEN = "nchu2026_admin";
 const STORES_SHEET_NAME = "Stores";
 const REPORTS_SHEET_NAME = "Reports";
 
 /**
- * 處理 GET 請求 (查詢店家、心跳檢測、讀取回報)
+ * 從 Google 雲端安全讀取管理員金鑰 (不寫死在代碼中)
+ */
+function getAdminSecretToken() {
+  const secret = PropertiesService.getScriptProperties().getProperty("ADMIN_SECRET_TOKEN");
+  return secret ? String(secret).trim() : null;
+}
+
+/**
+ * 處理 GET 請求 (心跳檢測、訪客店家查詢、管理員讀取回報)
  */
 function doGet(e) {
   try {
@@ -35,16 +41,25 @@ function doGet(e) {
       });
     }
 
-    // 2. 管理員讀取回報清單
+    // 2. 管理員安全讀取回報清單
     if (params.action === "admin_get_reports") {
-      if (params.token !== ADMIN_SECRET_TOKEN) {
-        return createJsonResponse({ status: "error", message: "管理員授權失敗！密鑰錯誤。" });
+      const serverSecret = getAdminSecretToken();
+      if (!serverSecret) {
+        return createJsonResponse({ 
+          status: "error", 
+          message: "尚未在 Apps Script 專案設定中配置 ADMIN_SECRET_TOKEN 指令碼屬性！" 
+        });
       }
+
+      if (!params.token || String(params.token).trim() !== serverSecret) {
+        return createJsonResponse({ status: "error", message: "管理員身分驗證失敗！權限不足。" });
+      }
+
       const reports = loadReportsFromSheet();
       return createJsonResponse({ status: "success", count: reports.length, data: reports });
     }
 
-    // 3. 一般店家資料查詢
+    // 3. 訪客端一般店家資料查詢 (只回傳 is_active !== false)
     const allFoods = loadFoodDataFromSheet();
     const targetStreet = (params.street || "").trim().toLowerCase();
     const targetCategory = (params.category || "").trim().toLowerCase();
@@ -52,35 +67,29 @@ function doGet(e) {
     const searchQuery = (params.search || params.q || "").trim().toLowerCase();
     const showAll = params.include_inactive === "true" || params.include_inactive === "1";
 
+    // 僅授權管理員才能檢視已下架店家
+    const isAdmin = params.token && params.token === getAdminSecretToken();
+
     let filtered = allFoods.filter(item => {
-      // 預設只顯示 active 店家
-      if (!showAll && String(item.is_active).toUpperCase() === "FALSE") {
-        return false;
+      if (!showAll || !isAdmin) {
+        if (String(item.is_active).toUpperCase() === "FALSE") return false;
       }
 
-      // 街道/商圈過濾
       if (targetStreet && targetStreet !== "all" && targetStreet !== "全部") {
         const itemStreet = String(item.street || "").toLowerCase();
-        if (!itemStreet.includes(targetStreet) && !targetStreet.includes(itemStreet)) {
-          return false;
-        }
+        if (!itemStreet.includes(targetStreet) && !targetStreet.includes(itemStreet)) return false;
       }
 
-      // 分類過濾
       if (targetCategory && targetCategory !== "all" && targetCategory !== "全部") {
         const itemCat = String(item.category || "").toLowerCase();
-        if (!itemCat.includes(targetCategory) && !targetCategory.includes(itemCat)) {
-          return false;
-        }
+        if (!itemCat.includes(targetCategory) && !targetCategory.includes(itemCat)) return false;
       }
 
-      // 步行時間過濾
       if (maxWalk > 0) {
         const itemWalk = parseInt(item.walk_minutes || "99", 10);
         if (itemWalk > maxWalk) return false;
       }
 
-      // 關鍵字搜尋
       if (searchQuery) {
         const fullText = (
           String(item.name || "") + " " +
@@ -114,14 +123,13 @@ function doGet(e) {
 }
 
 /**
- * 處理 POST 請求 (提交回報、審核處理、爬蟲批次匯入)
+ * 處理 POST 請求 (提交回報、管理員登入驗證、審核處理、爬蟲批次匯入)
  */
 function doPost(e) {
   try {
     let params = {};
     if (e && e.parameter) params = e.parameter;
 
-    // 嘗試解析 JSON postData
     if (e && e.postData && e.postData.contents) {
       try {
         const jsonBody = JSON.parse(e.postData.contents);
@@ -131,7 +139,7 @@ function doPost(e) {
 
     const action = params.action;
 
-    // 1. 學生提交回報 (免 Token)
+    // 1. 同學提交回報 (公開介面，免驗證，嚴格消毒輸入)
     if (action === "report") {
       let reportData = {};
       if (typeof params.payload === "string") {
@@ -143,16 +151,29 @@ function doPost(e) {
       }
 
       appendReportToSheet(reportData);
-      return createJsonResponse({ status: "success", message: "回報已成功記錄至 Google 試算表！" });
+      return createJsonResponse({ status: "success", message: "回報已成功送出！感謝協助維護店家資訊。" });
     }
 
-    // 2. 管理員操作 (需要 Token 驗證)
-    const token = params.token || params.adminToken;
-    if (token !== ADMIN_SECRET_TOKEN) {
-      return createJsonResponse({ status: "error", message: "管理員授權失敗！密鑰不符。" });
+    // 2. 以下所有管理功能必須通過雲端金鑰驗證
+    const serverSecret = getAdminSecretToken();
+    if (!serverSecret) {
+      return createJsonResponse({ 
+        status: "error", 
+        message: "後端尚未在 Apps Script 專案設定中配置 ADMIN_SECRET_TOKEN 指令碼屬性！請先至 GAS 設定。" 
+      });
     }
 
-    // 2.1 審核回報 (Resolve Report)
+    const clientToken = params.token || params.adminToken;
+    if (!clientToken || String(clientToken).trim() !== serverSecret) {
+      return createJsonResponse({ status: "error", message: "認證失敗：管理員密鑰無效或不符！" });
+    }
+
+    // 2.1 驗證密碼是否正確 (供 admin.html 登入時檢查)
+    if (action === "admin_verify") {
+      return createJsonResponse({ status: "success", message: "管理員身分驗證成功！" });
+    }
+
+    // 2.2 審核回報 (Resolve Report)
     if (action === "admin_resolve_report") {
       const reportId = params.report_id;
       const resolveAction = params.resolve_action; // 'delist' | 'reject' | 'resolved'
@@ -160,7 +181,6 @@ function doPost(e) {
 
       updateReportStatus(reportId, resolveAction);
 
-      // 若選擇下架，將該店家設為 FALSE
       if (resolveAction === "delist" && storeName) {
         setStoreActiveStatus(storeName, false);
       }
@@ -168,7 +188,7 @@ function doPost(e) {
       return createJsonResponse({ status: "success", message: `回報 ${reportId} 已處置為 ${resolveAction}` });
     }
 
-    // 2.2 批次匯入/爬蟲 Upsert 店家資料
+    // 2.3 爬蟲與批次 Upsert (供 Python 腳本或後台直接同步)
     if (action === "admin_batch_upsert") {
       let storesList = [];
       if (typeof params.payload === "string") {
@@ -181,7 +201,7 @@ function doPost(e) {
       return createJsonResponse({ status: "success", message: `成功批次更新/寫入 ${count} 間店家！`, count: count });
     }
 
-    // 2.3 單一店家資料更新
+    // 2.4 單一店家資料更新
     if (action === "admin_update_store") {
       let storeData = params.store || params;
       if (typeof storeData === "string") storeData = JSON.parse(storeData);
@@ -189,7 +209,7 @@ function doPost(e) {
       return createJsonResponse({ status: "success", message: "店家資訊已更新！" });
     }
 
-    return createJsonResponse({ status: "error", message: "未知的 POST 操作: " + action });
+    return createJsonResponse({ status: "error", message: "未知的管理操作: " + action });
 
   } catch (err) {
     return createJsonResponse({ status: "error", message: "POST 執行異常: " + err.toString() });
@@ -197,7 +217,7 @@ function doPost(e) {
 }
 
 /**
- * 試算表讀寫核心函式
+ * 試算表底層讀寫函式
  */
 function getOrCreateSheet(sheetName, defaultHeaders) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -274,7 +294,7 @@ function loadReportsFromSheet() {
     }
     result.push(record);
   }
-  return result.reverse(); // 最新回報置頂
+  return result.reverse();
 }
 
 function updateReportStatus(reportId, newStatus) {
@@ -284,7 +304,7 @@ function updateReportStatus(reportId, newStatus) {
 
   for (let i = 1; i < values.length; i++) {
     if (String(values[i][0]).trim() === String(reportId).trim()) {
-      sheet.getRange(i + 1, 6).setValue(newStatus); // 第6欄是 status
+      sheet.getRange(i + 1, 6).setValue(newStatus);
       break;
     }
   }
@@ -321,11 +341,10 @@ function batchUpsertStoresToSheet(storesList) {
   const headers = values[0].map(h => String(h || "").trim().toLowerCase());
   const nameColIdx = headers.indexOf("name");
 
-  // 現有店名與行數索引對應
   const existingMap = {};
   for (let i = 1; i < values.length; i++) {
     const sName = String(values[i][nameColIdx] || "").trim();
-    if (sName) existingMap[sName] = i + 1; // 1-indexed row number
+    if (sName) existingMap[sName] = i + 1;
   }
 
   let count = 0;
@@ -341,10 +360,8 @@ function batchUpsertStoresToSheet(storesList) {
     });
 
     if (existingMap[sName]) {
-      // 覆寫既有行
       sheet.getRange(existingMap[sName], 1, 1, rowData.length).setValues([rowData]);
     } else {
-      // 新增一行
       sheet.appendRow(rowData);
       existingMap[sName] = sheet.getLastRow();
     }

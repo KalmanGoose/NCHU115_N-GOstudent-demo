@@ -403,39 +403,47 @@
         <span class="provider-dot" id="activeProviderDot"></span>
         <span id="activeProviderName">後端模式: 載入中...</span>
       </div>
-      <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">🌐 前往網站</a>
+      <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">🌐 前往前台網站</a>
       <button class="btn btn-danger btn-sm" id="logoutBtn" onclick="adminLogout()" style="display:none;">登出</button>
     </div>
   </nav>
 
   <!-- Login View -->
   <div class="login-wrapper" id="loginSection">
-    <h1 class="login-title">🔐 興大管理員登入</h1>
-    <p class="login-subtitle">請選擇後端模式並輸入認證金鑰，即可審核回報、上下架店家與配置爬蟲 API。</p>
+    <h1 class="login-title">🔐 興大美食地圖管理員驗證</h1>
+    <p class="login-subtitle">此頁面為管理員專屬控制台。請選擇後端模式並輸入認證金鑰登入。</p>
 
     <div class="form-group">
       <label class="form-label">選擇認證後端</label>
       <select class="form-select" id="loginProviderSelect" onchange="toggleLoginInputs()">
-        <option value="gas">方案 B：Google Apps Script (預設金鑰)</option>
-        <option value="supabase">方案 A：Supabase 雲端資料庫</option>
-        <option value="local">本機離線展示模式 (免金鑰)</option>
+        <option value="gas">方案 B：Google Apps Script 雲端驗證</option>
+        <option value="supabase">方案 A：Supabase 帳號密碼登入</option>
       </select>
     </div>
 
-    <!-- GAS Login Input -->
+    <!-- GAS Login Input (No hardcoded values) -->
     <div id="gasLoginGroup" class="form-group">
-      <label class="form-label">管理員密碼 / Token (預設: nchu2026_admin)</label>
-      <input type="password" id="gasTokenInput" class="form-input" placeholder="請輸入管理密碼" value="nchu2026_admin">
+      <label class="form-label">管理員密碼 / Token</label>
+      <input type="password" id="gasTokenInput" class="form-input" placeholder="請輸入您在 GAS 指令碼屬性配置的密碼" autocomplete="current-password">
+      <p style="font-size:11.5px; color:var(--text-muted); margin-top:5px; line-height:1.4;">
+        💡 密碼存放於 Google Apps Script「專案設定 ➜ 指令碼屬性 (ADMIN_SECRET_TOKEN)」中，前端代碼無任何明文。
+      </p>
     </div>
 
-    <!-- Supabase Login Input -->
+    <!-- Supabase Login Input (Standard Auth) -->
     <div id="supabaseLoginGroup" class="form-group" style="display:none;">
-      <label class="form-label">Supabase Service Role Key 或 API Key</label>
-      <input type="password" id="supabaseKeyInput" class="form-input" placeholder="貼上你的 Supabase Key">
+      <div style="margin-bottom:10px;">
+        <label class="form-label">管理員 Email</label>
+        <input type="email" id="supabaseEmailInput" class="form-input" placeholder="admin@example.com" autocomplete="username">
+      </div>
+      <div>
+        <label class="form-label">管理員密碼</label>
+        <input type="password" id="supabasePasswordInput" class="form-input" placeholder="請輸入 Supabase 密碼" autocomplete="current-password">
+      </div>
     </div>
 
-    <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:12px;" onclick="doAdminLogin()">
-      🚀 登入管理面板
+    <button class="btn btn-primary" id="loginSubmitBtn" style="width:100%; justify-content:center; margin-top:16px;" onclick="doAdminLogin()">
+      🚀 安全登入
     </button>
   </div>
 
@@ -551,7 +559,8 @@
           <h2 class="card-title">🐍 Python 爬蟲批次自動更新對接指南</h2>
         </div>
         <p style="font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:16px;">
-          未來你寫好的 Python 爬蟲（如 Google Maps、IG 美食爬蟲）清洗完後，直接透過以下腳本即可將新店家批次 Upsert 進後端，完全不需要手動開試算表！
+          未來你寫好的 Python 爬蟲（如 Google Maps、IG 美食爬蟲）清洗完後，直接透過腳本即可將新店家批次 Upsert 進後端，完全不需要手動開試算表！<br>
+          金鑰建議透過環境變數傳入，避免在爬蟲程式碼中留下任何明文密碼。
         </p>
 
         <div class="code-box" id="pythonSnippetBox">
@@ -592,11 +601,10 @@
           你可以隨時在 <b>方案 A (Supabase)</b> 與 <b>方案 B (Google Apps Script)</b> 之間無縫切換，兩者獨立運作，完全杜絕環境打架！
         </p>
 
-        <!-- Provider Selection Cards -->
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-bottom:24px;">
           <div class="card" id="cardSupabase" style="margin:0; cursor:pointer;" onclick="selectProviderMode('supabase')">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-weight:800; font-size:15px; color:#fff;">方案 A：Supabase (推薦)</span>
+              <span style="font-weight:800; font-size:15px; color:#fff;">方案 A：Supabase (BaaS)</span>
               <span class="status-tag status-active" id="badgeSupabase">可選</span>
             </div>
             <p style="font-size:12px; color:var(--text-muted); margin-top:8px;">
@@ -615,7 +623,6 @@
           </div>
         </div>
 
-        <!-- Inputs for active configuration -->
         <div id="supabaseConfigInputs">
           <div class="form-group">
             <label class="form-label">Supabase Project URL</label>
@@ -624,10 +631,9 @@
           <div class="form-group">
             <label class="form-label">Supabase Anon Key (訪客公開金鑰)</label>
             <input type="password" id="cfgSupabaseAnon" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Supabase Service Role Key (管理員最高權限金鑰)</label>
-            <input type="password" id="cfgSupabaseService" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+            <p style="font-size:11.5px; color:var(--text-muted); margin-top:4px;">
+              🔒 注意：前端僅需填寫公開 anon key。禁止在前端填寫 service_role 私鑰！
+            </p>
           </div>
         </div>
 
@@ -635,10 +641,9 @@
           <div class="form-group">
             <label class="form-label">Google Apps Script Web App URL</label>
             <input type="text" id="cfgGasUrl" class="form-input" placeholder="https://script.google.com/macros/s/.../exec">
-          </div>
-          <div class="form-group">
-            <label class="form-label">管理員密碼 / Token</label>
-            <input type="text" id="cfgGasToken" class="form-input" value="nchu2026_admin">
+            <p style="font-size:11.5px; color:var(--text-muted); margin-top:4px;">
+              🔒 密碼請至 GAS 編輯器「專案設定 ➜ 指令碼屬性」中新增 <code>ADMIN_SECRET_TOKEN</code>，不在前端存儲。
+            </p>
           </div>
         </div>
 
@@ -700,12 +705,10 @@
   <script src="food_full_database.js"></script>
   <script src="backend_adapter.js"></script>
   <script>
-    // 全域變數
     let currentStores = [];
     let currentReports = [];
     let pendingBatchData = [];
 
-    // 初始化
     document.addEventListener("DOMContentLoaded", () => {
       checkLoginSession();
       updateNavbarProvider();
@@ -732,7 +735,6 @@
       }
     }
 
-    // 登入邏輯
     function toggleLoginInputs() {
       const p = document.getElementById("loginProviderSelect").value;
       document.getElementById("gasLoginGroup").style.display = (p === "gas") ? "block" : "none";
@@ -740,8 +742,8 @@
     }
 
     function checkLoginSession() {
-      const isAuth = sessionStorage.getItem("nchu_admin_logged_in") === "1";
-      if (isAuth) {
+      const token = window.nchuBackendAdapter.getAdminSessionToken();
+      if (token) {
         document.getElementById("loginSection").style.display = "none";
         document.getElementById("dashboardSection").style.display = "block";
         document.getElementById("logoutBtn").style.display = "inline-flex";
@@ -749,34 +751,42 @@
       }
     }
 
-    function doAdminLogin() {
+    async function doAdminLogin() {
       const p = document.getElementById("loginProviderSelect").value;
       const adapter = window.nchuBackendAdapter;
+      const btn = document.getElementById("loginSubmitBtn");
+      btn.disabled = true;
+      btn.textContent = "⏳ 驗證身分中...";
 
-      if (p === "gas") {
-        const token = document.getElementById("gasTokenInput").value.trim();
-        if (!token) return alert("請輸入 GAS 管理密碼！");
-        adapter.saveConfig({ gas: { adminToken: token }, provider: "gas" });
-      } else if (p === "supabase") {
-        const key = document.getElementById("supabaseKeyInput").value.trim();
-        if (key) {
-          adapter.saveConfig({ supabase: { serviceKey: key }, provider: "supabase" });
+      try {
+        if (p === "gas") {
+          const token = document.getElementById("gasTokenInput").value.trim();
+          if (!token) throw new Error("請輸入管理員密碼！");
+          adapter.setActiveProvider("gas");
+          await adapter.loginGAS(token);
+        } else if (p === "supabase") {
+          const email = document.getElementById("supabaseEmailInput").value.trim();
+          const password = document.getElementById("supabasePasswordInput").value.trim();
+          if (!email || !password) throw new Error("請填寫 Email 與密碼！");
+          adapter.setActiveProvider("supabase");
+          await adapter.loginSupabase(email, password);
         }
-      } else {
-        adapter.setActiveProvider("local");
-      }
 
-      sessionStorage.setItem("nchu_admin_logged_in", "1");
-      checkLoginSession();
-      updateNavbarProvider();
+        checkLoginSession();
+        updateNavbarProvider();
+      } catch (err) {
+        alert("登入失敗: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "🚀 安全登入";
+      }
     }
 
     function adminLogout() {
-      sessionStorage.removeItem("nchu_admin_logged_in");
+      window.nchuBackendAdapter.clearAdminSession();
       location.reload();
     }
 
-    // 分頁切換
     function switchTab(tabId, btn) {
       document.querySelectorAll(".tab-content").forEach(el => el.style.display = "none");
       document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
@@ -787,7 +797,6 @@
       if (tabId === "settingsTab") loadSettingsInputs();
     }
 
-    // 載入資料
     async function loadDashboardData() {
       await loadReportsData();
       await loadStoresData();
@@ -845,13 +854,16 @@
       if (action === "delist") {
         if (!confirm(`確定要將「${storeName}」下架嗎？前台將不再展示此店家。`)) return;
       }
-      const res = await window.nchuBackendAdapter.resolveReport(reportId, action, storeName);
-      alert(action === "delist" ? `已成功下架「${storeName}」！` : "回報已標記處理！");
-      await loadReportsData();
-      await loadStoresData();
+      try {
+        await window.nchuBackendAdapter.resolveReport(reportId, action, storeName);
+        alert(action === "delist" ? `已成功下架「${storeName}」！` : "回報已標記處理！");
+        await loadReportsData();
+        await loadStoresData();
+      } catch (e) {
+        alert("操作失敗: " + e.message);
+      }
     }
 
-    // 店家資料庫 CRUD
     async function loadStoresData() {
       const tbody = document.getElementById("storesTableBody");
       try {
@@ -908,7 +920,11 @@
     async function toggleStoreStatus(storeName, isActive) {
       const store = currentStores.find(s => s.name === storeName);
       if (store) store.is_active = isActive;
-      await window.nchuBackendAdapter.batchUpsertStores([{ name: storeName, is_active: isActive }]);
+      try {
+        await window.nchuBackendAdapter.batchUpsertStores([{ name: storeName, is_active: isActive }]);
+      } catch (e) {
+        alert("更新狀態失敗: " + e.message);
+      }
     }
 
     function openStoreEditModal(storeName) {
@@ -963,13 +979,16 @@
 
       if (!storeData.name) return alert("請填寫店家名稱！");
 
-      await window.nchuBackendAdapter.batchUpsertStores([storeData]);
-      alert("儲存成功！");
-      closeStoreEditModal();
-      await loadStoresData();
+      try {
+        await window.nchuBackendAdapter.batchUpsertStores([storeData]);
+        alert("儲存成功！");
+        closeStoreEditModal();
+        await loadStoresData();
+      } catch (e) {
+        alert("儲存失敗: " + e.message);
+      }
     }
 
-    // Python 爬蟲代碼動態產生
     function updatePythonCodeSnippet() {
       const adapter = window.nchuBackendAdapter;
       const cfg = adapter.config;
@@ -977,20 +996,21 @@
 
       let snippet = "";
       if (provider === "supabase") {
-        snippet = `# 方案 A: Supabase 爬蟲批次匯入腳本 (Python)
+        snippet = `# 方案 A: Supabase 爬蟲批次匯入 (使用環境變數或私鑰，絕不推上前端)
+import os
 import requests
 
 SUPABASE_URL = "${cfg.supabase.url || 'https://your-project.supabase.co'}"
-SERVICE_ROLE_KEY = "${cfg.supabase.serviceKey || 'YOUR_SERVICE_ROLE_KEY'}"
+# 在本地執行時透過環境變數傳入，切勿將此金鑰寫死或推到公開 Git！
+SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "YOUR_SERVICE_KEY")
 
 headers = {
     "apikey": SERVICE_ROLE_KEY,
     "Authorization": f"Bearer {SERVICE_ROLE_KEY}",
     "Content-Type": "application/json",
-    "Prefer": "resolution=merge-duplicates"  # 遇重名時自動覆寫更新
+    "Prefer": "resolution=merge-duplicates"
 }
 
-# 爬蟲爬到的新店家列表
 new_stores = [
     {
         "name": "早安廚房 (學府店)",
@@ -1007,12 +1027,14 @@ res = requests.post(f"{SUPABASE_URL}/rest/v1/stores", json=new_stores, headers=h
 print("上傳結果:", res.status_code, res.text)
 `;
       } else {
-        snippet = `# 方案 B: Google Apps Script 爬蟲批次匯入腳本 (Python)
+        snippet = `# 方案 B: Google Apps Script 爬蟲批次匯入
+import os
 import requests
 import json
 
 GAS_URL = "${cfg.gas.url || 'https://script.google.com/macros/s/.../exec'}"
-ADMIN_TOKEN = "${cfg.gas.adminToken || 'nchu2026_admin'}"
+# 讀取你在 GAS 專案設定中配置的 ADMIN_SECRET_TOKEN
+ADMIN_TOKEN = os.environ.get("GAS_ADMIN_TOKEN", "YOUR_SECRET_TOKEN")
 
 new_stores = [
     {
@@ -1043,7 +1065,6 @@ print("上傳結果:", res.json())
       navigator.clipboard.writeText(code).then(() => alert("Python 腳本已複製至剪貼簿！"));
     }
 
-    // 瀏覽器端直接批次匯入 (CSV / JSON)
     function handleFileSelected(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -1055,7 +1076,6 @@ print("上傳結果:", res.json())
           if (file.name.endsWith(".json")) {
             pendingBatchData = JSON.parse(content);
           } else {
-            // 簡易 CSV 解析
             const lines = content.split("\n").filter(l => l.trim());
             const headers = lines[0].split(",").map(h => h.trim().replace(/^"|"$/g, "").toLowerCase());
             pendingBatchData = lines.slice(1).map(l => {
@@ -1093,18 +1113,14 @@ print("上傳結果:", res.json())
       }
     }
 
-    // 後端配置設定
     function loadSettingsInputs() {
       const cfg = window.nchuBackendAdapter.config;
       const p = window.nchuBackendAdapter.getActiveProvider();
       selectProviderMode(p);
 
-      document.getElementById("cfgSupabaseUrl").value = cfg.supabase.url || "";
-      document.getElementById("cfgSupabaseAnon").value = cfg.supabase.anonKey || "";
-      document.getElementById("cfgSupabaseService").value = cfg.supabase.serviceKey || "";
-
-      document.getElementById("cfgGasUrl").value = cfg.gas.url || "";
-      document.getElementById("cfgGasToken").value = cfg.gas.adminToken || "nchu2026_admin";
+      document.getElementById("cfgSupabaseUrl").value = (cfg.supabase && cfg.supabase.url) || "";
+      document.getElementById("cfgSupabaseAnon").value = (cfg.supabase && cfg.supabase.anonKey) || "";
+      document.getElementById("cfgGasUrl").value = (cfg.gas && cfg.gas.url) || "";
     }
 
     function selectProviderMode(provider) {
@@ -1121,12 +1137,10 @@ print("上傳結果:", res.json())
         provider: p,
         supabase: {
           url: document.getElementById("cfgSupabaseUrl").value.trim(),
-          anonKey: document.getElementById("cfgSupabaseAnon").value.trim(),
-          serviceKey: document.getElementById("cfgSupabaseService").value.trim()
+          anonKey: document.getElementById("cfgSupabaseAnon").value.trim()
         },
         gas: {
-          url: document.getElementById("cfgGasUrl").value.trim(),
-          adminToken: document.getElementById("cfgGasToken").value.trim()
+          url: document.getElementById("cfgGasUrl").value.trim()
         }
       };
 
@@ -1143,9 +1157,13 @@ print("上傳結果:", res.json())
       }
       if (!confirm(`確定要將目前本地校對完成的 ${window.NCHU_EXPANDED_FOOD.length} 間店家一次匯入到當前后端嗎？`)) return;
 
-      const res = await window.nchuBackendAdapter.batchUpsertStores(window.NCHU_EXPANDED_FOOD);
-      alert(res.message || "匯入完成！");
-      await loadStoresData();
+      try {
+        const res = await window.nchuBackendAdapter.batchUpsertStores(window.NCHU_EXPANDED_FOOD);
+        alert(res.message || "匯入完成！");
+        await loadStoresData();
+      } catch (e) {
+        alert("匯入失敗: " + e.message);
+      }
     }
   </script>
 </body>
