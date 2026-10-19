@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>興大美食地圖 - 管理控制台 (Admin Hub)</title>
+  <link rel="icon" href="images/school.svg" type="image/svg+xml">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --accent: #38bdf8;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation */
+    .admin-navbar {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-weight: 700;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .provider-pill {
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: #334155;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .provider-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-secondary { background: #334155; color: #fff; }
+    .btn-secondary:hover { background: #475569; }
+    .btn-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+    .btn-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .btn-warning:hover { background: var(--warning); color: #000; }
+    .btn-sm { padding: 4px 10px; font-size: 12px; border-radius: 6px; }
+
+    /* Login Screen */
+    .login-wrapper {
+      max-width: 440px;
+      margin: 80px auto;
+      padding: 32px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .login-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .login-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      color: #fff;
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary);
+    }
+
+    /* Tabs Layout */
+    .admin-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 24px;
+      width: 100%;
+      flex: 1;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 10px 18px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-count {
+      background: var(--danger);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+
+    /* Content Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Tables */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: #0f172a;
+      padding: 12px 14px;
+      font-weight: 700;
+      color: #cbd5e1;
+      border-bottom: 1px solid var(--card-border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #e2e8f0;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* Status Pills */
+    .status-tag {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .status-pending { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .status-active { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .status-delist { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .status-resolved { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+
+    /* Switch toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 22px;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #475569;
+      transition: .3s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider { background-color: var(--primary); }
+    input:checked + .slider:before { transform: translateX(18px); }
+
+    /* Code block */
+    .code-box {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: monospace;
+      font-size: 12.5px;
+      color: #38bdf8;
+      overflow-x: auto;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    /* Drag & Drop */
+    .drop-zone {
+      border: 2px dashed #475569;
+      border-radius: 12px;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.5);
+      transition: all 0.2s;
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--primary);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .modal-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 550px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="admin-navbar">
+    <div class="brand">
+      <span>🌲 NCHU Food</span>
+      <span class="brand-badge">管理控制台</span>
+    </div>
+
+    <div class="nav-actions">
+      <div class="provider-pill">
+        <span class="provider-dot" id="activeProviderDot"></span>
+        <span id="activeProviderName">後端模式: 載入中...</span>
+      </div>
+      <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">🌐 前往網站</a>
+      <button class="btn btn-danger btn-sm" id="logoutBtn" onclick="adminLogout()" style="display:none;">登出</button>
+    </div>
+  </nav>
+
+  <!-- Login View -->
+  <div class="login-wrapper" id="loginSection">
+    <h1 class="login-title">🔐 興大管理員登入</h1>
+    <p class="login-subtitle">請選擇後端模式並輸入認證金鑰，即可審核回報、上下架店家與配置爬蟲 API。</p>
+
+    <div class="form-group">
+      <label class="form-label">選擇認證後端</label>
+      <select class="form-select" id="loginProviderSelect" onchange="toggleLoginInputs()">
+        <option value="gas">方案 B：Google Apps Script (預設金鑰)</option>
+        <option value="supabase">方案 A：Supabase 雲端資料庫</option>
+        <option value="local">本機離線展示模式 (免金鑰)</option>
+      </select>
+    </div>
+
+    <!-- GAS Login Input -->
+    <div id="gasLoginGroup" class="form-group">
+      <label class="form-label">管理員密碼 / Token (預設: nchu2026_admin)</label>
+      <input type="password" id="gasTokenInput" class="form-input" placeholder="請輸入管理密碼" value="nchu2026_admin">
+    </div>
+
+    <!-- Supabase Login Input -->
+    <div id="supabaseLoginGroup" class="form-group" style="display:none;">
+      <label class="form-label">Supabase Service Role Key 或 API Key</label>
+      <input type="password" id="supabaseKeyInput" class="form-input" placeholder="貼上你的 Supabase Key">
+    </div>
+
+    <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:12px;" onclick="doAdminLogin()">
+      🚀 登入管理面板
+    </button>
+  </div>
+
+  <!-- Dashboard Container -->
+  <div class="admin-container" id="dashboardSection" style="display:none;">
+    
+    <!-- Tab Navigation -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('reportsTab', this)">
+        🚩 幽靈店家回報審核
+        <span class="badge-count" id="pendingReportsBadge">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('storesTab', this)">
+        🏪 店家資料庫管理 (<span id="totalStoresCount">0</span>)
+      </button>
+      <button class="tab-btn" onclick="switchTab('scraperTab', this)">
+        🐍 Python 爬蟲與 API 自動化
+      </button>
+      <button class="tab-btn" onclick="switchTab('settingsTab', this)">
+        ⚙️ 後端核心引擎切換
+      </button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Tab 1: 幽靈店家與問題回報審核 -->
+    <!-- ========================================== -->
+    <div id="reportsTab" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">🚩 待審核學生回報清單</h2>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">
+              同學在前端卡片點擊「回報」後會即時列於此處。確認停業者可一鍵立即下架！
+            </p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="loadReportsData()">🔄 重新整理</button>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>回報時間</th>
+                <th>店家名稱</th>
+                <th>問題類型</th>
+                <th>補充說明</th>
+                <th>回報者</th>
+                <th>目前狀態</th>
+                <th>快速審核操作</th>
+              </tr>
+            </thead>
+            <tbody id="reportsTableBody">
+              <tr>
+                <td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted);">
+                  載入回報資料中...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Tab 2: 店家資料庫管理 (CRUD) -->
+    <!-- ========================================== -->
+    <div id="storesTab" class="tab-content" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">🏪 興大美食庫存總覽</h2>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">
+              可直接在開關上切換店家上架或下架，支援即時搜尋與編輯。
+            </p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="storeSearchInput" class="form-input" placeholder="🔍 搜尋店名或路名..." style="width:200px; padding:6px 12px; font-size:13px;" oninput="filterStoresList()">
+            <button class="btn btn-primary btn-sm" onclick="openStoreEditModal(null)">➕ 新增店家</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:70px;">狀態</th>
+                <th>店名</th>
+                <th>商圈路段</th>
+                <th>分類</th>
+                <th>評分/評論</th>
+                <th>地址</th>
+                <th style="text-align:right;">操作</th>
+              </tr>
+            </thead>
+            <tbody id="storesTableBody">
+              <tr>
+                <td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted);">
+                  載入店家清單中...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Tab 3: Python 爬蟲與 API 自動化 -->
+    <!-- ========================================== -->
+    <div id="scraperTab" class="tab-content" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">🐍 Python 爬蟲批次自動更新對接指南</h2>
+        </div>
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:16px;">
+          未來你寫好的 Python 爬蟲（如 Google Maps、IG 美食爬蟲）清洗完後，直接透過以下腳本即可將新店家批次 Upsert 進後端，完全不需要手動開試算表！
+        </p>
+
+        <div class="code-box" id="pythonSnippetBox">
+          載入代碼中...
+        </div>
+
+        <button class="btn btn-secondary btn-sm" style="margin-top:12px;" onclick="copyPythonCode()">📋 複製 Python 範例代碼</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📂 瀏覽器端直接批次匯入 (CSV / JSON)</h2>
+        </div>
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('csvFileInput').click()">
+          <input type="file" id="csvFileInput" accept=".csv, .json" style="display:none;" onchange="handleFileSelected(event)">
+          <div style="font-size:32px; margin-bottom:8px;">📁</div>
+          <div style="font-weight:700; color:#fff; margin-bottom:4px;">點擊選取或拖曳爬蟲產生的 CSV / JSON 檔案至此</div>
+          <div style="font-size:12px; color:var(--text-muted);">支援欄位：name, street, category, address, hours, rating 等</div>
+        </div>
+        <div id="uploadPreview" style="margin-top:16px; display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span id="previewCountLabel" style="font-size:13px; font-weight:700; color:var(--primary);"></span>
+            <button class="btn btn-primary btn-sm" id="confirmUploadBtn" onclick="executeBatchImport()">🚀 確認同步至後端</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Tab 4: 後端核心引擎切換 (Engine Switcher) -->
+    <!-- ========================================== -->
+    <div id="settingsTab" class="tab-content" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">⚙️ 後端核心引擎架構配置</h2>
+        </div>
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:20px;">
+          你可以隨時在 <b>方案 A (Supabase)</b> 與 <b>方案 B (Google Apps Script)</b> 之間無縫切換，兩者獨立運作，完全杜絕環境打架！
+        </p>
+
+        <!-- Provider Selection Cards -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-bottom:24px;">
+          <div class="card" id="cardSupabase" style="margin:0; cursor:pointer;" onclick="selectProviderMode('supabase')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:800; font-size:15px; color:#fff;">方案 A：Supabase (推薦)</span>
+              <span class="status-tag status-active" id="badgeSupabase">可選</span>
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:8px;">
+              Postgres 雲端資料庫，自帶 REST API 與 Auth，極速穩定，爬蟲批次匯入最方便。
+            </p>
+          </div>
+
+          <div class="card" id="cardGAS" style="margin:0; cursor:pointer;" onclick="selectProviderMode('gas')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:800; font-size:15px; color:#fff;">方案 B：Google Apps Script</span>
+              <span class="status-tag status-pending" id="badgeGAS">可選</span>
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:8px;">
+              以 Google 試算表作為輕量後端，免額外註冊第三方雲端，直覺查看儲存格。
+            </p>
+          </div>
+        </div>
+
+        <!-- Inputs for active configuration -->
+        <div id="supabaseConfigInputs">
+          <div class="form-group">
+            <label class="form-label">Supabase Project URL</label>
+            <input type="text" id="cfgSupabaseUrl" class="form-input" placeholder="https://your-project.supabase.co">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Supabase Anon Key (訪客公開金鑰)</label>
+            <input type="password" id="cfgSupabaseAnon" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Supabase Service Role Key (管理員最高權限金鑰)</label>
+            <input type="password" id="cfgSupabaseService" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+          </div>
+        </div>
+
+        <div id="gasConfigInputs" style="display:none;">
+          <div class="form-group">
+            <label class="form-label">Google Apps Script Web App URL</label>
+            <input type="text" id="cfgGasUrl" class="form-input" placeholder="https://script.google.com/macros/s/.../exec">
+          </div>
+          <div class="form-group">
+            <label class="form-label">管理員密碼 / Token</label>
+            <input type="text" id="cfgGasToken" class="form-input" value="nchu2026_admin">
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:20px;">
+          <button class="btn btn-primary" onclick="saveSettingsAndTest()">💾 儲存並測試連線</button>
+          <button class="btn btn-warning" onclick="seedInitialStoresToBackend()">🌱 一鍵匯入 255 筆精準店家至當前后端</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Store Edit Modal -->
+  <div class="modal-backdrop" id="storeEditModal">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="color:#fff; font-size:18px;" id="storeModalTitle">編輯店家</h3>
+        <button onclick="closeStoreEditModal()" style="background:none; border:none; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</button>
+      </div>
+
+      <input type="hidden" id="editStoreId">
+      <div class="form-group">
+        <label class="form-label">店家名稱 *</label>
+        <input type="text" id="editStoreName" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">商圈路段 *</label>
+        <input type="text" id="editStoreStreet" class="form-input" placeholder="例如：學府路/頂橋巷弄、校內學餐、南門路商圈">
+      </div>
+      <div class="form-group">
+        <label class="form-label">餐點分類</label>
+        <input type="text" id="editStoreCategory" class="form-input" placeholder="早餐早午餐、咖啡甜點、主食便當、平價麵食...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">門牌地址</label>
+        <input type="text" id="editStoreAddress" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">營業時間</label>
+        <input type="text" id="editStoreHours" class="form-input" placeholder="例如：11:00 - 20:30 (週日公休)">
+      </div>
+      <div class="form-group">
+        <label class="form-label">特色亮點 / 備註</label>
+        <textarea id="editStoreContent" class="form-textarea" rows="3"></textarea>
+      </div>
+      <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+        <input type="checkbox" id="editStoreActive" style="width:18px; height:18px;">
+        <label for="editStoreActive" style="font-size:13px; font-weight:600; color:#cbd5e1;">上架狀態 (打勾為前台顯示，取消為已歇業)</label>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
+        <button class="btn btn-secondary" onclick="closeStoreEditModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveStoreEdit()">儲存店家</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="food_full_database.js"></script>
+  <script src="backend_adapter.js"></script>
+  <script>
+    // 全域變數
+    let currentStores = [];
+    let currentReports = [];
+    let pendingBatchData = [];
+
+    // 初始化
+    document.addEventListener("DOMContentLoaded", () => {
+      checkLoginSession();
+      updateNavbarProvider();
+    });
+
+    function updateNavbarProvider() {
+      const adapter = window.nchuBackendAdapter;
+      const provider = adapter.getActiveProvider();
+      const dot = document.getElementById("activeProviderDot");
+      const name = document.getElementById("activeProviderName");
+
+      if (provider === "supabase") {
+        dot.style.background = "#38bdf8";
+        dot.style.boxShadow = "0 0 8px #38bdf8";
+        name.textContent = "後端: 方案 A (Supabase)";
+      } else if (provider === "gas") {
+        dot.style.background = "#fbbf24";
+        dot.style.boxShadow = "0 0 8px #fbbf24";
+        name.textContent = "後端: 方案 B (Google Apps Script)";
+      } else {
+        dot.style.background = "#94a3b8";
+        dot.style.boxShadow = "none";
+        name.textContent = "後端: 離線展示模式";
+      }
+    }
+
+    // 登入邏輯
+    function toggleLoginInputs() {
+      const p = document.getElementById("loginProviderSelect").value;
+      document.getElementById("gasLoginGroup").style.display = (p === "gas") ? "block" : "none";
+      document.getElementById("supabaseLoginGroup").style.display = (p === "supabase") ? "block" : "none";
+    }
+
+    function checkLoginSession() {
+      const isAuth = sessionStorage.getItem("nchu_admin_logged_in") === "1";
+      if (isAuth) {
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("dashboardSection").style.display = "block";
+        document.getElementById("logoutBtn").style.display = "inline-flex";
+        loadDashboardData();
+      }
+    }
+
+    function doAdminLogin() {
+      const p = document.getElementById("loginProviderSelect").value;
+      const adapter = window.nchuBackendAdapter;
+
+      if (p === "gas") {
+        const token = document.getElementById("gasTokenInput").value.trim();
+        if (!token) return alert("請輸入 GAS 管理密碼！");
+        adapter.saveConfig({ gas: { adminToken: token }, provider: "gas" });
+      } else if (p === "supabase") {
+        const key = document.getElementById("supabaseKeyInput").value.trim();
+        if (key) {
+          adapter.saveConfig({ supabase: { serviceKey: key }, provider: "supabase" });
+        }
+      } else {
+        adapter.setActiveProvider("local");
+      }
+
+      sessionStorage.setItem("nchu_admin_logged_in", "1");
+      checkLoginSession();
+      updateNavbarProvider();
+    }
+
+    function adminLogout() {
+      sessionStorage.removeItem("nchu_admin_logged_in");
+      location.reload();
+    }
+
+    // 分頁切換
+    function switchTab(tabId, btn) {
+      document.querySelectorAll(".tab-content").forEach(el => el.style.display = "none");
+      document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+      document.getElementById(tabId).style.display = "block";
+      if (btn) btn.classList.add("active");
+
+      if (tabId === "scraperTab") updatePythonCodeSnippet();
+      if (tabId === "settingsTab") loadSettingsInputs();
+    }
+
+    // 載入資料
+    async function loadDashboardData() {
+      await loadReportsData();
+      await loadStoresData();
+    }
+
+    async function loadReportsData() {
+      const tbody = document.getElementById("reportsTableBody");
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px; color:var(--text-muted);">讀取回報中...</td></tr>`;
+
+      try {
+        const reports = await window.nchuBackendAdapter.getReports();
+        currentReports = reports || [];
+
+        const pendingCount = currentReports.filter(r => r.status === "pending").length;
+        document.getElementById("pendingReportsBadge").textContent = pendingCount;
+
+        if (currentReports.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted);">🎉 目前沒有任何問題回報！</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = currentReports.map(r => {
+          const isPending = r.status === "pending";
+          const statusClass = r.status === "pending" ? "status-pending" : (r.status === "delist" ? "status-delist" : "status-resolved");
+          const statusText = r.status === "pending" ? "待審核" : (r.status === "delist" ? "已下架" : "已處理/駁回");
+          const timeStr = r.created_at ? new Date(r.created_at).toLocaleString("zh-TW", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "";
+          const escapedName = (r.store_name || "").replace(/'/g, "\\'");
+
+          return `
+            <tr>
+              <td style="color:var(--text-muted); font-size:12px;">${timeStr}</td>
+              <td style="font-weight:700; color:#fff;">${r.store_name}</td>
+              <td><span style="color:#f87171; font-weight:600;">${r.issue_type}</span></td>
+              <td style="font-size:12px; color:#cbd5e1; max-width:240px;">${r.details || "無補充"}</td>
+              <td style="font-size:12px; color:var(--text-muted);">${r.reporter || "同學"}</td>
+              <td><span class="status-tag ${statusClass}">${statusText}</span></td>
+              <td>
+                ${isPending ? `
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn btn-danger btn-sm" onclick="handleResolveReport('${r.id}', 'delist', '${escapedName}')" title="確認已歇業，前台立即下架">🛑 確認下架</button>
+                    <button class="btn btn-secondary btn-sm" onclick="quickEditFromReport('${escapedName}')" title="資訊有誤，前往修正門牌或時間">✏️ 修正</button>
+                    <button class="btn btn-secondary btn-sm" onclick="handleResolveReport('${r.id}', 'rejected', '${escapedName}')">❌ 駁回</button>
+                  </div>
+                ` : `<span style="font-size:12px; color:var(--text-muted);">已完成</span>`}
+              </td>
+            </tr>
+          `;
+        }).join("");
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px; color:#ef4444;">讀取失敗: ${e.message}</td></tr>`;
+      }
+    }
+
+    async function handleResolveReport(reportId, action, storeName) {
+      if (action === "delist") {
+        if (!confirm(`確定要將「${storeName}」下架嗎？前台將不再展示此店家。`)) return;
+      }
+      const res = await window.nchuBackendAdapter.resolveReport(reportId, action, storeName);
+      alert(action === "delist" ? `已成功下架「${storeName}」！` : "回報已標記處理！");
+      await loadReportsData();
+      await loadStoresData();
+    }
+
+    // 店家資料庫 CRUD
+    async function loadStoresData() {
+      const tbody = document.getElementById("storesTableBody");
+      try {
+        currentStores = await window.nchuBackendAdapter.getAllStores();
+        document.getElementById("totalStoresCount").textContent = currentStores.length;
+        renderStoresTable(currentStores);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderStoresTable(stores) {
+      const tbody = document.getElementById("storesTableBody");
+      if (stores.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px;">找不到任何店家。</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = stores.slice(0, 100).map(s => {
+        const isActive = s.is_active !== false && String(s.is_active).toUpperCase() !== "FALSE";
+        const escapedName = (s.name || "").replace(/'/g, "\\'");
+        return `
+          <tr>
+            <td>
+              <label class="switch">
+                <input type="checkbox" ${isActive ? "checked" : ""} onchange="toggleStoreStatus('${escapedName}', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </td>
+            <td style="font-weight:700; color:#fff;">${s.name}</td>
+            <td style="font-size:12px; color:#38bdf8;">${s.street || ""}</td>
+            <td style="font-size:12px;">${s.category || ""}</td>
+            <td style="font-size:12px;">⭐ ${s.rating || 4.5} (${s.review_count || 100})</td>
+            <td style="font-size:12px; color:var(--text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+              ${s.address || ""}
+            </td>
+            <td style="text-align:right;">
+              <button class="btn btn-secondary btn-sm" onclick="openStoreEditModal('${escapedName}')">✏️ 編輯</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function filterStoresList() {
+      const q = document.getElementById("storeSearchInput").value.trim().toLowerCase();
+      const filtered = currentStores.filter(s => {
+        const full = `${s.name} ${s.street} ${s.category} ${s.address}`.toLowerCase();
+        return full.includes(q);
+      });
+      renderStoresTable(filtered);
+    }
+
+    async function toggleStoreStatus(storeName, isActive) {
+      const store = currentStores.find(s => s.name === storeName);
+      if (store) store.is_active = isActive;
+      await window.nchuBackendAdapter.batchUpsertStores([{ name: storeName, is_active: isActive }]);
+    }
+
+    function openStoreEditModal(storeName) {
+      const modal = document.getElementById("storeEditModal");
+      const title = document.getElementById("storeModalTitle");
+      modal.style.display = "flex";
+
+      if (storeName) {
+        title.textContent = `編輯店家: ${storeName}`;
+        const store = currentStores.find(s => s.name === storeName) || {};
+        document.getElementById("editStoreId").value = store.id || "";
+        document.getElementById("editStoreName").value = store.name || "";
+        document.getElementById("editStoreStreet").value = store.street || "";
+        document.getElementById("editStoreCategory").value = store.category || "";
+        document.getElementById("editStoreAddress").value = store.address || "";
+        document.getElementById("editStoreHours").value = store.hours || "";
+        document.getElementById("editStoreContent").value = store.content || "";
+        document.getElementById("editStoreActive").checked = store.is_active !== false && String(store.is_active).toUpperCase() !== "FALSE";
+      } else {
+        title.textContent = "➕ 新增美食店家";
+        document.getElementById("editStoreId").value = "custom_" + Date.now();
+        document.getElementById("editStoreName").value = "";
+        document.getElementById("editStoreStreet").value = "學府路/頂橋巷弄";
+        document.getElementById("editStoreCategory").value = "特色美食";
+        document.getElementById("editStoreAddress").value = "";
+        document.getElementById("editStoreHours").value = "";
+        document.getElementById("editStoreContent").value = "";
+        document.getElementById("editStoreActive").checked = true;
+      }
+    }
+
+    function closeStoreEditModal() {
+      document.getElementById("storeEditModal").style.display = "none";
+    }
+
+    function quickEditFromReport(storeName) {
+      switchTab("storesTab", document.querySelectorAll(".tab-btn")[1]);
+      openStoreEditModal(storeName);
+    }
+
+    async function saveStoreEdit() {
+      const storeData = {
+        id: document.getElementById("editStoreId").value || ("store_" + Date.now()),
+        name: document.getElementById("editStoreName").value.trim(),
+        street: document.getElementById("editStoreStreet").value.trim(),
+        category: document.getElementById("editStoreCategory").value.trim(),
+        address: document.getElementById("editStoreAddress").value.trim(),
+        hours: document.getElementById("editStoreHours").value.trim(),
+        content: document.getElementById("editStoreContent").value.trim(),
+        is_active: document.getElementById("editStoreActive").checked
+      };
+
+      if (!storeData.name) return alert("請填寫店家名稱！");
+
+      await window.nchuBackendAdapter.batchUpsertStores([storeData]);
+      alert("儲存成功！");
+      closeStoreEditModal();
+      await loadStoresData();
+    }
+
+    // Python 爬蟲代碼動態產生
+    function updatePythonCodeSnippet() {
+      const adapter = window.nchuBackendAdapter;
+      const cfg = adapter.config;
+      const provider = adapter.getActiveProvider();
+
+      let snippet = "";
+      if (provider === "supabase") {
+        snippet = `# 方案 A: Supabase 爬蟲批次匯入腳本 (Python)
+import requests
+
+SUPABASE_URL = "${cfg.supabase.url || 'https://your-project.supabase.co'}"
+SERVICE_ROLE_KEY = "${cfg.supabase.serviceKey || 'YOUR_SERVICE_ROLE_KEY'}"
+
+headers = {
+    "apikey": SERVICE_ROLE_KEY,
+    "Authorization": f"Bearer {SERVICE_ROLE_KEY}",
+    "Content-Type": "application/json",
+    "Prefer": "resolution=merge-duplicates"  # 遇重名時自動覆寫更新
+}
+
+# 爬蟲爬到的新店家列表
+new_stores = [
+    {
+        "name": "早安廚房 (學府店)",
+        "street": "學府路/頂橋巷弄",
+        "category": "早餐早午餐",
+        "address": "台中市南區學府路88號",
+        "hours": "06:00 - 13:30",
+        "rating": 4.6,
+        "is_active": True
+    }
+]
+
+res = requests.post(f"{SUPABASE_URL}/rest/v1/stores", json=new_stores, headers=headers)
+print("上傳結果:", res.status_code, res.text)
+`;
+      } else {
+        snippet = `# 方案 B: Google Apps Script 爬蟲批次匯入腳本 (Python)
+import requests
+import json
+
+GAS_URL = "${cfg.gas.url || 'https://script.google.com/macros/s/.../exec'}"
+ADMIN_TOKEN = "${cfg.gas.adminToken || 'nchu2026_admin'}"
+
+new_stores = [
+    {
+        "name": "早安廚房 (學府店)",
+        "street": "學府路/頂橋巷弄",
+        "category": "早餐早午餐",
+        "address": "台中市南區學府路88號",
+        "hours": "06:00 - 13:30",
+        "rating": 4.6,
+        "is_active": True
+    }
+]
+
+res = requests.post(GAS_URL, data={
+    "action": "admin_batch_upsert",
+    "token": ADMIN_TOKEN,
+    "payload": json.dumps(new_stores, ensure_ascii=False)
+})
+print("上傳結果:", res.json())
+`;
+      }
+
+      document.getElementById("pythonSnippetBox").textContent = snippet;
+    }
+
+    function copyPythonCode() {
+      const code = document.getElementById("pythonSnippetBox").textContent;
+      navigator.clipboard.writeText(code).then(() => alert("Python 腳本已複製至剪貼簿！"));
+    }
+
+    // 瀏覽器端直接批次匯入 (CSV / JSON)
+    function handleFileSelected(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const content = event.target.result;
+          if (file.name.endsWith(".json")) {
+            pendingBatchData = JSON.parse(content);
+          } else {
+            // 簡易 CSV 解析
+            const lines = content.split("\n").filter(l => l.trim());
+            const headers = lines[0].split(",").map(h => h.trim().replace(/^"|"$/g, "").toLowerCase());
+            pendingBatchData = lines.slice(1).map(l => {
+              const cols = l.split(",").map(c => c.trim().replace(/^"|"$/g, ""));
+              const item = {};
+              headers.forEach((h, i) => item[h] = cols[i] || "");
+              return item;
+            });
+          }
+
+          document.getElementById("uploadPreview").style.display = "block";
+          document.getElementById("previewCountLabel").textContent = `已成功解析 ${pendingBatchData.length} 筆店家資料，準備同步！`;
+        } catch (err) {
+          alert("檔案解析失敗: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function executeBatchImport() {
+      if (!pendingBatchData || pendingBatchData.length === 0) return;
+      const btn = document.getElementById("confirmUploadBtn");
+      btn.disabled = true;
+      btn.textContent = "⏳ 正在同步中...";
+
+      try {
+        const res = await window.nchuBackendAdapter.batchUpsertStores(pendingBatchData);
+        alert(res.message || "同步完成！");
+        await loadStoresData();
+      } catch (err) {
+        alert("同步異常: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "🚀 確認同步至後端";
+      }
+    }
+
+    // 後端配置設定
+    function loadSettingsInputs() {
+      const cfg = window.nchuBackendAdapter.config;
+      const p = window.nchuBackendAdapter.getActiveProvider();
+      selectProviderMode(p);
+
+      document.getElementById("cfgSupabaseUrl").value = cfg.supabase.url || "";
+      document.getElementById("cfgSupabaseAnon").value = cfg.supabase.anonKey || "";
+      document.getElementById("cfgSupabaseService").value = cfg.supabase.serviceKey || "";
+
+      document.getElementById("cfgGasUrl").value = cfg.gas.url || "";
+      document.getElementById("cfgGasToken").value = cfg.gas.adminToken || "nchu2026_admin";
+    }
+
+    function selectProviderMode(provider) {
+      document.getElementById("cardSupabase").style.borderColor = (provider === "supabase") ? "var(--primary)" : "var(--card-border)";
+      document.getElementById("cardGAS").style.borderColor = (provider === "gas") ? "var(--primary)" : "var(--card-border)";
+      document.getElementById("supabaseConfigInputs").style.display = (provider === "supabase") ? "block" : "none";
+      document.getElementById("gasConfigInputs").style.display = (provider === "gas") ? "block" : "none";
+      window.selectedProviderTemp = provider;
+    }
+
+    async function saveSettingsAndTest() {
+      const p = window.selectedProviderTemp || "gas";
+      const newCfg = {
+        provider: p,
+        supabase: {
+          url: document.getElementById("cfgSupabaseUrl").value.trim(),
+          anonKey: document.getElementById("cfgSupabaseAnon").value.trim(),
+          serviceKey: document.getElementById("cfgSupabaseService").value.trim()
+        },
+        gas: {
+          url: document.getElementById("cfgGasUrl").value.trim(),
+          adminToken: document.getElementById("cfgGasToken").value.trim()
+        }
+      };
+
+      window.nchuBackendAdapter.saveConfig(newCfg);
+      updateNavbarProvider();
+
+      const testRes = await window.nchuBackendAdapter.testConnection();
+      alert(`[${testRes.provider.toUpperCase()}] 連線測試: ${testRes.message}`);
+    }
+
+    async function seedInitialStoresToBackend() {
+      if (!window.NCHU_EXPANDED_FOOD || window.NCHU_EXPANDED_FOOD.length === 0) {
+        return alert("找不到本地店家資料庫！");
+      }
+      if (!confirm(`確定要將目前本地校對完成的 ${window.NCHU_EXPANDED_FOOD.length} 間店家一次匯入到當前后端嗎？`)) return;
+
+      const res = await window.nchuBackendAdapter.batchUpsertStores(window.NCHU_EXPANDED_FOOD);
+      alert(res.message || "匯入完成！");
+      await loadStoresData();
+    }
+  </script>
+</body>
+</html>

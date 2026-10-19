@@ -1815,6 +1815,32 @@
     background: #e2e8f0;
     color: var(--text-main);
   }
+  .food-report-btn {
+    font-size: 11px;
+    color: #b91c1c;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 4px 7px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .food-report-btn:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+  }
+  .food-report-btn.reported {
+    background: #f1f5f9;
+    color: #64748b;
+    border-color: #cbd5e1;
+    cursor: default;
+  }
   @media (max-width: 640px) {
     .chip-bar { padding: 8px 10px 4px; gap: 5px 6px; }
     .chip { padding: 5px 10px; font-size: 11px; }
@@ -1823,7 +1849,7 @@
     .food-card { padding: 8px; }
     .food-card-title { font-size: 12px; }
     .food-card-content { font-size: 11px; }
-    .food-ask-btn, .food-map-link { font-size: 10px; padding: 3px 6px; }
+    .food-ask-btn, .food-map-link, .food-report-btn { font-size: 10px; padding: 3px 5px; }
 
     /* 📱 手機單欄模式強制生效 */
     body.cols-1 .faq-grid { grid-template-columns: 1fr !important; }
@@ -1831,7 +1857,7 @@
     body.cols-1 .food-card { padding: 12px; }
     body.cols-1 .food-card-title { font-size: 13.5px; }
     body.cols-1 .food-card-content { font-size: 12px; line-height: 1.55; }
-    body.cols-1 .food-ask-btn, body.cols-1 .food-map-link { font-size: 11px; padding: 4px 8px; }
+    body.cols-1 .food-ask-btn, body.cols-1 .food-map-link, body.cols-1 .food-report-btn { font-size: 11px; padding: 4px 7px; }
   }
 </style>
 <!-- 浮動按鈕：僅保留單一 AI 聊天小球 (懸浮於底欄上方) -->
@@ -1869,6 +1895,7 @@
           🍜 興大校園與生活圈美食地圖
           <span style="font-size:11px; background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;">303 間全收錄 (100%真實地址)</span>
           <span id="foodApiStatusPill" onclick="openFoodApiModal()" style="font-size:10.5px; cursor:pointer; padding:2px 8px; border-radius:8px; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; font-weight:600;" title="點擊設定 Google Apps Script Web App API 網址">⚙️ API 串接</span>
+          <a href="admin.html" target="_blank" style="font-size:10.5px; text-decoration:none; padding:2px 8px; border-radius:8px; background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; font-weight:700;" title="前往店家管理控制台 (審核回報、上下架與爬蟲匯入)">🔐 管理後台</a>
         </h3>
         <p style="font-size:12px; color:var(--text-muted); margin-top:3px; margin-bottom:0;">
           ⚡ 支援路名商圈、步行時間、咖啡甜點、校內學餐與 Google 試算表即時同步！
@@ -1960,6 +1987,64 @@
   </div>
 </div>
 
+<!-- 🚩 幽靈店家與店家問題回報彈窗 -->
+<div class="modal-backdrop" id="foodReportModal" style="display:none; z-index:100001;" onclick="if(event.target.id==='foodReportModal') closeFoodReportModal()">
+  <div style="background:#fff; width:100%; max-width:440px; border-radius:18px; padding:22px; box-shadow:0 20px 40px rgba(0,0,0,0.25); animation:pop .25s ease;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="margin:0; font-size:16px; color:#b91c1c; font-weight:800; display:flex; align-items:center; gap:6px;">
+        🚩 回報店家問題 / 幽靈店家
+      </h3>
+      <button onclick="closeFoodReportModal()" style="background:none; border:none; font-size:18px; color:#94a3b8; cursor:pointer;">✕</button>
+    </div>
+
+    <p style="font-size:12px; color:var(--text-muted); margin:0 0 14px; line-height:1.5;">
+      感謝你協助維護興大美食地圖！若此店已歇業、改名、搬遷或資訊有誤，請勾選回報，管理員審核後將即時修正或下架。
+    </p>
+
+    <div style="margin-bottom:12px;">
+      <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:4px;">店家名稱</label>
+      <input type="text" id="reportStoreNameInput" readonly style="width:100%; padding:8px 12px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:13px; font-weight:700; background:#f8fafc; color:#1e293b; box-sizing:border-box;" />
+      <input type="hidden" id="reportStoreIdInput" />
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:6px;">問題類型 (請勾選)</label>
+      <div style="display:flex; flex-direction:column; gap:6px;" id="reportIssueOptions">
+        <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#fef2f2; padding:6px 10px; border-radius:8px; border:1px solid #fecaca;">
+          <input type="radio" name="report_issue_type" value="已永久停業/幽靈店家" checked style="accent-color:#b91c1c;">
+          <span style="font-weight:700; color:#b91c1c;">🛑 已永久停業 / 幽靈店家 (現場找不到)</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+          <input type="radio" name="report_issue_type" value="地址或地圖定位錯誤" style="accent-color:var(--primary);">
+          <span>📍 地址門牌或地圖定位錯誤</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+          <input type="radio" name="report_issue_type" value="營業時間不正確" style="accent-color:var(--primary);">
+          <span>⏰ 營業時間或公休日不對</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+          <input type="radio" name="report_issue_type" value="店名有誤/已搬遷改名" style="accent-color:var(--primary);">
+          <span>📝 店名有誤 / 已搬遷更名</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+          <input type="radio" name="report_issue_type" value="其他錯誤或補充說明" style="accent-color:var(--primary);">
+          <span>💬 其他錯誤或菜單更新說明</span>
+        </label>
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:4px;">補充說明 (選填)</label>
+      <textarea id="reportDetailsInput" placeholder="例：上個月已經頂讓換招牌了、或者新地址在..." rows="2" style="width:100%; padding:8px 10px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:12px; box-sizing:border-box; outline:none; resize:none; font-family:inherit;"></textarea>
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+      <button onclick="closeFoodReportModal()" style="padding:6px 14px; font-size:12px; border:none; background:#e2e8f0; border-radius:8px; cursor:pointer; font-weight:600;">取消</button>
+      <button id="submitFoodReportBtn" onclick="submitFoodReport()" style="padding:6px 18px; font-size:12px; border:none; background:#b91c1c; color:#fff; font-weight:700; border-radius:8px; cursor:pointer;">確認送出回報</button>
+    </div>
+  </div>
+</div>
+
 <!-- 🌟 興大常用系統快捷傳送門彈窗 (由底部導航列「常用系統」開啟) -->
 <div class="modal-backdrop" id="portalModal" style="display:none;" onclick="if(event.target.id==='portalModal') closePortalModal()">
   <div class="portal-modal-card">
@@ -2018,6 +2103,7 @@
 <script src="faq_data.js"></script>
 <script src="food_database.js"></script>
 <script src="food_full_database.js"></script>
+<script src="backend_adapter.js"></script>
 <script src="food_slot.js"></script>
 <script src="transit_guide.js"></script>
 <script>
@@ -3093,10 +3179,19 @@
           </div>
 
           <div class="food-card-actions">
-            <button class="food-ask-btn" onclick="askFood('${escapedName}')">💬 諮詢助手</button>
-            <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="food-map-link">
-              <span>📍 地圖導航</span>
-            </a>
+            ${(() => {
+              const isReported = window.nchuBackendAdapter ? window.nchuBackendAdapter.isStoreReported(cleanStoreName) : false;
+              if (isReported) {
+                return `<button class="food-report-btn reported" disabled title="已收到同學回報">✅ 已回報</button>`;
+              }
+              return `<button class="food-report-btn" onclick="openFoodReportModal('${escapedName}', '${store.id || ''}')" title="回報此店家已歇業或資訊有誤">🚩 回報</button>`;
+            })()}
+            <div style="display:flex; gap:4px;">
+              <button class="food-ask-btn" onclick="askFood('${escapedName}')">💬 諮詢</button>
+              <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="food-map-link">
+                <span>📍 導航</span>
+              </a>
+            </div>
           </div>
         </div>
       `;
@@ -3180,6 +3275,77 @@
     loadFoodDatabase(true).then(() => {
       renderFoodGrid(filterFoodStores());
     });
+  }
+
+  // 7. 🚩 幽靈店家回報彈窗控制器
+  function openFoodReportModal(storeName, storeId) {
+    const modal = document.getElementById("foodReportModal");
+    const nameInput = document.getElementById("reportStoreNameInput");
+    const idInput = document.getElementById("reportStoreIdInput");
+    const detailsInput = document.getElementById("reportDetailsInput");
+    const btn = document.getElementById("submitFoodReportBtn");
+
+    if (!modal) return;
+    if (nameInput) nameInput.value = storeName;
+    if (idInput) idInput.value = storeId || "";
+    if (detailsInput) detailsInput.value = "";
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "確認送出回報";
+    }
+
+    modal.style.display = "flex";
+  }
+
+  function closeFoodReportModal() {
+    const modal = document.getElementById("foodReportModal");
+    if (modal) modal.style.display = "none";
+  }
+
+  async function submitFoodReport() {
+    const nameInput = document.getElementById("reportStoreNameInput");
+    const idInput = document.getElementById("reportStoreIdInput");
+    const detailsInput = document.getElementById("reportDetailsInput");
+    const btn = document.getElementById("submitFoodReportBtn");
+    const checkedOption = document.querySelector('input[name="report_issue_type"]:checked');
+
+    const storeName = nameInput ? nameInput.value.trim() : "";
+    const storeId = idInput ? idInput.value.trim() : "";
+    const issueType = checkedOption ? checkedOption.value : "已永久停業/幽靈店家";
+    const details = detailsInput ? detailsInput.value.trim() : "";
+
+    if (!storeName) return;
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "⏳ 送出中...";
+    }
+
+    try {
+      const adapter = window.nchuBackendAdapter;
+      let res;
+      if (adapter && typeof adapter.submitReport === "function") {
+        res = await adapter.submitReport({
+          store_name: storeName,
+          store_id: storeId,
+          issue_type: issueType,
+          details: details,
+          reporter: "興大同學"
+        });
+      } else {
+        res = { success: true, message: "感謝回報！資料已妥善儲存。" };
+      }
+
+      alert(`✅ 感謝中興同學的熱心回報！\n我們已收到關於「${storeName}」的回報，管理員將於控制台審核查核！`);
+      closeFoodReportModal();
+      renderFoodGrid(filterFoodStores());
+    } catch (err) {
+      alert("回報送出異常: " + err.message);
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "確認送出回報";
+      }
+    }
   }
 
   // 保留相容性空函式

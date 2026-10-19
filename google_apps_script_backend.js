@@ -1,59 +1,63 @@
 /**
  * ==============================================================================
- * 國立中興大學 (NCHU) 新生美食地圖 - Google Apps Script (GAS) 後端 Web App API 範本
+ * 國立中興大學 (NCHU) 新生美食地圖 - Google Apps Script (GAS) 升級版後端
  * ==============================================================================
  * 
- * 【功能說明】
- * 1. 將本腳本部署至 Google Apps Script Web App，即可將 Google 試算表 (Google Sheets)
- *    化身為高可用性、即時更新的無伺服器 (Serverless) 美食資料庫 API。
- * 2. 支援前端多維度篩選參數：
- *    - ?street=南門路商圈 或 ?street=校內學餐
- *    - ?category=咖啡甜點 或 ?category=主食便當
- *    - ?max_walk=5 (5分鐘以內路程)
- *    - ?search=樹瓦 (關鍵字搜尋)
- *    - ?action=ping (快速心跳測試連線)
- * 3. 支援 CORS 跨域請求，並內建試算表自動快取與容錯機制。
+ * 【特色】
+ * 1. 同時支援「訪客免登入查詢」與「管理員 Token 授權管理」。
+ * 2. 支援前端學生即時提交「幽靈店家 / 資訊錯誤」回報，自動記錄至 Reports 工作表。
+ * 3. 支援後台審核一鍵將店家標記為停業 (is_active = FALSE)。
+ * 4. 支援 Python 爬蟲與後台面板「批次 Upsert (新增或覆寫)」店家資料。
+ * 5. 全面支援 CORS，無跨域障礙。
  * 
- * 【五分鐘快速部署教學】
- * 步驟一：建立一個新的 Google 試算表 (或匯入專案中的 nchu_food_scraped.csv)。
- * 步驟二：點選試算表上方選單「擴充功能」 -> 「Apps Script」。
- * 步驟三：將本檔案全部內容複製並貼入 Code.gs 編輯器中。
- * 步驟四：點選右上角「部署」 -> 「新增部署作業」：
- *         - 種類選擇：網頁應用程式 (Web app)
- *         - 說明：NCHU Food API v1
- *         - 誰可以存取：所有人 (Anyone) ★注意：務必選「所有人」，前端才能免登入抓取
- * 步驟五：點選「部署」並授權，複製獲得的「網頁應用程式網址 (Web App URL)」。
- * 步驟六：打開興大新生美食地圖彈窗，點擊「⚙️ 串接 Google 試算表 API」，貼上網址即可！
+ * 【預設管理金鑰】
+ * 在下方 ADMIN_SECRET_TOKEN 自訂你的管理密碼 (預設: nchu2026_admin)。
  * ==============================================================================
  */
 
-// 試算表工作表名稱 (若為空白則自動讀取第一張工作表)
-const SHEET_NAME = ""; 
+const ADMIN_SECRET_TOKEN = "nchu2026_admin";
+const STORES_SHEET_NAME = "Stores";
+const REPORTS_SHEET_NAME = "Reports";
 
+/**
+ * 處理 GET 請求 (查詢店家、心跳檢測、讀取回報)
+ */
 function doGet(e) {
   try {
     const params = (e && e.parameter) ? e.parameter : {};
     
-    // 心跳檢測 / 測試連線
+    // 1. 心跳檢測
     if (params.action === "ping" || params.test === "1") {
       return createJsonResponse({
         status: "success",
-        message: "🌲 國立中興大學美食地圖 Google Apps Script API 連線成功！",
+        message: "🌲 中興大學美食地圖 Google Apps Script API 正常運作中！",
         timestamp: new Date().toISOString()
       });
     }
 
-    // 取得資料
+    // 2. 管理員讀取回報清單
+    if (params.action === "admin_get_reports") {
+      if (params.token !== ADMIN_SECRET_TOKEN) {
+        return createJsonResponse({ status: "error", message: "管理員授權失敗！密鑰錯誤。" });
+      }
+      const reports = loadReportsFromSheet();
+      return createJsonResponse({ status: "success", count: reports.length, data: reports });
+    }
+
+    // 3. 一般店家資料查詢
     const allFoods = loadFoodDataFromSheet();
-    
-    // 參數過濾
     const targetStreet = (params.street || "").trim().toLowerCase();
     const targetCategory = (params.category || "").trim().toLowerCase();
     const maxWalk = parseInt(params.max_walk || "0", 10);
     const searchQuery = (params.search || params.q || "").trim().toLowerCase();
-    const limit = parseInt(params.limit || "0", 10);
+    const showAll = params.include_inactive === "true" || params.include_inactive === "1";
 
     let filtered = allFoods.filter(item => {
+      // 預設只顯示 active 店家
+      if (!showAll && String(item.is_active).toUpperCase() === "FALSE") {
+        return false;
+      }
+
       // 街道/商圈過濾
       if (targetStreet && targetStreet !== "all" && targetStreet !== "全部") {
         const itemStreet = String(item.street || "").toLowerCase();
@@ -73,33 +77,23 @@ function doGet(e) {
       // 步行時間過濾
       if (maxWalk > 0) {
         const itemWalk = parseInt(item.walk_minutes || "99", 10);
-        if (itemWalk > maxWalk) {
-          return false;
-        }
+        if (itemWalk > maxWalk) return false;
       }
 
-      // 關鍵字搜尋 (店名、介紹、地址、營業時間等)
+      // 關鍵字搜尋
       if (searchQuery) {
         const fullText = (
           String(item.name || "") + " " +
           String(item.street || "") + " " +
           String(item.category || "") + " " +
-          String(item.transport_tip || "") + " " +
           String(item.address || "") + " " +
           String(item.hours || "")
         ).toLowerCase();
-        if (!fullText.includes(searchQuery)) {
-          return false;
-        }
+        if (!fullText.includes(searchQuery)) return false;
       }
 
       return true;
     });
-
-    // 限制筆數 (若有設定)
-    if (limit > 0 && filtered.length > limit) {
-      filtered = filtered.slice(0, limit);
-    }
 
     return createJsonResponse({
       status: "success",
@@ -120,23 +114,112 @@ function doGet(e) {
 }
 
 /**
- * 從當前綁定的 Google Sheet 讀取美食資料
+ * 處理 POST 請求 (提交回報、審核處理、爬蟲批次匯入)
  */
-function loadFoodDataFromSheet() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  if (!ss) {
-    return getFallbackFoodData();
-  }
+function doPost(e) {
+  try {
+    let params = {};
+    if (e && e.parameter) params = e.parameter;
 
-  const sheet = SHEET_NAME ? ss.getSheetByName(SHEET_NAME) : ss.getSheets()[0];
-  if (!sheet) {
-    return getFallbackFoodData();
+    // 嘗試解析 JSON postData
+    if (e && e.postData && e.postData.contents) {
+      try {
+        const jsonBody = JSON.parse(e.postData.contents);
+        params = Object.assign({}, params, jsonBody);
+      } catch (err) {}
+    }
+
+    const action = params.action;
+
+    // 1. 學生提交回報 (免 Token)
+    if (action === "report") {
+      let reportData = {};
+      if (typeof params.payload === "string") {
+        reportData = JSON.parse(params.payload);
+      } else if (params.payload) {
+        reportData = params.payload;
+      } else {
+        reportData = params;
+      }
+
+      appendReportToSheet(reportData);
+      return createJsonResponse({ status: "success", message: "回報已成功記錄至 Google 試算表！" });
+    }
+
+    // 2. 管理員操作 (需要 Token 驗證)
+    const token = params.token || params.adminToken;
+    if (token !== ADMIN_SECRET_TOKEN) {
+      return createJsonResponse({ status: "error", message: "管理員授權失敗！密鑰不符。" });
+    }
+
+    // 2.1 審核回報 (Resolve Report)
+    if (action === "admin_resolve_report") {
+      const reportId = params.report_id;
+      const resolveAction = params.resolve_action; // 'delist' | 'reject' | 'resolved'
+      const storeName = params.store_name;
+
+      updateReportStatus(reportId, resolveAction);
+
+      // 若選擇下架，將該店家設為 FALSE
+      if (resolveAction === "delist" && storeName) {
+        setStoreActiveStatus(storeName, false);
+      }
+
+      return createJsonResponse({ status: "success", message: `回報 ${reportId} 已處置為 ${resolveAction}` });
+    }
+
+    // 2.2 批次匯入/爬蟲 Upsert 店家資料
+    if (action === "admin_batch_upsert") {
+      let storesList = [];
+      if (typeof params.payload === "string") {
+        storesList = JSON.parse(params.payload);
+      } else if (Array.isArray(params.payload)) {
+        storesList = params.payload;
+      }
+
+      const count = batchUpsertStoresToSheet(storesList);
+      return createJsonResponse({ status: "success", message: `成功批次更新/寫入 ${count} 間店家！`, count: count });
+    }
+
+    // 2.3 單一店家資料更新
+    if (action === "admin_update_store") {
+      let storeData = params.store || params;
+      if (typeof storeData === "string") storeData = JSON.parse(storeData);
+      updateSingleStoreInSheet(storeData);
+      return createJsonResponse({ status: "success", message: "店家資訊已更新！" });
+    }
+
+    return createJsonResponse({ status: "error", message: "未知的 POST 操作: " + action });
+
+  } catch (err) {
+    return createJsonResponse({ status: "error", message: "POST 執行異常: " + err.toString() });
   }
+}
+
+/**
+ * 試算表讀寫核心函式
+ */
+function getOrCreateSheet(sheetName, defaultHeaders) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(sheetName);
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    if (defaultHeaders && defaultHeaders.length > 0) {
+      sheet.appendRow(defaultHeaders);
+      sheet.getRange(1, 1, 1, defaultHeaders.length).setFontWeight("bold").setBackground("#f1f5f9");
+    }
+  }
+  return sheet;
+}
+
+function loadFoodDataFromSheet() {
+  const sheet = getOrCreateSheet(STORES_SHEET_NAME, [
+    "id", "name", "street", "category", "walk_minutes", "rating", "review_count", 
+    "hours", "address", "photo_url", "maps_url", "is_active", "content"
+  ]);
 
   const values = sheet.getDataRange().getValues();
-  if (!values || values.length <= 1) {
-    return getFallbackFoodData();
-  }
+  if (!values || values.length <= 1) return [];
 
   const headers = values[0].map(h => String(h || "").trim().toLowerCase());
   const rows = values.slice(1);
@@ -144,69 +227,134 @@ function loadFoodDataFromSheet() {
 
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
-    if (!row || !row[0]) continue; // 略過空行
-
+    if (!row || !row[0]) continue;
     const record = {};
     for (let j = 0; j < headers.length; j++) {
-      const key = headers[j];
-      let val = row[j];
-      if (val instanceof Date) {
-        val = Utilities.formatDate(val, Session.getScriptTimeZone(), "yyyy-MM-dd");
-      }
-      record[key] = String(val !== undefined && val !== null ? val : "").trim();
+      record[headers[j]] = row[j] !== undefined && row[j] !== null ? String(row[j]).trim() : "";
     }
     result.push(record);
   }
-
-  return result.length > 0 ? result : getFallbackFoodData();
+  return result;
 }
 
-/**
- * 格式化為 JSON 回應，並啟用跨域支援 (CORS)
- */
+function appendReportToSheet(rep) {
+  const sheet = getOrCreateSheet(REPORTS_SHEET_NAME, [
+    "id", "store_name", "issue_type", "details", "reporter", "status", "created_at"
+  ]);
+
+  sheet.appendRow([
+    rep.id || ("rep_" + Date.now()),
+    rep.store_name || "",
+    rep.issue_type || "已永久停業/幽靈店家",
+    rep.details || "",
+    rep.reporter || "興大熱心同學",
+    rep.status || "pending",
+    rep.created_at || new Date().toISOString()
+  ]);
+}
+
+function loadReportsFromSheet() {
+  const sheet = getOrCreateSheet(REPORTS_SHEET_NAME, [
+    "id", "store_name", "issue_type", "details", "reporter", "status", "created_at"
+  ]);
+
+  const values = sheet.getDataRange().getValues();
+  if (!values || values.length <= 1) return [];
+
+  const headers = values[0].map(h => String(h || "").trim().toLowerCase());
+  const rows = values.slice(1);
+  const result = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    if (!row || !row[0]) continue;
+    const record = {};
+    for (let j = 0; j < headers.length; j++) {
+      record[headers[j]] = row[j] !== undefined ? String(row[j]).trim() : "";
+    }
+    result.push(record);
+  }
+  return result.reverse(); // 最新回報置頂
+}
+
+function updateReportStatus(reportId, newStatus) {
+  const sheet = getOrCreateSheet(REPORTS_SHEET_NAME);
+  const values = sheet.getDataRange().getValues();
+  if (!values || values.length <= 1) return;
+
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][0]).trim() === String(reportId).trim()) {
+      sheet.getRange(i + 1, 6).setValue(newStatus); // 第6欄是 status
+      break;
+    }
+  }
+}
+
+function setStoreActiveStatus(storeName, isActive) {
+  const sheet = getOrCreateSheet(STORES_SHEET_NAME);
+  const values = sheet.getDataRange().getValues();
+  if (!values || values.length <= 1) return;
+
+  const headers = values[0].map(h => String(h || "").trim().toLowerCase());
+  const nameColIdx = headers.indexOf("name");
+  const activeColIdx = headers.indexOf("is_active");
+  if (nameColIdx === -1 || activeColIdx === -1) return;
+
+  const targetName = String(storeName).trim().toLowerCase();
+
+  for (let i = 1; i < values.length; i++) {
+    const rowName = String(values[i][nameColIdx]).trim().toLowerCase();
+    if (rowName === targetName || rowName.includes(targetName) || targetName.includes(rowName)) {
+      sheet.getRange(i + 1, activeColIdx + 1).setValue(isActive ? "TRUE" : "FALSE");
+    }
+  }
+}
+
+function batchUpsertStoresToSheet(storesList) {
+  if (!Array.isArray(storesList) || storesList.length === 0) return 0;
+  const sheet = getOrCreateSheet(STORES_SHEET_NAME, [
+    "id", "name", "street", "category", "walk_minutes", "rating", "review_count", 
+    "hours", "address", "photo_url", "maps_url", "is_active", "content"
+  ]);
+
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0].map(h => String(h || "").trim().toLowerCase());
+  const nameColIdx = headers.indexOf("name");
+
+  // 現有店名與行數索引對應
+  const existingMap = {};
+  for (let i = 1; i < values.length; i++) {
+    const sName = String(values[i][nameColIdx] || "").trim();
+    if (sName) existingMap[sName] = i + 1; // 1-indexed row number
+  }
+
+  let count = 0;
+  storesList.forEach(store => {
+    const sName = String(store.name || "").trim();
+    if (!sName) return;
+
+    const rowData = headers.map(header => {
+      if (header === "is_active") {
+        return store.is_active !== undefined ? (store.is_active ? "TRUE" : "FALSE") : "TRUE";
+      }
+      return store[header] !== undefined ? store[header] : "";
+    });
+
+    if (existingMap[sName]) {
+      // 覆寫既有行
+      sheet.getRange(existingMap[sName], 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      // 新增一行
+      sheet.appendRow(rowData);
+      existingMap[sName] = sheet.getLastRow();
+    }
+    count++;
+  });
+
+  return count;
+}
+
 function createJsonResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
-}
-
-/**
- * 備用模擬資料 (當試算表尚未建立時確保 API 可立即測試)
- */
-function getFallbackFoodData() {
-  return [
-    {
-      "id": "nchu_food_225",
-      "name": "樹瓦咖啡 (南門路/興大獨家推薦)",
-      "source": "生活圈實體擴充",
-      "street": "南門路商圈",
-      "walk_minutes": "7",
-      "transport_tip": "走路 5 分鐘 (側門出發)",
-      "category": "咖啡甜點",
-      "budget_tier": "中等價位 (100~200元)",
-      "avg_price": "140",
-      "rating": "4.9",
-      "review_count": "368",
-      "hours": "10:30 - 18:30 (週三公休 / 老闆特調精品)",
-      "address": "台中市南區南門路59巷2號",
-      "photo_url": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&auto=format&fit=crop&q=80",
-      "maps_url": "https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E8%88%88%E5%A4%A7%E5%AD%B8%20%E6%A8%B9%E7%93%A6%E5%92%96%E5%95%A1"
-    },
-    {
-      "id": "nchu_food_177",
-      "name": "興大圓廳深森自助餐 (圓廳1F)",
-      "source": "生活圈實體擴充",
-      "street": "校內學餐/校園專區",
-      "walk_minutes": "3",
-      "transport_tip": "校園內部 1~3 分鐘 (免出校門)",
-      "category": "主食便當",
-      "budget_tier": "百元有找 (<100元)",
-      "avg_price": "85",
-      "rating": "4.3",
-      "review_count": "520",
-      "hours": "10:30 - 19:30 (校園學生餐廳)",
-      "address": "台中市南區興大路145號 (興大圓廳美食廣場)",
-      "photo_url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80",
-      "maps_url": "https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E8%88%88%E5%A4%A7%E5%AD%B8%20%E8%88%88%E5%A4%A7%E5%9C%93%E5%BB%B3%E6%B7%B1%E6%A3%AE%E8%87%AA%E5%8A%A9%E9%A4%90"
-    }
-  ];
 }
