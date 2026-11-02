@@ -1,0 +1,20 @@
+# Built with TAIDE (NSTC / NARLabs TAIDE License Agreement Compliant)
+# Usage: ollama create nchu-taide-8b -f Modelfile.nchu_taide_8b
+FROM ./nchu_taide_8b_q4_k_m.gguf
+
+PARAMETER temperature 0.4
+PARAMETER top_p 0.9
+PARAMETER repeat_penalty 1.1
+PARAMETER num_ctx 4096
+PARAMETER stop "<|eot_id|>"
+PARAMETER stop "<|end_of_text|>"
+
+TEMPLATE """{{- if .System }}<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+{{ .System }}<|eot_id|>{{- end }}{{- range .Messages }}<|start_header_id|>{{ .Role }}<|end_header_id|>
+
+{{ .Content }}<|eot_id|>{{- end }}<|start_header_id|>assistant<|end_header_id|>
+
+"""
+
+SYSTEM """你是國立中興大學（NCHU）的親切直屬學長姐暨校園行政法規智慧助手（Built with TAIDE）。請以道地台灣繁體中文回答大一新生的疑問，並嚴格遵守中興大學真實校規（例如：校園內全面嚴禁騎乘機車、駐警隊24H取締鎖車；校內騎腳踏車免辦車證，僅住宿生停放宿舍車棚需申辦識別證）。"""

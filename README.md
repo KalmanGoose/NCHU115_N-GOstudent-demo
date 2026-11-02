@@ -36,9 +36,18 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **NCHU-BGE-Small-V2** | 語意檢索 / Embedding | 24M (BGE-Small) | `BAAI/bge-small-zh-v1.5` | 專為中興校園黑話與行政公文設計的向量檢索大腦，支援 30ms 毫秒級檢索 |
 | **NCHU-Gemma2-2B-LoRA** | 領域對話 / SLM | 2.6B (LoRA $r=16, \alpha=32$) | `unsloth/gemma-2-2b-it` | Google 輕量小鋼砲，完美適配親切幽默學長姐對話與校園生活導航 |
-| **NCHU-Llama3.2-3B-LoRA** | 領域對話 / SLM | 3.2B (LoRA $r=16, \alpha=32$) | `unsloth/Llama-3.2-3B-Instruct` | Meta 最新輕量開源旗艦，強大指令遵循與多輪對話能力 |
-| **NCHU-TAIDE-7B-LoRA** | 台灣在地 / LLM | 7B (LoRA $r=16, \alpha=32$) | `taide/TAIDE-LX-7B-Chat` | 國科會與中研院繁中大模型，台灣在地成語、用語與公務制度最適配 |
+| **NCHU-Llama3.2-3B-LoRA** | 領域對話 / SLM | 3.2B (LoRA $r=16, \alpha=32$) | `unsloth/Llama-3.2-3B-Instruct` | Meta 輕量開源旗艦，強大指令遵循與多輪對話能力 |
+| **NCHU-TAIDE-7B-LoRA** | 台灣在地 / LLM | 7B (LoRA $r=16, \alpha=32$) | `taide/TAIDE-LX-7B-Chat` | 國科會與中研院初代繁中模型，台灣在地用語與公務制度適配 |
+| **NCHU-Llama3.1-TAIDE-8B (LoRA & GGUF)** | 台灣主權 AI / 邊緣量化引擎 | 8B (`Q4_K_M` 4.90 GB) | `taide/Llama-3.1-TAIDE-LX-8B-Chat` | 3,183 筆興大語料微調；突破 188,256 繁中擴充詞表 BPE 校驗限制，由 16.25 GB 壓縮為 **4.90 GB 4-bit GGUF** 邊緣運算引擎 |
+| **NCHU-Gemma3-TAIDE-12B-LoRA** | 台灣主權 AI / 2026 旗艦 | 12B (QLoRA `bfloat16`) | `taide/Gemma-3-TAIDE-12b-Chat-2602` | 國科會最新 12B 旗艦（A100 微調 Loss 由 `2.60` 收斂至 `0.79`），支援前端「🎭 TAIDE 語氣調色盤」三種學長姐角色切換 |
 | **Laya Gateway (0.4.13)** | 極速路由 / 守護閘道 | 輕量特徵閘道器 | Local Rule & Pattern Gate | 30ms 極速分流：24H 校安危急攔截、InBody 體脂贖罪、特約門診、美食輪盤 |
+
+### ⚡ 本機或免費邊緣端一鍵啟動 4-bit GGUF (`Ollama`)
+將微調並量化完成之 `nchu_taide_8b_q4_k_m.gguf` (4.90 GB) 放至專案目錄，執行一行指令即可在 Mac (Apple Silicon) 或無獨顯環境秒速啟動興大專屬 AI 學長姐：
+```bash
+ollama create nchu-taide-8b -f Modelfile.nchu_taide_8b
+ollama run nchu-taide-8b "學長好！請問大一新生校內可以騎機車嗎？男宿環境如何？"
+```
 
 ### 🚀 Python 快速載入 Gemma 2 LoRA 模型
 ```python
@@ -73,6 +82,7 @@ print(tokenizer.decode(outputs[0][len(prompt_ids):], skip_special_tokens=True))
 
 ---
 
-## 📜 授權與免責聲明
+## 📜 授權與免責聲明 (License & TAIDE Attribution)
+- **Built with TAIDE**：本專案之台灣在地繁中微調模型與衍生量化權重（`NCHU-Llama3.1-TAIDE-8B`、`NCHU-Gemma3-TAIDE-12B`）係基於國家科學及技術委員會（NSTC）與財團法人國家實驗研究院（NARLabs）釋出之 **TAIDE 模型**建構，並嚴格遵循《TAIDE 模型授權同意書》與衍生作品標示規範（Built with TAIDE）。
 - 本系統為學生社群與非官方專案，旨在提供新生更友善的校園指引。
 - 涉及成績、學籍、繳費截止日等重大手續，請務必以國立中興大學（NCHU）各行政處室最新公告為準。
