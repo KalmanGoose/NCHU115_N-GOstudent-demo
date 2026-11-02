@@ -5,24 +5,44 @@
  */
 
 (function () {
-  // ── 1. 區域與預算定義 ──
+  
+  function getSlotLang() {
+    return (window.nchuI18n && typeof window.nchuI18n.getLanguage === 'function')
+      ? window.nchuI18n.getLanguage()
+      : 'zh-TW';
+  }
+
+  // ── 1. 區域與預算定義 (多語增強版) ──
   const REEL_LOCATIONS = [
-    { id: "all", name: "🎲 隨機全區", filter: () => true },
-    { id: "xuefu", name: "🎓 大門學府路", filter: f => (f.tags && f.tags.includes("xuefu")) || (f.kws && f.kws.includes("學府")) || (f.content && f.content.includes("學府")) },
-    { id: "nanmen", name: "🌸 女宿南門路", filter: f => (f.tags && f.tags.includes("nanmen")) || (f.kws && f.kws.includes("南門")) || (f.content && f.content.includes("南門")) },
-    { id: "gaogong", name: "🛵 高工美村", filter: f => (f.tags && f.tags.includes("gaogong")) || (f.kws && f.kws.includes("高工")) || (f.content && f.content.includes("美村")) },
-    { id: "nightmarket", name: "🏮 忠孝夜市", filter: f => (f.tags && f.tags.includes("nightmarket")) || (f.kws && f.kws.includes("忠孝")) || (f.content && f.content.includes("夜市")) },
-    { id: "campus", name: "🌲 校內圓廳學餐", filter: f => (f.tags && f.tags.includes("campus")) || (f.kws && f.kws.includes("學餐")) || (f.content && f.content.includes("圓廳")) },
-    { id: "late_night", name: "🌙 深夜宵夜", filter: f => (f.tags && f.tags.includes("late_night")) || (f.kws && f.kws.includes("宵夜")) || (f.content && f.content.includes("宵夜")) },
-    { id: "cafe", name: "☕ 飲料手搖甜點", filter: f => (f.tags && f.tags.includes("cafe")) || (f.kws && f.kws.includes("飲料")) || (f.content && f.content.includes("手搖")) }
+    { id: "all", name: "🎲 隨機全區", name_en: "🎲 Any Area", name_id: "🎲 Semua Area", filter: () => true },
+    { id: "xuefu", name: "🎓 大門學府路", name_en: "🎓 Main Gate (Xuefu)", name_id: "🎓 Gerbang Utama (Xuefu)", filter: f => (f.tags && f.tags.includes("xuefu")) || (f.kws && f.kws.includes("學府")) || (f.content && f.content.includes("學府")) },
+    { id: "nanmen", name: "🌸 女宿南門路", name_en: "🌸 Nanmen Rd. Area", name_id: "🌸 Jl. Nanmen", filter: f => (f.tags && f.tags.includes("nanmen")) || (f.kws && f.kws.includes("南門")) || (f.content && f.content.includes("南門")) },
+    { id: "gaogong", name: "🛵 高工美村", name_en: "🛵 Gaogong & Meicun", name_id: "🛵 Gaogong & Meicun", filter: f => (f.tags && f.tags.includes("gaogong")) || (f.kws && f.kws.includes("高工")) || (f.content && f.content.includes("美村")) },
+    { id: "nightmarket", name: "🏮 忠孝夜市", name_en: "🏮 Zhongxiao Night Mkt", name_id: "🏮 Pasar Malam Zhongxiao", filter: f => (f.tags && f.tags.includes("nightmarket")) || (f.kws && f.kws.includes("忠孝")) || (f.content && f.content.includes("夜市")) },
+    { id: "campus", name: "🌲 校內圓廳學餐", name_en: "🌲 On-Campus Canteen", name_id: "🌲 Kantin Kampus", filter: f => (f.tags && f.tags.includes("campus")) || (f.kws && f.kws.includes("學餐")) || (f.content && f.content.includes("圓廳")) },
+    { id: "late_night", name: "🌙 深夜宵夜", name_en: "🌙 Late Night Eats", name_id: "🌙 Camilan Larut Malam", filter: f => (f.tags && f.tags.includes("late_night")) || (f.kws && f.kws.includes("宵夜")) || (f.content && f.content.includes("宵夜")) },
+    { id: "cafe", name: "☕ 飲料手搖甜點", name_en: "☕ Drinks & Cafe", name_id: "☕ Minuman & Kafe", filter: f => (f.tags && f.tags.includes("cafe")) || (f.kws && f.kws.includes("飲料")) || (f.content && f.content.includes("手搖")) }
   ];
 
   const REEL_BUDGETS = [
-    { id: "any", name: "✨ 隨緣無拘", filter: () => true },
-    { id: "budget", name: "💰 百元平價有找", filter: f => (f.tags && f.tags.includes("budget")) || (f.title && f.title.includes("百元")) || (f.content && f.content.includes("百元")) },
-    { id: "student_deal", name: "🏷️ 學生特約優惠", filter: f => (f.tags && f.tags.includes("student_deal")) || (f.kws && f.kws.includes("特約")) || (f.content && f.content.includes("折扣")) },
-    { id: "hearty", name: "🥩 吃粗飽大份量", filter: f => !f.tags.includes("cafe") && (f.content.includes("大碗") || f.content.includes("加飯") || f.content.includes("大份量") || f.content.includes("吃粗飽") || f.content.includes("飽")) }
+    { id: "any", name: "✨ 隨緣無拘", name_en: "✨ Any Budget", name_id: "✨ Bebas Anggaran", filter: () => true },
+    { id: "budget", name: "💰 百元平價有找", name_en: "💰 Under NT$100", name_id: "💰 Kurang NT$100", filter: f => (f.tags && f.tags.includes("budget")) || (f.title && f.title.includes("百元")) || (f.content && f.content.includes("百元")) },
+    { id: "student_deal", name: "🏷️ 學生特約優惠", name_en: "🏷️ Student Discount", name_id: "🏷️ Diskon Mahasiswa", filter: f => (f.tags && f.tags.includes("student_deal")) || (f.kws && f.kws.includes("特約")) || (f.content && f.content.includes("折扣")) },
+    { id: "hearty", name: "🥩 吃粗飽大份量", name_en: "🥩 Hearty Big Portion", name_id: "🥩 Porsi Besar Puas", filter: f => !f.tags.includes("cafe") && (f.content.includes("大碗") || f.content.includes("加飯") || f.content.includes("大份量") || f.content.includes("吃粗飽") || f.content.includes("飽")) }
   ];
+
+  function getReelLocationName(idx) {
+    const lang = getSlotLang();
+    const loc = REEL_LOCATIONS[idx] || REEL_LOCATIONS[0];
+    return lang === 'en' ? (loc.name_en || loc.name) : (lang === 'id' ? (loc.name_id || loc.name) : loc.name);
+  }
+
+  function getReelBudgetName(idx) {
+    const lang = getSlotLang();
+    const bud = REEL_BUDGETS[idx] || REEL_BUDGETS[0];
+    return lang === 'en' ? (bud.name_en || bud.name) : (lang === 'id' ? (bud.name_id || bud.name) : bud.name);
+  }
+
 
   let currentLocIndex = 0;
   let currentBudIndex = 0;
@@ -486,6 +506,15 @@
               💬 問學長姐
             </button>
           </div>
+
+          <!-- 創意 1：吃貨贖罪券 (惠蓀堂 1F 免費 InBody 體脂計連動) -->
+          <div class="slot-burn-box" onclick="if(typeof openHealthCareGuide==='function')openHealthCareGuide('inbody')" style="cursor:pointer; margin-top:10px; background:linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); border:1px dashed #f43f5e; border-radius:12px; padding:9px 12px; display:flex; align-items:center; justify-content:space-between; gap:8px; transition:transform .2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='none'">
+            <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:#be123c; font-weight:700;">
+              <span style="font-size:16px;">⚖️</span>
+              <span>吃完怕胖？惠蓀堂 1F 有免費 InBody 體脂計可測！</span>
+            </div>
+            <span style="font-size:11px; background:#e11d48; color:#fff; padding:3px 8px; border-radius:999px; font-weight:800; white-space:nowrap; box-shadow:0 2px 5px rgba(225,29,72,0.3);">贖罪挑戰 →</span>
+          </div>
         </div>
       </div>
     </div>
@@ -576,7 +605,7 @@
     const timer1 = setInterval(() => {
       if (!isLocLocked) {
         currentLocIndex = (currentLocIndex + 1) % REEL_LOCATIONS.length;
-        v1.textContent = REEL_LOCATIONS[currentLocIndex].name;
+        v1.textContent = getReelLocationName(currentLocIndex);
         v1.style.transform = `translateY(${Math.sin(t1) * 8}px)`;
         playTickSound();
       }
@@ -588,7 +617,7 @@
     const timer2 = setInterval(() => {
       if (!isBudLocked) {
         currentBudIndex = (currentBudIndex + 1) % REEL_BUDGETS.length;
-        v2.textContent = REEL_BUDGETS[currentBudIndex].name;
+        v2.textContent = getReelBudgetName(currentBudIndex);
         v2.style.transform = `translateY(${Math.cos(t2) * 8}px)`;
         playTickSound();
       }
@@ -611,7 +640,7 @@
       v1.style.transform = "none";
       if (!isLocLocked) {
         currentLocIndex = Math.floor(Math.random() * REEL_LOCATIONS.length);
-        v1.textContent = REEL_LOCATIONS[currentLocIndex].name;
+        v1.textContent = getReelLocationName(currentLocIndex);
       }
       playTickSound();
     }, 650);
@@ -621,7 +650,7 @@
       v2.style.transform = "none";
       if (!isBudLocked) {
         currentBudIndex = Math.floor(Math.random() * REEL_BUDGETS.length);
-        v2.textContent = REEL_BUDGETS[currentBudIndex].name;
+        v2.textContent = getReelBudgetName(currentBudIndex);
       }
       playTickSound();
       updateCandidatePoolCount();

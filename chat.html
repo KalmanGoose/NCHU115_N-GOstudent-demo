@@ -17,6 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
   <script src="faq_data.js"></script>
   <script src="food_database.js"></script>
+  <script src="i18n.js"></script>
 
   <style>
     :root {
@@ -172,6 +173,43 @@
       transform: translateY(-1px);
     }
 
+    /* 多語系切換器 (Language Switcher) */
+    .lang-switch-wrap {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: var(--radius-sm);
+      padding: 2px 4px;
+      gap: 2px;
+    }
+    .lang-switch-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      line-height: 1.2;
+    }
+    .lang-switch-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.18);
+    }
+    .lang-switch-btn.active {
+      background: #ffffff;
+      color: var(--nchu-green-primary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .lang-switch-sep {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 10px;
+    }
+
     /* Quick Suggestions Bar */
     .suggestions-container {
       background: #f8fafc;
@@ -185,6 +223,54 @@
       scrollbar-width: none;
       -ms-overflow-style: none;
       flex-shrink: 0;
+    }
+
+    /* 🎭 TAIDE 語氣調色盤 (Persona Bar) */
+    .persona-container {
+      background: #f1f5f9;
+      padding: 5px 12px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    .persona-container::-webkit-scrollbar {
+      display: none;
+    }
+    .persona-label {
+      font-size: 11px;
+      color: var(--nchu-green-dark);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .persona-chip {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: var(--text-main);
+      padding: 2.5px 9px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .persona-chip:hover {
+      border-color: var(--nchu-green-primary);
+      color: var(--nchu-green-primary);
+    }
+    .persona-chip.active {
+      background: var(--nchu-green-primary);
+      color: #ffffff;
+      border-color: var(--nchu-green-primary);
+      font-weight: 700;
+      box-shadow: 0 1px 4px rgba(0, 90, 54, 0.25);
     }
 
     .suggestions-container::-webkit-scrollbar {
@@ -722,13 +808,19 @@
       <div class="header-logo">🌲</div>
       <div>
         <div class="header-title">
-          中興新生生活問答
-          <span class="header-badge">AI 學長姐</span>
+          <span data-i18n="chat_title">中興新生生活問答</span>
+          <span class="header-badge" data-i18n="chat_badge">AI 學長姐</span>
         </div>
-        <div class="header-subtitle">國立中興大學 (NCHU) 專屬生活與行政諮詢</div>
+        <div class="header-subtitle" data-i18n="chat_subtitle">國立中興大學 (NCHU) 專屬生活與行政諮詢</div>
       </div>
     </div>
     <div class="header-actions">
+      <!-- 多語系切換 (繁中 / EN) -->
+      <div class="lang-switch-wrap" id="chatLangSwitch">
+        <button type="button" class="lang-switch-btn active" id="chatLangZh" onclick="window.nchuI18n && window.nchuI18n.setLanguage('zh-TW')" title="切換為繁體中文">🇹🇼 繁中</button>
+        <span class="lang-switch-sep">|</span>
+        <button type="button" class="lang-switch-btn" id="chatLangEn" onclick="window.nchuI18n && window.nchuI18n.setLanguage('en')" title="Switch to English">🌐 EN</button>
+      </div>
       <!-- 字體大小即時切換按鈕 -->
       <button class="icon-btn" id="fontSizeBtn" onclick="toggleFontSize()" title="調整字體大小">Aa</button>
       <button class="icon-btn" onclick="openWhitepaperModal()" title="AI 使用須知與倫理白皮書">📜</button>
@@ -740,16 +832,24 @@
 
   <!-- Quick Suggestions -->
   <div class="suggestions-container">
-    <div class="suggestion-chip highlight-chip" onclick="openFoodMapModal()" title="開啟興大美食地圖 (0 Token 快速瀏覽)">🍜 興大美食地圖</div>
-    <div class="suggestion-chip" onclick="openWhitepaperModal()" title="查閱中興新生 AI 使用須知與資安倫理白皮書">📜 倫理白皮書</div>
-    <div class="suggestion-label">🔥 熱門：</div>
-    <div class="suggestion-chip" onclick="askSuggestion('課外組在哪裡？負責什麼？')">📍 課外組位置</div>
-    <div class="suggestion-chip" onclick="askSuggestion('選課三階段與人工加簽怎麼辦？')">🎓 選課與加簽</div>
-    <div class="suggestion-chip" onclick="askSuggestion('通識課有什麼推薦的涼課或甜課？')">📚 通識課推薦</div>
-    <div class="suggestion-chip" onclick="askSuggestion('宿舍床墊規格多少？生活用品去哪買？')">🛏️ 宿舍與採買</div>
-    <div class="suggestion-chip" onclick="askSuggestion('在校內騎腳踏車需要申請車證嗎？宿舍腳踏車怎麼停？')">🚲 腳踏車與宿舍車證</div>
-    <div class="suggestion-chip" onclick="askSuggestion('出示學生證有哪些特約商店優惠？')">🏷️ 特約商家</div>
-    <div class="suggestion-chip" onclick="askSuggestion('大一英文免修抵免條件？')">📑 英文免修</div>
+    <div class="suggestion-chip highlight-chip" onclick="openFoodMapModal()" data-i18n="chat_food_map_chip" title="開啟興大美食地圖 (0 Token 快速瀏覽)">🍜 興大美食地圖</div>
+    <div class="suggestion-chip" onclick="openWhitepaperModal()" data-i18n="chat_whitepaper_chip" title="查閱中興新生 AI 使用須知與資安倫理白皮書">📜 倫理白皮書</div>
+    <div class="suggestion-label" data-i18n="chat_hot_label">🔥 熱門：</div>
+    <div class="suggestion-chip" onclick="handleSuggestionClick('extra_curr')" data-i18n="chip_extra_curr">📍 課外組位置</div>
+    <div class="suggestion-chip" onclick="handleSuggestionClick('course_select')" data-i18n="chip_course_select">🎓 選課與加簽</div>
+    <div class="suggestion-chip" onclick="handleSuggestionClick('general_rec')" data-i18n="chip_general_rec">📚 通識課推薦</div>
+    <div class="suggestion-chip" onclick="handleSuggestionClick('dorm_supplies')" data-i18n="chip_dorm_supplies">🛏️ 宿舍與採買</div>
+    <div class="suggestion-chip" onclick="handleSuggestionClick('bike_permit')" data-i18n="chip_bike_permit">🚲 腳踏車與宿舍車證</div>
+    <div class="suggestion-chip" onclick="handleSuggestionClick('deals')" data-i18n="chip_deals">🏷️ 特約商家</div>
+    <div class="suggestion-chip" onclick="handleSuggestionClick('eng_waive')" data-i18n="chip_eng_waive">📑 英文免修</div>
+  </div>
+
+  <!-- 🎭 TAIDE 語氣調色盤 -->
+  <div class="persona-container">
+    <span class="persona-label" data-i18n="chat_persona_label">🎭 TAIDE 語氣：</span>
+    <button class="persona-chip active" id="persona-senior" onclick="setPersona('senior')" data-i18n="persona_senior" title="切換為熱血老司機學長口吻">🌲 老司機學長</button>
+    <button class="persona-chip" id="persona-gentle" onclick="setPersona('gentle')" data-i18n="persona_gentle" title="切換為溫柔暖心學姐口吻">💖 暖心學姐</button>
+    <button class="persona-chip" id="persona-official" onclick="setPersona('official')" data-i18n="persona_official" title="切換為嚴謹教務處行政法規口吻">📜 嚴謹教務處</button>
   </div>
 
   <!-- Messages List -->
@@ -775,6 +875,7 @@
         class="chat-input" 
         id="userInput" 
         rows="1" 
+        data-i18n="chat_input_placeholder"
         placeholder="輸入問題...（例如：通識課推薦？課外組在哪？特約優惠？）"
         oninput="autoResize(this)"
         onkeydown="handleKeyDown(event)"
@@ -787,8 +888,8 @@
       </button>
     </div>
     <div class="input-hint">
-      <span>💡 按右上角「Aa」可切換字體大小</span>
-      <span id="modelStatus">🟢 AI 學長姐即時連線 (免金鑰)</span>
+      <span data-i18n="chat_input_hint">💡 按右上角「Aa」可切換字體大小</span>
+      <span id="modelStatus" data-i18n="chat_model_status">🟢 AI 學長姐即時連線 (免金鑰)</span>
     </div>
   </footer>
 </div>
@@ -799,10 +900,10 @@
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
       <div>
         <h3 style="font-size:15px; color:var(--nchu-green-primary); font-weight:700; display:flex; align-items:center; gap:6px;">
-          🍜 興大校園與周邊美食地圖
-          <span style="font-size:10.5px; background:var(--nchu-accent-gold); color:#fff; padding:2px 8px; border-radius:10px;">176 間精選</span>
+          <span data-i18n="food_map_title">🍜 興大校園與周邊美食地圖</span>
+          <span style="font-size:10.5px; background:var(--nchu-accent-gold); color:#fff; padding:2px 8px; border-radius:10px;" data-i18n="food_map_badge">176 間精選</span>
         </h3>
-        <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+        <p style="font-size:11px; color:var(--text-muted); margin-top:2px;" data-i18n="food_map_desc">
           ⚡ 0 Token 成本純前端即時瀏覽！收錄學府路、南門路、高工美村、忠孝夜市與台中名店。
         </p>
       </div>
@@ -817,7 +918,7 @@
 
     <!-- Search Box -->
     <div>
-      <input type="text" id="foodSearchInput" class="form-input" style="padding:7px 10px; font-size:12px;" placeholder="🔍 搜尋店名、菜色（如：炒飯、煎餃、咖哩、宵夜、牛肉麵、甜點、加飯）..." oninput="onFoodSearchChange()" />
+      <input type="text" id="foodSearchInput" class="form-input" style="padding:7px 10px; font-size:12px;" data-i18n-placeholder="food_search_placeholder" placeholder="🔍 搜尋店名、菜色（如：炒飯、煎餃、咖哩、宵夜、牛肉麵、甜點、加飯）..." oninput="onFoodSearchChange()" />
     </div>
 
     <!-- Filter Chips -->
@@ -841,7 +942,7 @@
 
     <div style="display:flex; justify-content:space-between; align-items:center; padding-top:6px; border-top:1px solid #e2e8f0; font-size:11.5px; color:var(--text-muted);">
       <span id="foodCountLabel">顯示 176 間美食</span>
-      <button class="btn-secondary" style="padding:4px 12px; font-size:11.5px;" onclick="closeFoodMapModal()">關閉</button>
+      <button class="btn-secondary" style="padding:4px 12px; font-size:11.5px;" onclick="closeFoodMapModal()" data-i18n="food_btn_close">關閉</button>
     </div>
   </div>
 </div>
@@ -852,51 +953,22 @@
     <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
       <div>
         <h3 style="font-size:15px; color:var(--nchu-green-primary); font-weight:700; display:flex; align-items:center; gap:6px;">
-          📜 中興新生 AI 使用須知與資安倫理白皮書
-          <span style="font-size:10.5px; background:var(--nchu-green-primary); color:#fff; padding:2px 8px; border-radius:10px;">資訊素養指引</span>
+          <span data-i18n="whitepaper_modal_title">📜 中興新生 AI 使用須知與資安倫理白皮書</span>
+          <span style="font-size:10.5px; background:var(--nchu-green-primary); color:#fff; padding:2px 8px; border-radius:10px;" data-i18n="whitepaper_badge">資訊素養指引</span>
         </h3>
-        <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+        <p style="font-size:11px; color:var(--text-muted); margin-top:2px;" data-i18n="whitepaper_sub">
           國立中興大學 (NCHU) 專屬校園生活導覽、個資防護與 AI 學術倫理守則
         </p>
       </div>
       <button class="icon-btn" style="color:#666; background:transparent;" onclick="closeWhitepaperModal()">✕</button>
     </div>
 
-    <div style="overflow-y:auto; padding:8px 4px; font-size:12.5px; line-height:1.65; color:var(--text-main); display:flex; flex-direction:column; gap:12px;">
-      <div style="background:#f8fafc; border-left:3px solid var(--nchu-green-primary); padding:10px 12px; border-radius:4px;">
-        <strong style="color:var(--nchu-green-dark);">1. 輔助性質與非官方唯一決策聲明</strong>
-        <p style="margin-top:4px; font-size:12px; color:#475569;">
-          • 本系統為自主研發之校園生活導覽與行政輔助檢索工具，<strong>非國立中興大學官方唯一法定公文公告管道</strong>。<br>
-          • 系統所提供之日程、選課階段、抵免標準等資訊，每年均依教務處最新行事曆略有微調。<strong>重大權益請務必以學校各處室最新正式公文公告為準</strong>。
-        </p>
-      </div>
-
-      <div style="background:#f8fafc; border-left:3px solid #dc2626; padding:10px 12px; border-radius:4px;">
-        <strong style="color:#b91c1c;">2. 資訊安全與個人資料保護規範（個資法合規聲明）</strong>
-        <p style="margin-top:4px; font-size:12px; color:#475569;">
-          • <strong>嚴禁輸入機密資訊</strong>：請勿於對話框中輸入個人身分證字號、居留證號、學生證帳號密碼、銀行帳戶或私密個人隱私。<br>
-          • <strong>合法脫敏日誌聲明</strong>：為持續統計新生常見問題與改善檢索題庫，本系統後端依《個人資料保護法》進行去識別化處理。所有提問若含潛在個人代碼，將於第一時間強制過濾遮蔽，僅保留統計熱點數據，絕不收集或販售個人身分資料。
-        </p>
-      </div>
-
-      <div style="background:#f8fafc; border-left:3px solid #d97706; padding:10px 12px; border-radius:4px;">
-        <strong style="color:#b45309;">3. 負責任的 AI 倫理與學術誠信倡議</strong>
-        <p style="margin-top:4px; font-size:12px; color:#475569;">
-          • <strong>杜絕學術不端</strong>：本助手專門解答生活與行政流程，嚴禁用於課程作業代寫、考試作弊或偽造出缺席證明。<br>
-          • <strong>批判性思考與驗證習慣</strong>：大語言模型輸出可能受限於情境與機率分佈，請養成查閱檢索來源標籤（如官方處室電話、規章連結）並進行二次事實查核之良好習慣。
-        </p>
-      </div>
-
-      <div style="background:#f8fafc; border-left:3px solid var(--nchu-green-primary); padding:10px 12px; border-radius:4px;">
-        <strong style="color:var(--nchu-green-dark);">4. 校園秩序與交通安全最高鐵律</strong>
-        <p style="margin-top:4px; font-size:12px; color:#475569;">
-          • <strong>校內全面嚴禁騎乘機車</strong>：學生機車一律嚴禁進入校園核心徒步區，違規必被駐警隊鎖車開罰。請善用校外三大免費停車場（社管樓旁、校門口右側、國光忠明南路口）。
-        </p>
-      </div>
+    <div id="whitepaperBodyContainer" style="overflow-y:auto; padding:8px 4px; font-size:12.5px; line-height:1.65; color:var(--text-main); display:flex; flex-direction:column; gap:12px;">
+      <!-- Localized points rendered dynamically -->
     </div>
 
     <div style="display:flex; justify-content:flex-end; padding-top:6px; border-top:1px solid #e2e8f0;">
-      <button class="btn-primary" style="padding:5px 16px; font-size:12px;" onclick="closeWhitepaperModal()">我已詳細閱讀並瞭解</button>
+      <button class="btn-primary" style="padding:5px 16px; font-size:12px;" onclick="closeWhitepaperModal()" data-i18n="whitepaper_btn_agree">我已詳細閱讀並瞭解</button>
     </div>
   </div>
 </div>
@@ -939,6 +1011,7 @@
   })();
 
   function openWhitepaperModal() {
+    renderWhitepaperContent();
     document.getElementById("whitepaperModal").style.display = "flex";
   }
 
@@ -987,20 +1060,24 @@
       const cleanStoreName = item.title.split("(")[0].trim();
       const badgeText = item.title.includes("(") ? item.title.substring(item.title.indexOf("(") + 1, item.title.indexOf(")")) : "";
       const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("中興大學 " + cleanStoreName)}`;
+      const encodedName = encodeURIComponent(cleanStoreName).replace(/'/g, "%27");
+      const safeStoreName = escapeHtml(cleanStoreName);
+      const safeBadge = escapeHtml(badgeText ? badgeText.substring(0, 12) : "");
+      const safeContent = escapeHtml(item.content || "").replace(/\n/g, "<br>");
 
       return `
         <div class="food-card">
           <div>
             <div class="food-card-title">
-              <span>🍽️ ${cleanStoreName}</span>
-              ${badgeText ? `<span class="food-tag-badge">${badgeText.substring(0, 12)}</span>` : ""}
+              <span>🍽️ ${safeStoreName}</span>
+              ${safeBadge ? `<span class="food-tag-badge">${safeBadge}</span>` : ""}
             </div>
             <div class="food-card-content" style="margin-top:4px;">
-              ${item.content.replace(/\n/g, "<br>")}
+              ${safeContent}
             </div>
           </div>
           <div class="food-card-actions">
-            <button class="food-ask-btn" onclick="askFoodInChat('${cleanStoreName}')">💬 諮詢助手</button>
+            <button class="food-ask-btn" onclick="askFoodInChat(decodeURIComponent('${encodedName}'))">💬 諮詢助手</button>
             <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="food-map-link">
               <span>📍 地圖</span>
             </a>
@@ -1010,10 +1087,196 @@
     }).join("");
   }
 
+  // ── 📜 白皮書多語系動態內容渲染 (Whitepaper Content Engine) ──
+  function renderWhitepaperContent(lang = null) {
+    const currentL = lang || (window.nchuI18n ? window.nchuI18n.getLanguage() : "zh-TW");
+    const container = document.getElementById("whitepaperBodyContainer");
+    if (!container) return;
+
+    if (currentL === "en") {
+      container.innerHTML = `
+        <div style="background:#f8fafc; border-left:3px solid var(--nchu-green-primary); padding:10px 12px; border-radius:4px;">
+          <strong style="color:var(--nchu-green-dark);">1. Advisory Nature & Non-Official Sole Authority Disclaimer</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • This system is an independently developed campus life navigation and administrative retrieval tool, <strong>NOT the official statutory announcement channel of National Chung Hsing University</strong>.<br>
+            • Schedules, course enrollment phases, and waiver criteria are adjusted each year per the latest Office of Academic Affairs calendar. <strong>For critical rights and deadlines, always rely on the latest official university bulletins.</strong>
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid #dc2626; padding:10px 12px; border-radius:4px;">
+          <strong style="color:#b91c1c;">2. Information Security & Personal Data Protection (PDPA Compliance)</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>Strictly Prohibit Confidential Input</strong>: Do NOT enter national ID numbers, Alien Resident Certificate (ARC) numbers, student portal passwords, bank details, or private sensitive data into the chat.<br>
+            • <strong>Legal De-Identification Logging</strong>: To statistically track common freshman questions, queries are anonymized in compliance with the Personal Data Protection Act. Potential personal identifiers are immediately masked; no personal identities are ever collected or shared.
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid #d97706; padding:10px 12px; border-radius:4px;">
+          <strong style="color:#b45309;">3. Responsible AI Ethics & Academic Integrity</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>No Academic Misconduct</strong>: This assistant is designed exclusively for daily life and administrative inquiries. It is strictly prohibited from writing assignments, cheating on exams, or forging attendance.<br>
+            • <strong>Critical Thinking & Verification</strong>: LLM outputs may vary by probability. Develop the habit of verifying citation sources (such as office phone numbers and regulatory links) and conducting secondary fact-checking.
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid var(--nchu-green-primary); padding:10px 12px; border-radius:4px;">
+          <strong style="color:var(--nchu-green-dark);">4. Campus Order & Supreme Traffic Safety Rule</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>Motorcycles Strictly Prohibited on Campus</strong>: Student scooters are strictly prohibited from entering the inner campus pedestrian zones. Violators will be wheel-locked and fined by Campus Police. Please park in the 3 large free parking lots outside the campus (Social Sciences Bldg, Main Gate right side, Guoguang & Zhongming S. Rd).
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid #2563eb; padding:10px 12px; border-radius:4px;">
+          <strong style="color:#1d4ed8;">5. NSTC TAIDE Open-Source License Compliance (Built with TAIDE)</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>Dual-Compliance</strong>: This system is derived from the Trustworthy AI Dialogue Engine (TAIDE) released by the National Science and Technology Council (NSTC), adhering to open-source community licenses.<br>
+            • <strong>Copyright & Lawful Usage</strong>: Built specifically for NCHU freshman survival and academic assistance. Prohibited from being used for illegal activities, cyberattacks, disinformation, or infringing third-party rights.
+          </p>
+        </div>
+      `;
+    } else if (currentL === "id") {
+      container.innerHTML = `
+        <div style="background:#f8fafc; border-left:3px solid var(--nchu-green-primary); padding:10px 12px; border-radius:4px;">
+          <strong style="color:var(--nchu-green-dark);">1. Sifat Penasihat & Pernyataan Non-Resmi</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • Sistem ini adalah alat navigasi kehidupan kampus dan pencarian informasi administratif independen, <strong>BUKAN saluran pengumuman resmi berkekuatan hukum satu-satunya dari NCHU</strong>.<br>
+            • Jadwal, tahapan pemilihan mata kuliah, dan kriteria pembebasan mata kuliah dapat sedikit disesuaikan setiap tahun. <strong>Untuk hak penting dan batas waktu, selalu rujuk pada pengumuman resmi universitas terkini.</strong>
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid #dc2626; padding:10px 12px; border-radius:4px;">
+          <strong style="color:#b91c1c;">2. Keamanan Informasi & Perlindungan Data Pribadi (PDPA)</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>Dilarang Memasukkan Data Rahasia</strong>: JANGAN memasukkan nomor KTP/ARC, kata sandi akun portal mahasiswa, rekening bank, atau data pribadi sensitif ke dalam obrolan.<br>
+            • <strong>Pencatatan De-identifikasi Legal</strong>: Untuk melacak pertanyaan umum mahasiswa baru, data pertanyaan dide-identifikasi sesuai dengan Undang-Undang Perlindungan Data Pribadi. Tidak ada identitas pribadi yang dikumpulkan atau diperjualbelikan.
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid #d97706; padding:10px 12px; border-radius:4px;">
+          <strong style="color:#b45309;">3. Etika AI yang Bertanggung Jawab & Integritas Akademik</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>Cegah Pelanggaran Akademik</strong>: Asisten ini khusus untuk tanya jawab kehidupan kampus dan administrasi. Dilarang keras digunakan untuk joki tugas, menyontek ujian, atau memalsukan kehadiran.<br>
+            • <strong>Berpikir Kritis & Verifikasi</strong>: Output AI bergantung pada probabilitas. Biasakan memverifikasi sumber rujukan (seperti nomor telepon kantor resmi dan tautan peraturan).
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid var(--nchu-green-primary); padding:10px 12px; border-radius:4px;">
+          <strong style="color:var(--nchu-green-dark);">4. Ketertiban Kampus & Peraturan Lalu Lintas Utama (Larangan Sepeda Motor)</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>Dilarang Keras Mengendarai Sepeda Motor di Dalam Kampus</strong>: Seluruh area pembelajaran dan jalan utama dalam kampus khusus pejalan kaki. Pelanggaran akan digembok dan didenda oleh Kepolisian Kampus. Parkirlah di 3 area parkir gratis di luar gerbang kampus.
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid #2563eb; padding:10px 12px; border-radius:4px;">
+          <strong style="color:#1d4ed8;">5. Kepatuhan Lisensi TAIDE NSTC (Built with TAIDE)</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>Kepatuhan Ganda (Dual-Compliance)</strong>: Sistem ini dikembangkan berdasarkan Mesin Dialog AI Terpercaya (TAIDE) dari NSTC dan mematuhi lisensi komunitas sumber terbuka terkait.<br>
+            • <strong>Hak Cipta & Penggunaan Beritikad Baik</strong>: Dirancang untuk membantu mahasiswa baru NCHU, dilarang disalahgunakan untuk melanggar hukum atau merugikan pihak ketiga.
+          </p>
+        </div>
+      `;
+    } else {
+      // 繁體中文 (zh-TW)
+      container.innerHTML = `
+        <div style="background:#f8fafc; border-left:3px solid var(--nchu-green-primary); padding:10px 12px; border-radius:4px;">
+          <strong style="color:var(--nchu-green-dark);">1. 輔助性質與非官方唯一決策聲明</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • 本系統為自主研發之校園生活導覽與行政輔助檢索工具，<strong>非國立中興大學官方唯一法定公文公告管道</strong>。<br>
+            • 系統所提供之日程、選課階段、抵免標準等資訊，每年均依教務處最新行事曆略有微調。<strong>重大權益請務必以學校各處室最新正式公文公告為準</strong>。
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid #dc2626; padding:10px 12px; border-radius:4px;">
+          <strong style="color:#b91c1c;">2. 資訊安全與個人資料保護規範（個資法合規聲明）</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>嚴禁輸入機密資訊</strong>：請勿於對話框中輸入個人身分證字號、居留證號、學生證帳號密碼、銀行帳戶或私密個人隱私。<br>
+            • <strong>合法脫敏日誌聲明</strong>：為持續統計新生常見問題與改善檢索題庫，本系統後端依《個人資料保護法》進行去識別化處理。所有提問若含潛在個人代碼，將於第一時間強制過濾遮蔽，僅保留統計熱點數據，絕不收集或販售個人身分資料。
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid #d97706; padding:10px 12px; border-radius:4px;">
+          <strong style="color:#b45309;">3. 負責任的 AI 倫理與學術誠信倡議</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>杜絕學術不端</strong>：本助手專門解答生活與行政流程，嚴禁用於課程作業代寫、考試作弊或偽造出缺席證明。<br>
+            • <strong>批判性思考與驗證習慣</strong>：大語言模型輸出可能受限於情境與機率分佈，請養成查閱檢索來源標籤（如官方處室電話、規章連結）並進行二次事實查核之良好習慣。
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid var(--nchu-green-primary); padding:10px 12px; border-radius:4px;">
+          <strong style="color:var(--nchu-green-dark);">4. 校園秩序與交通安全最高鐵律</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>校內全面嚴禁騎乘機車</strong>：學生機車一律嚴禁進入校園核心徒步區，違規必被駐警隊鎖車開罰。請善用校外三大免費停車場（社管樓旁、校門口右側、國光忠明南路口）。
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border-left:3px solid #2563eb; padding:10px 12px; border-radius:4px;">
+          <strong style="color:#1d4ed8;">5. 國科會 TAIDE 開源模型授權遵循聲明 (Built with TAIDE)</strong>
+          <p style="margin-top:4px; font-size:12px; color:#475569;">
+            • <strong>雙重授權合規 (Dual-Compliance)</strong>：本系統採用國家科學及技術委員會 (NSTC) 釋出之可信賴 AI 對話引擎 (TAIDE) 衍生研發 (Built with TAIDE)，並同時遵循基底開源架構之社群授權規範。<br>
+            • <strong>著作權與良善使用</strong>：本問答系統專為中興大學新生生活與學業輔助設計，嚴禁利用本模型從事違反中華民國法律、國防軍事攻擊、散佈虛假訊息或侵害第三方權利之行為。
+          </p>
+        </div>
+      `;
+    }
+  }
+
+  // ── 🔥 快速建議點擊提問多語系處理 ──
+  const SUGGESTION_QUESTIONS = {
+    extra_curr: {
+      "zh-TW": "課外組在哪裡？負責什麼？",
+      "en": "Where is the Extracurricular Activities Division and what does it handle?",
+      "id": "Di mana Divisi Kegiatan Ekstrakurikuler dan apa tanggung jawabnya?"
+    },
+    course_select: {
+      "zh-TW": "選課三階段與人工加簽怎麼辦？",
+      "en": "How do the three course selection stages and manual add/drop work?",
+      "id": "Bagaimana tiga tahap pemilihan mata kuliah dan penambahan manual?"
+    },
+    general_rec: {
+      "zh-TW": "通識課有什麼推薦的涼課或甜課？",
+      "en": "Any recommended general education courses?",
+      "id": "Ada rekomendasi mata kuliah pendidikan umum yang santai dan nilainya bagus?"
+    },
+    dorm_supplies: {
+      "zh-TW": "宿舍床墊規格多少？生活用品去哪買？",
+      "en": "What are the dorm mattress dimensions and where to buy daily supplies?",
+      "id": "Berapa ukuran kasur asrama dan di mana membeli kebutuhan sehari-hari?"
+    },
+    bike_permit: {
+      "zh-TW": "在校內騎腳踏車需要申請車證嗎？宿舍腳踏車怎麼停？",
+      "en": "Do I need a bicycle permit on campus? How to park at dormitories?",
+      "id": "Apakah perlu izin sepeda di kampus? Bagaimana parkir di asrama?"
+    },
+    deals: {
+      "zh-TW": "出示學生證有哪些特約商店優惠？",
+      "en": "What student discounts are available with NCHU student ID?",
+      "id": "Apa saja diskon toko rekanan yang tersedia dengan kartu mahasiswa NCHU?"
+    },
+    eng_waive: {
+      "zh-TW": "大一英文免修抵免條件？",
+      "en": "What are the requirements for Freshman English course waiver?",
+      "id": "Apa syarat bebas mata kuliah Bahasa Inggris tahun pertama?"
+    }
+  };
+
+  function handleSuggestionClick(key) {
+    const lang = (window.nchuI18n && window.nchuI18n.getLanguage()) || "zh-TW";
+    const qObj = SUGGESTION_QUESTIONS[key];
+    const qText = (qObj && qObj[lang]) || (qObj && qObj["zh-TW"]) || key;
+    askSuggestion(qText);
+  }
+
   function askFoodInChat(storeName) {
     closeFoodMapModal();
     const input = document.getElementById("userInput");
-    input.value = `想了解「${storeName}」的特色與推薦餐點！`;
+    const lang = (window.nchuI18n && window.nchuI18n.getLanguage()) || "zh-TW";
+    if (lang === "en") {
+      input.value = `Tell me about the specialty and recommended dishes of "${storeName}"!`;
+    } else if (lang === "id") {
+      input.value = `Beri tahu saya tentang keistimewaan dan menu rekomendasi "${storeName}"!`;
+    } else {
+      input.value = `想了解「${storeName}」的特色與推薦餐點！`;
+    }
     autoResize(input);
     sendMessage();
   }
@@ -1033,58 +1296,160 @@
   }
   initLocalKnowledge();
 
+  // ── 🎭 TAIDE 語氣調色盤 (Persona Engine) ──
+  let currentPersona = "senior"; // "senior" | "gentle" | "official"
+
+  function setPersona(personaKey) {
+    currentPersona = personaKey;
+    document.querySelectorAll(".persona-chip").forEach(el => el.classList.remove("active"));
+    const activeBtn = document.getElementById(`persona-${personaKey}`);
+    if (activeBtn) activeBtn.classList.add("active");
+    updateStatusDisplay();
+  }
+
+  function wrapWithPersona(title, body) {
+    const lang = (window.nchuI18n && window.nchuI18n.getLanguage()) || "zh-TW";
+    if (lang === "en") {
+      if (currentPersona === "gentle") {
+        return `Hi there! Senior sister here to help you get settled at NCHU~ Don't worry, here is the essential breakdown for **【${title}】** 💖\n\n${body}\n\n🌸 Friendly reminder: Academic schedules and regulations may vary slightly each year; always verify with official NCHU announcements! Feel free to ask me anything else~`;
+      } else if (currentPersona === "official") {
+        return `【National Chung Hsing University (NCHU) Official Regulations Notice】\nRegarding the inquiry on **【${title}】**, the statutory guidelines are as follows:\n\n${body}\n\n⚠️ Official Notice: Critical academic rights, schedules, and application procedures remain strictly subject to formal administrative decrees issued by the Office of Academic Affairs / Office of Student Affairs.`;
+      } else {
+        // senior (default)
+        return `No worries! You asked the right senior 🌲 Here's the insider scoop and survival tips on **【${title}】**:\n\n${body}\n\n💡 Senior's Pro-Tip: Rules may be tweaked each academic year; double-check the latest announcements so you don't get caught off guard!`;
+      }
+    } else if (lang === "id") {
+      if (currentPersona === "gentle") {
+        return `Halo adik-adik! Selamat datang di NCHU~ Jangan cemas, ini panduan penting untuk **【${title}】** 💖\n\n${body}\n\n🌸 Catatan ramah: Jadwal dan aturan akademik dapat sedikit berubah setiap tahun; selalu periksa pengumuman resmi universitas ya!`;
+      } else if (currentPersona === "official") {
+        return `【Pemberitahuan Regulasi Resmi National Chung Hsing University (NCHU)】\nMengenai hal **【${title}】**, ketentuan resminya adalah sebagai berikut:\n\n${body}\n\n⚠️ Perhatian: Hak akademik dan jadwal prosedur selalu merujuk pada pengumuman resmi universitas terkini.`;
+      } else {
+        return `Santai saja! Tanya senior berpengalaman adalah pilihan tepat 🌲 Pengalaman dan panduan tentang **【${title}】**:\n\n${body}\n\n💡 Tips Senior: Aturan bisa diperbarui tiap tahun ajaran, pastikan cek pengumuman resmi agar tidak kena denda!`;
+      }
+    } else {
+      if (currentPersona === "gentle") {
+        return `嗨嗨同學！剛進中興一定很多要摸索適應的吧～別慌，學姐幫你整理【${title}】的重點囉 💖\n\n${body}\n\n🌸 貼心小提醒：重大日程與辦法每年可能會微調，記得以學校各處室最新公告為準喔！有問題隨時再問學姐～`;
+      } else if (currentPersona === "official") {
+        return `【國立中興大學 (NCHU) 校務規章與行政程序公告】\n有關查驗事項【${title}】之法定說明規範如下：\n\n${body}\n\n⚠️ 備查注意：重大就學權益與各項申辦時程，悉依本校教務處/學務處官方公文公告法規為準。`;
+      } else {
+        // senior (default)
+        return `學弟妹安啦！這題問老司機就對了 🌲 關於【${title}】的血淚經驗與規範：\n\n${body}\n\n💡 學長貼心叮嚀：規定每年多少有些微調，以學校最新公告為準，踩雷被罰不要說我沒提醒你喔！`;
+      }
+    }
+  }
+
   // 2. 純前端毫秒級智慧檢索引擎 (Zero-Server Fallback Engine)
   function searchKnowledgeBase(query) {
     const q = query.trim().toLowerCase();
+    const lang = (window.nchuI18n && window.nchuI18n.getLanguage()) || "zh-TW";
 
-    // 🚨 核心危機防護：自傷與生命線專線
-    if (/自殺|想不開|自殘|想死|好累想走|結束生命|憂鬱|活不下去|絕望/.test(q)) {
-      return {
-        reply: "同學，請深呼吸！你不是一個人，我們都在這裡陪你！🌲\n\n**【興大 24 小時守護與諮商專線】**：\n• **校安中心 24H 緊急通報專線**：04-22870885 (24 小時駐警校安)\n• **健康及諮商中心 (惠蓀堂 4F)**：04-22840241\n• **衛福部 24 小時安心專線**：1925 (依舊愛我)\n• **生命線專線**：1995\n\n請立刻撥打電話，會有專業溫暖的老師傾聽與陪伴你！",
-        sources: ["健康及諮商中心", "校安中心 24H 專線"]
-      };
+    // 🚨 核心危機防護：自傷與生命線專線 (守護生命不分人設，嚴格遵守標準指引)
+    if (/自殺|想不開|自殘|想死|好累想走|結束生命|憂鬱|活不下去|絕望/.test(q) ||
+        /suicide|kill myself|depress|help line|crisis|end my life|hopeless/i.test(q)) {
+      if (lang === "en") {
+        return {
+          reply: "Please take a deep breath! You are never alone; we are all here to support you! 🌲\n\n**【NCHU 24-Hour Emergency & Counseling Hotlines】**:\n• **Campus Security 24H Emergency Line**: 04-22870885 (24-hour campus police & security)\n• **Health and Counseling Center (Huisun Hall 4F)**: 04-22840241\n• **Ministry of Health and Welfare 24H Peace Line**: 1925\n• **Life Line Hotline**: 1995\n\nPlease reach out immediately; caring professional counselors are ready to listen and accompany you!",
+          sources: ["NCHU Health & Counseling Center", "Campus Security 24H Line"]
+        };
+      } else if (lang === "id") {
+        return {
+          reply: "Tarik napas dalam-dalam! Anda tidak sendirian, kami semua ada di sini untuk mendampingi Anda! 🌲\n\n**【Saluran Siaga & Konseling NCHU 24 Jam】**:\n• **Pusat Keamanan Kampus 24H**: 04-22870885 (Polisi kampus & keamanan 24 jam)\n• **Pusat Kesehatan & Konseling (Huisun Hall 4F)**: 04-22840241\n• **Hotline Kesejahteraan 24H**: 1925\n• **Life Line**: 1995\n\nSilakan segera hubungi, konselor profesional siap mendengarkan dan menemani Anda!",
+          sources: ["Pusat Kesehatan & Konseling NCHU", "Pusat Keamanan Kampus 24H"]
+        };
+      } else {
+        return {
+          reply: "同學，請深呼吸！你不是一個人，我們都在這裡陪你！🌲\n\n**【興大 24 小時守護與諮商專線】**：\n• **校安中心 24H 緊急通報專線**：04-22870885 (24 小時駐警校安)\n• **健康及諮商中心 (惠蓀堂 4F)**：04-22840241\n• **衛福部 24 小時安心專線**：1925 (依舊愛我)\n• **生命線專線**：1995\n\n請立刻撥打電話，會有專業溫暖的老師傾聽與陪伴你！",
+          sources: ["健康及諮商中心", "校安中心 24H 專線"]
+        };
+      }
     }
 
     // 🚲 核心交通校規：腳踏車免車證
-    if (/腳踏車|自行車|單車/.test(q) && (/車證|通行證|申請|辦理|宿舍|要不要|鎖/.test(q) || q.includes("腳踏車"))) {
-      return {
-        reply: "在中興生活一定要知道這個！關於【校園自行車通行與宿舍停放規範】：\n\n1. **校內自由騎乘【完全免申請車證】**：在校園內部道路騎乘腳踏車通行，**不需要申請任何車證貼紙**，隨時自由通行！\n2. **宿舍車棚停放規範**：僅有「住宿生」若需要將腳踏車停放於男宿二村或女宿各棟專屬車棚內，才需要向所屬宿舍服務中心洽詢申辦宿舍車棚識別證。\n3. **防盜防坑提醒**：校內停放時務必鎖在「車架主樑」，切勿只鎖前輪，避免車身遭拆解！\n\n記得要以學校最新公告為準，有不懂的隨時再問我喔！🌲",
-        sources: ["總務處事務組最新交通要點", "學務處住宿輔導組"]
-      };
+    if ((/腳踏車|自行車|單車/.test(q) && (/車證|通行證|申請|辦理|宿舍|要不要|鎖/.test(q) || q.includes("腳踏車"))) ||
+        (/(bike|bicycle|cycling)/i.test(q) && (/(permit|pass|sticker|dorm|lock|register|rule)/i.test(q) || q.includes("bike")))) {
+      if (lang === "en") {
+        const bikeBody = "1. **Riding on Campus (100% Free of Any Vehicle Permit)**: Riding a bicycle on campus roads **does NOT require any permit, sticker, or pass**. You can ride freely at any time!\n2. **Dormitory Bike Shed Regulation**: Only dormitory residents who wish to park their bikes inside the designated covered bike sheds at Male Dorm Village 2 or Female Dorm buildings need to obtain a dorm bike decal from the Dormitory Service Center.\n3. **Theft Prevention Tip**: Always lock your bike by the main frame to a rack—never lock only the front wheel, or the frame could be detached!";
+        return {
+          reply: wrapWithPersona("Campus Bicycle Regulations & Dormitory Parking Rules", bikeBody),
+          sources: ["Office of General Affairs - Traffic Section", "Office of Student Affairs - Housing Section"]
+        };
+      } else {
+        const bikeBody = "1. **校內自由騎乘【完全免申請車證】**：在校園內部道路騎乘腳踏車通行，**不需要申請任何車證貼紙**，隨時自由通行！\n2. **宿舍車棚停放規範**：僅有「住宿生」若需要將腳踏車停放於男宿二村或女宿各棟專屬車棚內，才需要向所屬宿舍服務中心洽詢申辦宿舍車棚識別證。\n3. **防盜防坑提醒**：校內停放時務必鎖在「車架主樑」，切勿只鎖前輪，避免車身遭拆解！";
+        return {
+          reply: wrapWithPersona("校園自行車通行與宿舍停放規範", bikeBody),
+          sources: ["總務處事務組最新交通要點", "學務處住宿輔導組"]
+        };
+      }
     }
 
     // 🏍️ 核心交通校規：機車嚴禁騎入校園
-    if (/機車.*騎進|機車.*校內|機車.*被鎖|機車.*車證|機車.*罰款|機車.*停車/.test(q)) {
-      return {
-        reply: "這題超級重要！中興大學校園交通最高鐵律：**校內全面絕對嚴禁騎乘機車！**\n\n1. **校園內絕對禁行機車**：全校教學區與椰林大道均為行人徒步區，駐警隊 24 小時巡邏取締，違規必當場大鎖鎖車並開單處分！\n2. **大一新生機車停車解法**：新生請將機車停放於校外三大免費停車場：\n   • 社管大樓/雲平樓旁免費停車場\n   • 校門口右側停車棚（學府路大門側）\n   • 國光路與忠明南路口停車場\n3. **男宿二村停車**：二村地下 B2 為機車專用停車場（需申請宿舍車證，依每學期公告）。",
-        sources: ["中興大學車輛管理辦法", "駐衛警察隊"]
-      };
+    if (/機車.*騎進|機車.*校內|機車.*被鎖|機車.*車證|機車.*罰款|機車.*停車/.test(q) ||
+        /(scooter|motorcycle|motor).*?(ride in|campus|locked|permit|fine|park)/i.test(q)) {
+      if (lang === "en") {
+        const motoBody = "1. **Strictly Prohibited on Campus**: All academic zones, core walking areas, and the Royal Palm Boulevard are strictly pedestrian-only. Campus police patrol 24/7; any unauthorized motorcycle will be immobilized with a wheel lock and fined immediately!\n2. **Parking Solutions for Freshmen**: Park in the 3 large free off-campus parking lots:\n   • Free parking lot next to College of Social Sciences & Yun-Ping Building\n   • Covered parking lot to the right of the Main Gate (Xuefu Rd)\n   • Guoguang Rd & Zhongming S. Rd intersection parking lot\n3. **Male Dormitory Village 2**: Basement B2 is a designated motorcycle parking lot (requires dorm parking permit per semester announcement).";
+        return {
+          reply: wrapWithPersona("NCHU Campus Traffic Regulations: Strict Motorcycle Prohibition", motoBody),
+          sources: ["NCHU Vehicle Management Regulations", "Campus Police Team"]
+        };
+      } else {
+        const motoBody = "1. **校園內絕對禁行機車**：全校教學區與椰林大道均為行人徒步區，駐警隊 24 小時巡邏取締，違規必當場大鎖鎖車並開單處分！\n2. **大一新生機車停車解法**：新生請將機車停放於校外三大免費停車場：\n   • 社管大樓/雲平樓旁免費停車場\n   • 校門口右側停車棚（學府路大門側）\n   • 國光路與忠明南路口停車場\n3. **男宿二村停車**：二村地下 B2 為機車專用停車場（需申請宿舍車證，依每學期公告）。";
+        return {
+          reply: wrapWithPersona("中興大學校園交通鐵律-機車管制", motoBody),
+          sources: ["中興大學車輛管理辦法", "駐衛警察隊"]
+        };
+      }
     }
 
     // 🍚 揚州炒飯
-    if (/揚州炒飯|揚州/.test(q)) {
-      return {
-        reply: "沒問題，在中興生活一定要知道這個！關於【美食推薦-揚州炒飯（平價名店）】：\n\n• **店家位置**：位於忠明南路與北區路附近（近南門路）。\n• **學長姐評價**：人上人等級！份量天花板，大一不吃會後悔！炒飯粒粒分明、香氣撲鼻，百元有找吃超飽！\n• **用餐小撇步**：中午用餐尖峰人潮眾多，建議提早前往或先打電話訂餐喔！🍜",
-        sources: ["中興生活美食地圖", "Dcard 興大板精選"]
-      };
+    if (/揚州炒飯|揚州/.test(q) || /yangzhou|fried rice/i.test(q)) {
+      if (lang === "en") {
+        const foodBody = "• **Location**: Near Zhongming S. Rd & Nanmen Rd.\n• **Reputation**: Legendary staple among NCHU students! Huge portions under NT$100, fragrant and satisfying—a must-try for freshmen.\n• **Pro-Tip**: Extremely crowded during lunch peak; head there early or call in advance to order! 🍜";
+        return {
+          reply: wrapWithPersona("Food Recommendation: Yangzhou Fried Rice (Affordable Legend)", foodBody),
+          sources: ["NCHU Life Food Map", "Dcard NCHU Board Highlights"]
+        };
+      } else {
+        const foodBody = "• **店家位置**：位於忠明南路與北區路附近（近南門路）。\n• **特色與評價**：人上人等級！份量天花板，大一不吃會後悔！炒飯粒粒分明、香氣撲鼻，百元有找吃超飽！\n• **用餐小撇步**：中午用餐尖峰人潮眾多，建議提早前往或先打電話訂餐喔！🍜";
+        return {
+          reply: wrapWithPersona("美食推薦-揚州炒飯（平價名店）", foodBody),
+          sources: ["中興生活美食地圖", "Dcard 興大板精選"]
+        };
+      }
     }
 
-    // 綜合檢索庫：合併 LOCAL_KNOWLEDGE 與 FAQ_DATA
+    // 綜合檢索庫：合併 FAQ_DATA 與 LOCAL_KNOWLEDGE
     const candidateList = [];
+    if (typeof FAQ_DATA !== "undefined" && Array.isArray(FAQ_DATA)) {
+      for (const item of FAQ_DATA) {
+        const loc = (typeof getLocalizedFaqItem === "function") 
+          ? getLocalizedFaqItem(item, lang) 
+          : item;
+        candidateList.push({
+          title: loc.q || item.q || "",
+          content: loc.a || item.a || "",
+          kws: (loc.keywords || item.keywords || []).join(","),
+          // 雙語比對欄位
+          title_zh: item.q || "",
+          title_en: item.q_en || "",
+          kws_zh: (item.keywords || []).join(","),
+          kws_en: (item.keywords_en || []).join(","),
+          content_zh: item.a || "",
+          content_en: item.a_en || ""
+        });
+      }
+    }
     if (LOCAL_KNOWLEDGE && LOCAL_KNOWLEDGE.length > 0) {
       for (const item of LOCAL_KNOWLEDGE) {
         candidateList.push({
           title: item.名稱 || item.title || "",
           content: item.情報內容 || item.content || "",
-          kws: item.關鍵字 || item.kws || ""
-        });
-      }
-    } else if (typeof FAQ_DATA !== "undefined" && Array.isArray(FAQ_DATA)) {
-      for (const item of FAQ_DATA) {
-        candidateList.push({
-          title: item.q || "",
-          content: item.a || "",
-          kws: (item.keywords || []).join(",")
+          kws: item.關鍵字 || item.kws || "",
+          title_zh: item.名稱 || item.title || "",
+          title_en: item.title_en || "",
+          kws_zh: item.關鍵字 || item.kws || "",
+          kws_en: item.kws_en || "",
+          content_zh: item.情報內容 || item.content || "",
+          content_en: item.content_en || ""
         });
       }
     }
@@ -1096,17 +1461,19 @@
 
     let scored = [];
     for (const cand of candidateList) {
-      const fullText = (cand.title + " " + cand.kws + " " + cand.content).toLowerCase();
+      const fullText = (cand.title + " " + cand.kws + " " + cand.content + " " +
+                        (cand.title_zh || "") + " " + (cand.title_en || "") + " " +
+                        (cand.kws_zh || "") + " " + (cand.kws_en || "")).toLowerCase();
       let score = 0;
 
-      if (cand.title.toLowerCase().includes(q)) score += 80;
-      if (cand.kws.toLowerCase().includes(q)) score += 60;
+      if (cand.title.toLowerCase().includes(q) || (cand.title_en && cand.title_en.toLowerCase().includes(q))) score += 80;
+      if (cand.kws.toLowerCase().includes(q) || (cand.kws_en && cand.kws_en.toLowerCase().includes(q))) score += 60;
 
       for (const w of words) {
         if (w.length === 1 && !/宿|車|飯|課|證|洗/.test(w)) continue;
-        if (cand.title.toLowerCase().includes(w)) score += 25;
-        if (cand.kws.toLowerCase().includes(w)) score += 18;
-        if (cand.content.toLowerCase().includes(w)) score += 6;
+        if (cand.title.toLowerCase().includes(w) || (cand.title_en && cand.title_en.toLowerCase().includes(w))) score += 25;
+        if (cand.kws.toLowerCase().includes(w) || (cand.kws_en && cand.kws_en.toLowerCase().includes(w))) score += 18;
+        if (cand.content.toLowerCase().includes(w) || (cand.content_en && cand.content_en.toLowerCase().includes(w))) score += 6;
       }
 
       if (score > 0) {
@@ -1118,7 +1485,7 @@
     if (scored.length > 0 && scored[0].score >= 12) {
       const top = scored[0].cand;
       return {
-        reply: `這題很重要喔！關於【${top.title}】的官方規範如下：\n\n${top.content}\n\n記得要以學校最新公告為準，有不懂的隨時再問我喔！🌲`,
+        reply: wrapWithPersona(top.title, top.content),
         sources: [top.title]
       };
     }
@@ -1148,7 +1515,15 @@
   function updateStatusDisplay() {
     const statusEl = document.getElementById("modelStatus");
     if (statusEl) {
-      statusEl.textContent = "🟢 AI 學長姐即時連線 (免金鑰)";
+      const lang = (window.nchuI18n && window.nchuI18n.getLanguage()) || "zh-TW";
+      const personaNames = {
+        "zh-TW": { senior: "老司機學長", gentle: "暖心學姐", official: "嚴謹教務處" },
+        "en": { senior: "Senior Guide", gentle: "Senior Sister", official: "Academic Registry" },
+        "id": { senior: "Senior Ahli", gentle: "Kakak Senior", official: "Bagian Akademik" }
+      };
+      const pName = (personaNames[lang] && personaNames[lang][currentPersona]) || personaNames["zh-TW"][currentPersona] || "老司機學長";
+      const latencyStr = lang === "en" ? "0 latency" : "0 延遲";
+      statusEl.textContent = `🟢 TAIDE · ${pName} (${latencyStr})`;
     }
   }
 
@@ -1321,15 +1696,42 @@
             sources: localMatch.sources
           };
         } else {
+          let fallbackReply = "";
+          const lang = (window.nchuI18n && window.nchuI18n.getLanguage()) || "zh-TW";
+          if (lang === "en") {
+            if (currentPersona === "gentle") {
+              fallbackReply = `Hi there! 💖 Regarding "${text}", I couldn't find a direct answer in the NCHU campus database just yet!\nHere is what you can try:\n1. Try common keywords (e.g., "course waiver", "laundry", "credit transfer", "night snack")\n2. Click "🍜 NCHU Food Map" above to explore\n3. Check the NCHU Portal for the latest official bulletins!`;
+            } else if (currentPersona === "official") {
+              fallbackReply = `【NCHU Campus Life Advisory: No Direct Match Found】\nYour query "${text}" did not match the current campus regulations index. Please try searching with specific terms (e.g., "course registration", "bicycle permit", "student loan") or contact the relevant administrative office.`;
+            } else {
+              fallbackReply = `No worries! Regarding "${text}", our campus database doesn't have an exact hit yet. Here are some senior tips:\n1. Try more specific keywords (e.g., "PE course", "dorm washing machine", "bicycle", "Yangzhou fried rice")\n2. Click "🍜 NCHU Food Map" above to discover great spots\n3. Check the NCHU Single Sign-On Portal or official department sites! 🌲`;
+            }
+          } else if (lang === "id") {
+            if (currentPersona === "gentle") {
+              fallbackReply = `Halo adik-adik! 💖 Mengenai "${text}", belum ada jawaban langsung di basis data kampus NCHU!\nTips yang bisa dicoba:\n1. Gunakan kata kunci umum (misal: "bebas inggris", "mesin cuci", "asrama", "makanan")\n2. Klik "🍜 Peta Kuliner NCHU" di atas\n3. Kunjungi Portal NCHU untuk pengumuman resmi terbaru!`;
+            } else if (currentPersona === "official") {
+              fallbackReply = `【Pemberitahuan Konsultasi Kehidupan Kampus NCHU: Tidak Ada Hasil Cocok】\nKata kunci "${text}" tidak cocok dengan indeks peraturan kampus saat ini. Silakan coba cari dengan istilah yang lebih spesifik.`;
+            } else {
+              fallbackReply = `Santai saja! Mengenai "${text}", basis data kampus belum menemukan kecocokan langsung. Saran senior:\n1. Coba kata kunci yang lebih spesifik (misal: "sepeda", "nasi goreng yangzhou", "kredit mata kuliah")\n2. Klik "🍜 Peta Kuliner NCHU" untuk melihat rekomendasi\n3. Cek Portal NCHU atau situs resmi jurusan! 🌲`;
+            }
+          } else {
+            if (currentPersona === "gentle") {
+              fallbackReply = `同學你好呀 💖 關於「${text}」，學姐在校園資料庫裡暫時沒有找到直接的答案耶！\n建議你可以：\n1. 換個更常見的關鍵字（例如「加簽」、「洗衣機」、「學分抵免」或「宵夜」）\n2. 點擊上方的「🍜 興大美食地圖」逛逛\n3. 或是去興大單一入口看看最新公告唷！`;
+            } else if (currentPersona === "official") {
+              fallbackReply = `【中興大學校園生活諮詢查無直接匹配項目】\n查詢詞「${text}」未符合現有校規資料庫索引。請嘗試以精確名詞（如「選課」、「腳踏車車證」、「就學貸款」）再次檢索，或逕洽各權責處室洽詢。`;
+            } else {
+              fallbackReply = `學弟妹安啦！關於「${text}」，目前的校園資料庫沒有直接命中。建議你：\n1. 換個更具體的關鍵字（例如：「體育選課」、「男宿洗衣機」、「腳踏車」或「揚州炒飯」）\n2. 點擊上方的「🍜 興大美食地圖」挖寶\n3. 直接去【中興大學單一入口】或各處室官網查詢！🌲`;
+            }
+          }
           data = {
-            reply: `同學你好！我是新鮮人-興生FAQ 🌲\n\n關於「${text}」，目前校園資料庫中沒有直接匹配的單一條目。建議你可以：\n1. 換個更具體的關鍵字（例如：「體育選課」、「男宿洗衣機」、「腳踏車」或「揚州炒飯」）\n2. 點擊上方的「🎯 午餐吃什麼轉盤」或「🍜 興大美食地圖」瀏覽。\n3. 直接前往【中興大學單一入口】或各處室官網查詢！`,
-            sources: ["國立中興大學生活與行政指南"]
+            reply: fallbackReply,
+            sources: lang === "en" ? ["National Chung Hsing University Life & Admin Guide"] : ["國立中興大學生活與行政指南"]
           };
         }
       }
 
       removeTypingIndicator();
-      const botReply = data.reply || data.message || "抱歉，目前無法取得完整回覆。";
+      const botReply = data.reply || data.message || (lang === "en" ? "Sorry, could not retrieve a full reply." : "抱歉，目前無法取得完整回覆。");
       const sources = data.sources || null;
 
       historyContents.push({ role: "assistant", content: botReply });
@@ -1337,7 +1739,10 @@
 
     } catch (err) {
       removeTypingIndicator();
-      let msg = `抱歉，系統暫時無法處理您的問題，請稍候再試。`;
+      const lang = (window.nchuI18n && window.nchuI18n.getLanguage()) || "zh-TW";
+      let msg = lang === "en" 
+        ? "Sorry, the system is temporarily unable to process your request. Please try again later."
+        : "抱歉，系統暫時無法處理您的問題，請稍候再試。";
       appendMessage(msg, false);
     } finally {
       isGenerating = false;
@@ -1354,22 +1759,47 @@
   }
 
   function clearChatHistory() {
-    if (confirm("確定要清除所有對話紀錄嗎？")) {
+    const lang = (window.nchuI18n && window.nchuI18n.getLanguage()) || "zh-TW";
+    const confirmMsg = lang === "en" ? "Are you sure you want to clear all chat history?" : "確定要清除所有對話紀錄嗎？";
+    if (confirm(confirmMsg)) {
       historyContents = [];
+      const clearedMsg = lang === "en" 
+        ? "Chat history cleared! I am your <strong>NCHU Freshman Assistant</strong>, feel free to ask anything! 🌲"
+        : "對話已清除！我是你的<strong>中興大學新生生活助手</strong>，隨時歡迎發問！🌲";
+      const senderLabel = lang === "en" ? "AI Senior" : "AI 學長姐";
       document.getElementById("chatList").innerHTML = `
         <div class="msg-row bot-row">
           <div class="msg-avatar bot-avatar">🌲</div>
           <div class="msg-content-wrapper">
-            <div class="msg-bubble bot-bubble"><p>對話已清除！我是你的<strong>中興大學新生生活助手</strong>，隨時歡迎發問！🌲</p></div>
-            <div class="msg-meta"><span>AI 學長姐</span> • <span>${getCurrentTimeStr()}</span></div>
+            <div class="msg-bubble bot-bubble"><p>${clearedMsg}</p></div>
+            <div class="msg-meta"><span>${senderLabel}</span> • <span>${getCurrentTimeStr()}</span></div>
           </div>
         </div>
       `;
     }
   }
 
+  // ── 🌐 多語系切換監聽 (i18n Listener) ──
+  function syncHeaderLangButtons(lang) {
+    const btnZh = document.getElementById("chatLangZh");
+    const btnEn = document.getElementById("chatLangEn");
+    if (btnZh) btnZh.classList.toggle("active", lang === "zh-TW");
+    if (btnEn) btnEn.classList.toggle("active", lang === "en");
+  }
+
+  if (window.nchuI18n) {
+    window.nchuI18n.onChange((lang) => {
+      updateStatusDisplay();
+      renderWhitepaperContent(lang);
+      syncHeaderLangButtons(lang);
+    });
+  }
+
   // 初始化狀態
+  const initLang = (window.nchuI18n && window.nchuI18n.getLanguage()) || "zh-TW";
   updateStatusDisplay();
+  renderWhitepaperContent(initLang);
+  syncHeaderLangButtons(initLang);
 
   // 檢查網址參數（如 ?ask=...）自動填入並提問
   const urlParams = new URLSearchParams(window.location.search);
@@ -1377,7 +1807,7 @@
   if (askParam) {
     const input = document.getElementById("userInput");
     if (input) {
-      input.value = (askParam.startsWith("想了解") || askParam.includes("美食推薦")) ? askParam : `想了解「${askParam}」的特色與推薦餐點！`;
+      input.value = (askParam.startsWith("想了解") || askParam.includes("美食推薦") || askParam.includes("Tell me")) ? askParam : `想了解「${askParam}」的特色與推薦餐點！`;
       autoResize(input);
       setTimeout(() => { sendMessage(); }, 350);
     }

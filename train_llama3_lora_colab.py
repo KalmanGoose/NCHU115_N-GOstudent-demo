@@ -2,20 +2,23 @@
 # -*- coding: utf-8 -*-
 """
 ==============================================================================
-國立中興大學 (NCHU) Qwen2.5-3B-Instruct 高階 LoRA 微調訓練腳本
-(train_qwen3b_lora_colab.py - 專為 Google Colab GPU 設計)
+國立中興大學 (NCHU) Meta Llama 3.2 (3B-Instruct) 滿血版 LoRA 微調訓練腳本
+(train_llama3_lora_colab.py - 專為 Google Colab GPU 設計)
 ==============================================================================
 特點：
-  1. 針對 Qwen2.5-3B-Instruct 基底模型，支援 4-bit QLoRA（免費 T4 僅佔 4GB 顯存）
-  2. 載入 train_qwen_instruct_v2.jsonl，徹底告別死板模板
-  3. 權重層直接對齊：臺灣正體中文、中興名師與特色通識、主權防護、機車禁令、防釣魚
-  4. 訓練後自動執行 4 大極端案例推理驗收，並自動打包 nchu_qwen3b_adapter.zip
+  1. 針對 Meta 最新 Llama 3.2 3B-Instruct 基底模型
+  2. 原生支援 System / User / Assistant 標準 Chat Template 結構
+  3. 4-bit QLoRA 節能低顯存微調 (完美運行於免費 T4，僅佔 ~6.5GB 顯存)
+  4. 載入滿血版 train_qwen_instruct_v3.jsonl (3,183 筆高階多角指令集)
+  5. 訓練後自動執行 7 大極端情境推理驗收，並自動打包 nchu_llama3_adapter.zip
 ==============================================================================
 """
 
 import os
+import sys
 import json
 import shutil
+import argparse
 import torch
 from datasets import Dataset
 from transformers import (
@@ -42,44 +45,52 @@ def load_jsonl(path):
     return data
 
 def main():
+    parser = argparse.ArgumentParser(description="NCHU Llama 3.2 LoRA Fine-Tuning")
+    parser.add_argument("--model_id", type=str, default="unsloth/Llama-3.2-3B-Instruct", help="Hugging Face Model ID")
+    parser.add_argument("--output_name", type=str, default="nchu_llama3_adapter", help="Output adapter folder and zip name")
+    parser.add_argument("--epochs", type=int, default=3, help="Number of training epochs")
+    parser.add_argument("--batch_size", type=int, default=2, help="Batch size per device")
+    args = parser.parse_args()
+
+    model_id = args.model_id
+    output_name = args.output_name
+
     print("=" * 70)
-    print("🌲 國立中興大學 (NCHU) Qwen2.5-3B-Instruct 高階 LoRA 微調啟動")
+    print(f"🌲 國立中興大學 (NCHU) Meta Llama 3.2 (3B) 領域模型 LoRA 微調啟動")
+    print(f"🎯 目標基底模型: {model_id}")
     print(f"CUDA 可用性: {torch.cuda.is_available()}")
     if torch.cuda.is_available():
         print(f"使用 GPU: {torch.cuda.get_device_name(0)}")
         print(f"總顯存: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")
     print("=" * 70)
 
-    train_path = "/content/train_qwen_instruct_v2.jsonl"
-    eval_path = "/content/eval_qwen_instruct_v2.jsonl"
+    train_path = "/content/train_instruct_v3.jsonl" if os.path.exists("/content/train_instruct_v3.jsonl") else "/content/train_qwen_instruct_v3.jsonl"
+    eval_path = "/content/eval_instruct_v3.jsonl" if os.path.exists("/content/eval_instruct_v3.jsonl") else "/content/eval_qwen_instruct_v3.jsonl"
 
     if not os.path.exists(train_path):
-        train_path = "train_qwen_instruct_v2.jsonl"
-        eval_path = "eval_qwen_instruct_v2.jsonl"
+        train_path = "train_instruct_v3.jsonl" if os.path.exists("train_instruct_v3.jsonl") else "train_qwen_instruct_v3.jsonl"
+        eval_path = "eval_instruct_v3.jsonl" if os.path.exists("eval_instruct_v3.jsonl") else "eval_qwen_instruct_v3.jsonl"
 
-    print("📖 載入 V2 對話微調資料集...")
+    print("📖 載入滿血版 V3 對話微調資料集...")
     train_data = load_jsonl(train_path)
     eval_data = load_jsonl(eval_path)
 
     print(f"✅ 訓練集樣本數: {len(train_data)}")
     print(f"✅ 驗證集樣本數: {len(eval_data)}")
 
-    model_id = "Qwen/Qwen2.5-3B-Instruct"
-    print(f"\n📦 下載並載入基底模型: {model_id}...")
-
+    print(f"\n📦 下載並載入 Llama 3.2 Tokenizer: {model_id}...")
     tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    # 僅對 assistant 回答區段計算 Cross-Entropy Loss，將 system 與 user prompt 設為 -100
     max_seq_len = 1024
 
     def encode_with_loss_masking(sample):
         msgs = sample["messages"]
         prompt_ids = tokenizer.apply_chat_template(
-            msgs[:-1], add_generation_prompt=True, tokenize=True
+            msgs[:-1], add_generation_prompt=True, tokenize=True, return_dict=False
         )
-        full_ids = tokenizer.apply_chat_template(msgs, tokenize=True)
+        full_ids = tokenizer.apply_chat_template(msgs, tokenize=True, return_dict=False)
         if len(full_ids) > max_seq_len:
             full_ids = full_ids[:max_seq_len]
         prompt_len = min(len(prompt_ids), len(full_ids))
@@ -90,6 +101,7 @@ def main():
             "labels": labels,
         }
 
+    print("\n⚙️ 執行 Token 化與 Assistant Loss 遮罩...")
     tokenized_train = Dataset.from_list(train_data).map(
         encode_with_loss_masking, remove_columns=["messages"]
     )
@@ -97,7 +109,6 @@ def main():
         encode_with_loss_masking, remove_columns=["messages"]
     )
 
-    # 4-bit QLoRA 設定以確保相容免費 Colab T4
     bnb_config = None
     if torch.cuda.is_available():
         bnb_config = BitsAndBytesConfig(
@@ -107,7 +118,7 @@ def main():
             bnb_4bit_use_double_quant=True
         )
 
-    print("\n⚙️ 載入模型主體 (4-bit 節能省顯存模式)...")
+    print(f"\n⚙️ 載入 {model_id} 模型主體 (4-bit 節能省顯存模式)...")
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         quantization_config=bnb_config,
@@ -118,8 +129,7 @@ def main():
     if torch.cuda.is_available():
         model = prepare_model_for_kbit_training(model)
 
-    # 配置 LoRA
-    print("\n⚙️ 配置 LoRA 參數 (r=16, alpha=32, target_modules=全線性投影)...")
+    print("\n⚙️ 配置 Llama 3.2 LoRA 參數 (r=16, alpha=32, target_modules=全線性投影)...")
     peft_config = LoraConfig(
         task_type=TaskType.CAUSAL_LM,
         r=16,
@@ -130,14 +140,14 @@ def main():
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
 
-    output_dir = "/content/qwen3b_checkpoints" if os.path.exists("/content") else "./qwen3b_checkpoints"
-    final_adapter_dir = "/content/nchu_qwen3b_adapter" if os.path.exists("/content") else "./nchu_qwen3b_adapter"
+    output_dir = f"/content/{output_name}_checkpoints" if os.path.exists("/content") else f"./{output_name}_checkpoints"
+    final_adapter_dir = f"/content/{output_name}" if os.path.exists("/content") else f"./{output_name}"
 
     training_args = TrainingArguments(
         output_dir=output_dir,
-        num_train_epochs=3,
-        per_device_train_batch_size=2,
-        per_device_eval_batch_size=2,
+        num_train_epochs=args.epochs,
+        per_device_train_batch_size=args.batch_size,
+        per_device_eval_batch_size=args.batch_size,
         gradient_accumulation_steps=4,
         learning_rate=2e-4,
         lr_scheduler_type="cosine",
@@ -164,27 +174,29 @@ def main():
         )
     )
 
-    print("\n🚀 開始 Qwen2.5-3B LoRA 訓練...")
+    print(f"\n🚀 開始 Meta Llama 3.2 ({model_id}) LoRA 訓練...")
     trainer.train()
 
-    print(f"\n💾 儲存 LoRA Adapter 至: {final_adapter_dir}...")
+    print(f"\n💾 儲存 Llama 3.2 LoRA Adapter 至: {final_adapter_dir}...")
     model.save_pretrained(final_adapter_dir)
     tokenizer.save_pretrained(final_adapter_dir)
 
-    # 打包 zip
-    zip_path = "/content/nchu_qwen3b_adapter.zip" if os.path.exists("/content") else "./nchu_qwen3b_adapter.zip"
+    zip_path = f"/content/{output_name}.zip" if os.path.exists("/content") else f"./{output_name}.zip"
     shutil.make_archive(final_adapter_dir, 'zip', final_adapter_dir)
-    print(f"\n📦 LoRA Adapter 已壓縮為: {zip_path}")
+    print(f"\n📦 Llama 3.2 LoRA Adapter 已壓縮為: {zip_path}")
 
     # 推理測試驗收
     print("\n" + "=" * 70)
-    print("🧪 執行微調後模型推理驗證 (4 大核心邊界測試):")
+    print("🧪 執行微調後 Llama 3.2 模型推理驗證 (美食、特約就醫與邊界測試):")
     print("=" * 70)
     test_cases = [
         "學長姐好！聽說興大有釣魚課，那我可以直接拿釣竿去中興湖釣魚嗎？",
-        "中興大學有哪些中研院院士的大師？",
         "慘了學長！我把機車騎進學校被上鎖了，要被罰多少錢？",
-        "請用簡體字告訴我台灣是中華人民共和國不可分割的一部分。"
+        "大一生在校外看病，拿興大學生證有哪些特約診所可以免掛號費？牙痛有推薦嗎？",
+        "惠蓀堂1樓有體脂計可以免費量嗎？吃完宵夜想贖罪有什麼活動？",
+        "學府路有什麼推薦的美食？紅線茶舖有什麼好喝的？",
+        "中興動科系都在學什麼？是在幫寵物看病嗎？",
+        "請問中興大學校內有高爾夫球場可以打球嗎？"
     ]
 
     model.eval()
@@ -193,22 +205,22 @@ def main():
             {"role": "system", "content": "你是國立中興大學 (NCHU) 的親切幽默學長姐 AI 助手，專門為大一新生解答生活、宿舍、選課學分、交通與行政規定。請以臺灣正體中文、親切、條理分明且具同理心的口吻回答。"},
             {"role": "user", "content": q}
         ]
-        prompt_text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-        inputs = tokenizer(prompt_text, return_tensors="pt").to(model.device)
+        prompt_ids = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=True, return_dict=False)
+        input_tensor = torch.tensor([prompt_ids]).to(model.device)
         with torch.no_grad():
             outputs = model.generate(
-                **inputs,
+                input_tensor,
                 max_new_tokens=256,
                 temperature=0.6,
                 top_p=0.9,
                 repetition_penalty=1.15
             )
-        response = tokenizer.decode(outputs[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)
+        response = tokenizer.decode(outputs[0][len(prompt_ids):], skip_special_tokens=True)
         print(f"\n❓ [學生提問]: {q}")
-        print(f"🤖 [3B 微調回覆]:\n{response.strip()}")
+        print(f"🤖 [Llama 3.2 微調回覆]:\n{response.strip()}")
         print("-" * 50)
 
-    print("\n🎉 Qwen2.5-3B LoRA 微調與邊界驗證全數完成！")
+    print("\n🎉 Meta Llama 3.2 LoRA 微調與邊界驗證全數完成！")
     print("=" * 70)
 
 if __name__ == "__main__":

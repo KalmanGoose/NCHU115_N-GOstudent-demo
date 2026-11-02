@@ -84,6 +84,52 @@
     box-shadow: 0 4px 14px rgba(0,0,0,0.22);
   }
 
+  /* ── 🌐 多語系切換按鈕組 (Language Switcher) ── */
+  .lang-switch-wrap {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    border-radius: var(--pill-radius);
+    padding: 2px 6px;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .lang-switch-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--pill-radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .lang-switch-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.18);
+  }
+  .lang-switch-btn.active {
+    background: #ffffff;
+    color: var(--primary);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+  .lang-switch-sep {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 11px;
+    user-select: none;
+  }
+  @media screen and (max-width: 480px) {
+    .lang-switch-btn {
+      font-size: 10.5px;
+      padding: 2.5px 6px;
+    }
+  }
+
   /* ── 🐱 往下拉發現很空時的守護黑貓背影與爪痕彩蛋 ── */
   .pull-cat-wrap {
     width: 100%;
@@ -893,10 +939,17 @@
 <body>
 
 <header class="site-header">
-  <a class="brand" href="index.html" onclick="toggleCatEasterEgg(event)" title="點擊召喚守護興大的黑貓 🐾">
-    <span class="brand-logo">🌲</span>新鮮人-興生FAQ問答指南(非官方)
+  <a class="brand" href="index.html" onclick="toggleCatEasterEgg(event)" title="點擊召喚守護興大的黑貓 🐾" data-i18n-title="cat_summon_title">
+    <span class="brand-logo">🌲</span><span data-i18n="brand_title">新鮮人-興生FAQ問答指南(非官方)</span>
   </a>
-  <a class="header-cta" href="#" onclick="openChatSheet('');return false;">🤖 問 新鮮人-興生FAQ</a>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <div class="lang-switch-wrap" id="langSwitchWrap">
+      <button type="button" class="lang-switch-btn active" id="langBtnZh" onclick="window.nchuI18n.setLanguage('zh-TW')" title="切換為繁體中文">🇹🇼 繁中</button>
+      <span class="lang-switch-sep">|</span>
+      <button type="button" class="lang-switch-btn" id="langBtnEn" onclick="window.nchuI18n.setLanguage('en')" title="Switch to English">🌐 EN</button>
+    </div>
+    <a class="header-cta" href="#" onclick="openChatSheet('');return false;" data-i18n="ask_ai_btn">🤖 問 新鮮人-興生FAQ</a>
+  </div>
 </header>
 
 <!-- 🐱 往下拉發現很空時的守護黑貓＋爪痕彩蛋 -->
@@ -987,22 +1040,22 @@
 
 <!-- 📌 資料來源聲明(懶人包中心定位) -->
 <div class="source-banner" id="sourceBanner">
-  <span>📌 本站資料<b>大部分整理自學校各處室公開網站與公告文件</b>;部分生活、美食、課程心得為<b>學長姐經驗分享之整理</b>,可能因口述資訊不足而有些微出入。這裡是<b>懶人包中心</b>——幫你快速上手用,重要事項請以學校官方最新公告為準。</span>
-  <button onclick="dismissBanner()" title="今日不再顯示">✕</button>
+  <span data-i18n="banner_text">📌 本站資料<b>大部分整理自學校各處室公開網站與公告文件</b>;部分生活、美食、課程心得為<b>學長姐經驗分享之整理</b>,可能因口述資訊不足而有些微出入。這裡是<b>懶人包中心</b>——幫你快速上手用,重要事項請以學校官方最新公告為準。</span>
+  <button onclick="dismissBanner()" title="今日不再顯示" data-i18n-title="banner_dismiss_title">✕</button>
 </div>
 
 <section class="hero">
   <div style="display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
-    <span class="hero-badge" style="margin-bottom:0;">🌱 0 Token 快速解答 · 不用等 AI</span>
-    <button class="ios-install-badge-btn" onclick="openIosInstallModal()" title="查看 iPhone 加入主畫面教學">
+    <span class="hero-badge" style="margin-bottom:0;" data-i18n="hero_badge">🌱 0 Token 快速解答 · 不用等 AI</span>
+    <button class="ios-install-badge-btn" onclick="openIosInstallModal()" title="查看 iPhone 加入主畫面教學" data-i18n="ios_install_badge">
       📲 加到 iPhone 主畫面 (全螢幕 App 體驗)
     </button>
   </div>
-  <h1>興生入學<em>生活與行政</em>問答指南</h1>
-  <p>選課、宿舍、繳費、交通、獎助學金⋯高頻問題都有完整步驟解答。搜尋或點分類,點開卡片看詳細指引。(但別再問怎麼交女朋友交男朋友了)</p>
+  <h1 id="heroH1"><span data-i18n="hero_title_prefix">興生入學</span><em data-i18n="hero_title_highlight">生活與行政</em><span data-i18n="hero_title_suffix">問答指南</span></h1>
+  <p data-i18n="hero_desc">選課、宿舍、繳費、交通、獎助學金⋯高頻問題都有完整步驟解答。搜尋或點分類,點開卡片看詳細指引。(但別再問怎麼交女朋友交男朋友了)</p>
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input id="faqSearch" type="text" placeholder="搜尋問題(如:選課、宿舍、繳費、機車、獎學金...)" oninput="renderGrid()" />
+    <input id="faqSearch" type="text" placeholder="搜尋問題(如:選課、宿舍、繳費、機車、獎學金...)" data-i18n-placeholder="search_placeholder" oninput="renderGrid()" />
   </div>
 </section>
 
@@ -1010,47 +1063,57 @@
 
 <!-- 🔥 熱門話題 -->
 <section class="hot-topic-bar">
-  <div class="hot-title">🔥 熱門話題</div>
+  <div class="hot-title" data-i18n="hot_topics_title">🔥 熱門話題</div>
   <div class="hot-scroll">
     <div class="hot-card hot-line" onclick="openLineModal()">
       <div style="font-size:30px;">💬</div>
       <div>
         <div style="font-weight:900; font-size:14px; display:flex; align-items:center; gap:6px;">
-          新生 LINE 群總整理
-          <span style="font-size:11px; background:#e0f2fe; color:#0369a1; padding:1px 6px; border-radius:6px; font-weight:700;">115學年度</span>
+          <span data-i18n="hot_line_title">新生 LINE 群總整理</span>
+          <span style="font-size:11px; background:#e0f2fe; color:#0369a1; padding:1px 6px; border-radius:6px; font-weight:700;" data-i18n="hot_line_badge">115學年度</span>
         </div>
-        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">【115學年度】17 系群快速加入，找系群、提早認識同學！(有洋蔥🥲)</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" data-i18n="hot_line_desc">【115學年度】17 系群快速加入，找系群、提早認識同學！(有洋蔥🥲)</div>
       </div>
     </div>
     <div class="hot-card hot-transit" onclick="openTransitModal()" style="border-color:#38bdf8;">
       <div style="font-size:30px;">🚄</div>
       <div>
         <div style="font-weight:900; font-size:14px; display:flex; align-items:center; gap:6px;">
-          返鄉與交通全攻略 🚌
-          <span style="font-size:11px; background:#fef3c7; color:#b45309; padding:1px 6px; border-radius:6px; font-weight:700;">高鐵·台鐵·公車·捷運</span>
+          <span data-i18n="hot_transit_title">返鄉與交通全攻略 🚌</span>
+          <span style="font-size:11px; background:#fef3c7; color:#b45309; padding:1px 6px; border-radius:6px; font-weight:700;" data-i18n="hot_transit_badge">高鐵·台鐵·公車·捷運</span>
         </div>
-        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">高鐵158直達、火車站公車、大慶捷運、市民卡10公里免費與Ubike！</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" data-i18n="hot_transit_desc">高鐵158直達、火車站公車、大慶捷運、市民卡10公里免費與Ubike！</div>
+      </div>
+    </div>
+    <div class="hot-card hot-health" onclick="if(typeof openHealthCareGuide==='function')openHealthCareGuide('doctors')" style="border-color:#f43f5e;">
+      <div style="font-size:30px;">💖</div>
+      <div>
+        <div style="font-weight:900; font-size:14px; display:flex; align-items:center; gap:6px;">
+          <span data-i18n="hot_health_title">健康健檢與特約診所 🏥</span>
+          <span style="font-size:11px; background:#ffe4e6; color:#be123c; padding:1px 6px; border-radius:6px; font-weight:700;" data-i18n="hot_health_badge">0元掛號·免費InBody</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" data-i18n="hot_health_desc">惠蓀堂1F免費測體脂/駐診、20+間免掛號費特約診所與吃貨贖罪券！</div>
       </div>
     </div>
     <div class="hot-card hot-star" onclick="openModal('faq_club_star')">
       <div style="font-size:30px;">🎤</div>
       <div>
-        <div style="font-weight:900; font-size:14px;">敢在火車上唱歌跳舞?!</div>
-        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">學術小講座講師 許凱桓——ATCC 全國 12 強的履歷之路</div>
+        <div style="font-weight:900; font-size:14px;" data-i18n="hot_star_title">敢在火車上唱歌跳舞?!</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" data-i18n="hot_star_desc">學術小講座講師 許凱桓——ATCC 全國 12 強的履歷之路</div>
       </div>
     </div>
     <div class="hot-card hot-food" onclick="openFoodMap()">
       <div style="font-size:30px;">🍜</div>
       <div>
-        <div style="font-weight:900; font-size:14px;">興大美食清單 📝</div>
-        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">學長姐認證美食地圖,十顆星必吃揚州炒飯也在裡面!</div>
+        <div style="font-weight:900; font-size:14px;" data-i18n="hot_food_title">興大美食清單 📝</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" data-i18n="hot_food_desc">學長姐認證美食地圖,十顆星必吃揚州炒飯也在裡面!</div>
       </div>
     </div>
     <div class="hot-card hot-ai" onclick="openChatSheet('')">
       <div style="font-size:30px;">🤖</div>
       <div>
-        <div style="font-weight:900; font-size:14px;">問 新鮮人-興生FAQ</div>
-        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">選課、宿舍、美食⋯任何問題直接問,24 小時在線!</div>
+        <div style="font-weight:900; font-size:14px;" data-i18n="hot_ai_title">問 新鮮人-興生FAQ</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" data-i18n="hot_ai_desc">選課、宿舍、美食⋯任何問題直接問,24 小時在線!</div>
       </div>
     </div>
   </div>
@@ -1098,12 +1161,12 @@
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
       <span style="display:inline-flex; width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg, #004B97, #0088cc); color:#fff; align-items:center; justify-content:center; font-size:22px; box-shadow:0 4px 12px rgba(0,75,151,0.25); flex-shrink:0;">📲</span>
       <div>
-        <span class="faq-board-tag" style="background:rgba(0,75,151,0.1); color:#004B97; font-weight:700;">iOS 專屬推薦體驗</span>
-        <h2 style="font-size:18px; font-weight:900; color:var(--text-main); margin-top:2px;">將「興生FAQ」加入 iPhone 主畫面</h2>
+        <span class="faq-board-tag" style="background:rgba(0,75,151,0.1); color:#004B97; font-weight:700;" data-i18n="ios_modal_tag">iOS 專屬推薦體驗</span>
+        <h2 style="font-size:18px; font-weight:900; color:var(--text-main); margin-top:2px;" data-i18n="ios_modal_title">將「興生FAQ」加入 iPhone 主畫面</h2>
       </div>
     </div>
     
-    <p style="font-size:13.5px; color:#475569; line-height:1.6; margin-bottom:14px;">
+    <p style="font-size:13.5px; color:#475569; line-height:1.6; margin-bottom:14px;" data-i18n="ios_modal_desc">
       為獲得最佳校園生活指引，強烈建議將本指南<b>加入手機主畫面</b>！享受<b>全螢幕無網址列干擾、極速秒開</b>的專屬 App 級體驗，查公車、選課與美食更隨手就來！
     </p>
 
@@ -1112,10 +1175,10 @@
       <div style="display:flex; align-items:flex-start; gap:12px;">
         <span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#004B97; color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;">1</span>
         <div style="font-size:13px; color:var(--text-main); line-height:1.5;">
-          點擊 Safari 下方工具列中央的<b>「分享」圖示</b>
+          <span data-i18n="ios_step_1">點擊 Safari 下方工具列中央的<b>「分享」圖示</b></span>
           <div style="margin-top:4px; display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:3px 10px; font-size:12px; color:#0f172a; font-weight:600;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#007aff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-            分享按鈕 (下方工具列)
+            <span data-i18n="ios_step_1_sub">分享按鈕 (下方工具列)</span>
           </div>
         </div>
       </div>
@@ -1123,16 +1186,16 @@
       <div style="display:flex; align-items:flex-start; gap:12px;">
         <span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#004B97; color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;">2</span>
         <div style="font-size:13px; color:var(--text-main); line-height:1.5;">
-          在選單中向下滑動，找到並點選<b>「加入主畫面」</b>
+          <span data-i18n="ios_step_2">在選單中向下滑動，找到並點選<b>「加入主畫面」</b></span>
           <div style="margin-top:4px; display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:3px 10px; font-size:12px; color:#0f172a; font-weight:600;">
-            <span style="font-size:14px;">➕</span> 加入主畫面 (Add to Home Screen)
+            <span style="font-size:14px;">➕</span> <span data-i18n="ios_step_2_sub">加入主畫面 (Add to Home Screen)</span>
           </div>
         </div>
       </div>
 
       <div style="display:flex; align-items:flex-start; gap:12px;">
         <span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#004B97; color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;">3</span>
-        <div style="font-size:13px; color:var(--text-main); line-height:1.5;">
+        <div style="font-size:13px; color:var(--text-main); line-height:1.5;" data-i18n="ios_step_3">
           點擊右上角的<b>「新增」</b>，桌面就會出現興生專屬圖示，點開即可全螢幕極速使用！
         </div>
       </div>
@@ -1140,10 +1203,10 @@
 
     <!-- 底部按鈕 -->
     <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
-      <button class="ai-btn" onclick="closeIosInstallModal()" style="background:linear-gradient(135deg, #004B97, #003a75); margin-top:0; padding:12px; font-size:14px; font-weight:700;">
+      <button class="ai-btn" onclick="closeIosInstallModal()" style="background:linear-gradient(135deg, #004B97, #003a75); margin-top:0; padding:12px; font-size:14px; font-weight:700;" data-i18n="ios_btn_ok">
         ✨ 我瞭解了，馬上試試看！
       </button>
-      <button type="button" onclick="closeIosInstallModal()" style="background:transparent; border:none; color:#64748b; font-size:12.5px; padding:6px; cursor:pointer; text-decoration:underline;">
+      <button type="button" onclick="closeIosInstallModal()" style="background:transparent; border:none; color:#64748b; font-size:12.5px; padding:6px; cursor:pointer; text-decoration:underline;" data-i18n="ios_btn_skip">
         先逛逛網頁版
       </button>
     </div>
@@ -1154,17 +1217,17 @@
 <div class="modal-backdrop" id="lineModal" onclick="if(event.target===this)closeLineModal()">
   <div class="modal-card">
     <button class="modal-close" onclick="closeLineModal()">✕</button>
-    <span class="faq-board-tag">💬 115學年度 新生 LINE 群</span>
-    <h2 style="font-size:19px; font-weight:900; margin-top:10px;">115學年度 各系新生 LINE 群總整理 🙇</h2>
-    <p style="font-size:13.5px; line-height:1.9; color:var(--text-main); margin-top:10px;">
+    <span class="faq-board-tag" data-i18n="line_modal_tag">💬 115學年度 新生 LINE 群</span>
+    <h2 style="font-size:19px; font-weight:900; margin-top:10px;" data-i18n="line_modal_title">115學年度 各系新生 LINE 群總整理 🙇</h2>
+    <p style="font-size:13.5px; line-height:1.9; color:var(--text-main); margin-top:10px;" data-i18n="line_modal_desc">
       本整理專屬 <b>115 學年度（119級）</b> 新生！各系的 LINE 群連結目前<b>只有資工系是「點了直接加入」</b>，其他科系的連結都是 QR Code 圖片形式，
       沒辦法在網頁上直接按~真的不能怪我 ==ㄏㄏ。請用新鮮人-興生FAQ輸入你的科系，就會拿到該系的加入方式！
     </p>
     <a class="ai-btn" href="https://line.me/ti/g2/YYKlpGLCC_dcEwyjuuCmaIqMysJ8nJ5Q2OWZ2w" target="_blank" rel="noopener"
-       style="background:linear-gradient(135deg,#06C755,#04a344);text-decoration:none;">✅ 我是資工系，點我直接加入新生群！(LINE OpenChat)</a>
+       style="background:linear-gradient(135deg,#06C755,#04a344);text-decoration:none;" data-i18n="line_modal_cs_btn">✅ 我是資工系，點我直接加入新生群！(LINE OpenChat)</a>
     <a class="ai-btn" href="#" onclick="closeLineModal();openChatSheet('__DEPT_LIST__');return false;"
-       style="background:var(--primary);">🔍 其他科系：直接看 115 學年度各系新生群連結列表</a>
-    <p style="font-size:12px; color:var(--text-muted); margin-top:12px; text-align:center;">
+       style="background:var(--primary);" data-i18n="line_modal_other_btn">🔍 其他科系：直接看 115 學年度各系新生群連結列表</a>
+    <p style="font-size:12px; color:var(--text-muted); margin-top:12px; text-align:center;" data-i18n="line_modal_footer">
       已收錄科系（115學年度）：環工、應數、農藝、昆蟲、應經、台文、電資、食生、資工、材料、獸醫、生機、企管、中文、外文、會計、水保
     </p>
   </div>
@@ -1281,8 +1344,8 @@
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
       <span style="font-size:24px;">📝</span>
       <div>
-        <h3 id="customModalTitle" style="font-size:17.5px; font-weight:900; margin:0; color:var(--text-main);">新增自訂問答卡片</h3>
-        <p style="font-size:12px; color:var(--text-muted); margin:2px 0 0;">內容安全儲存於本機瀏覽器，重新整理不遺失，隨時可修改與匯出！</p>
+        <h3 id="customModalTitle" style="font-size:17.5px; font-weight:900; margin:0; color:var(--text-main);" data-i18n="custom_add_title">新增自訂問答卡片</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin:2px 0 0;" data-i18n="custom_modal_desc">內容安全儲存於本機瀏覽器，重新整理不遺失，隨時可修改與匯出！</p>
       </div>
     </div>
     
@@ -1290,53 +1353,53 @@
       <input type="hidden" id="customFaqId" value="" />
       
       <div>
-        <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;">
+        <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;" data-i18n="custom_q_label">
           📌 問答標題／主題（必填）
         </label>
-        <input type="text" id="customFaqQ" required placeholder="例如：資工系大一必修選課避雷、男宿洗衣離峰時間..." 
+        <input type="text" id="customFaqQ" required placeholder="例如：資工系大一必修選課避雷、男宿洗衣離峰時間..." data-i18n-placeholder="custom_q_placeholder"
                style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:13px; border:1.5px solid #cbd5e1; border-radius:10px; outline:none;" />
       </div>
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
         <div>
-          <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;">
+          <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;" data-i18n="custom_board_label">
             🏷️ 所屬分類
           </label>
           <select id="customFaqBoard" style="width:100%; box-sizing:border-box; padding:9px 10px; font-size:12.5px; border:1.5px solid #cbd5e1; border-radius:10px; outline:none; background:#fff;">
-            <option value="course">📚 選課與學分</option>
-            <option value="dorm">🏠 宿舍生活</option>
-            <option value="register">💰 註冊與學雜費</option>
-            <option value="transport">🛵 交通與周邊</option>
-            <option value="admin">🏛️ 獎助與行政</option>
-            <option value="club">🎉 社團與活動</option>
-            <option value="custom" selected>📝 私房備忘筆記</option>
+            <option value="course" data-i18n="board_course">📚 選課與學分</option>
+            <option value="dorm" data-i18n="board_dorm">🏠 宿舍生活</option>
+            <option value="register" data-i18n="board_register">💰 註冊與學雜費</option>
+            <option value="transport" data-i18n="board_transport">🛵 交通與周邊</option>
+            <option value="admin" data-i18n="board_admin">🏛️ 獎助與行政</option>
+            <option value="club" data-i18n="board_club">🎉 社團與活動</option>
+            <option value="custom" selected data-i18n="board_custom">📝 私房備忘筆記</option>
           </select>
         </div>
         <div>
-          <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;">
+          <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;" data-i18n="custom_kw_label">
             🏷️ 標籤關鍵字（逗號分隔）
           </label>
-          <input type="text" id="customFaqKw" placeholder="例如：避雷, 必修, 教授" 
+          <input type="text" id="customFaqKw" placeholder="例如：避雷, 必修, 教授" data-i18n-placeholder="custom_kw_placeholder"
                  style="width:100%; box-sizing:border-box; padding:9px 10px; font-size:12.5px; border:1.5px solid #cbd5e1; border-radius:10px; outline:none;" />
         </div>
       </div>
 
       <div>
-        <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;">
+        <label style="display:block; font-size:12px; font-weight:700; color:var(--text-main); margin-bottom:5px;" data-i18n="custom_a_label">
           💬 詳細內容與步驟解答（必填）
         </label>
-        <textarea id="customFaqA" required rows="5" placeholder="輸入詳細說明、避雷心得、推薦技巧或待辦提醒..." 
+        <textarea id="customFaqA" required rows="5" placeholder="輸入詳細說明、避雷心得、推薦技巧或待辦提醒..." data-i18n-placeholder="custom_a_placeholder"
                   style="width:100%; box-sizing:border-box; padding:9px 12px; font-size:13px; line-height:1.6; border:1.5px solid #cbd5e1; border-radius:10px; outline:none; font-family:inherit; resize:vertical;"></textarea>
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-        <button type="button" id="customFaqDeleteBtn" onclick="deleteCustomFaqFromModal()" 
+        <button type="button" id="customFaqDeleteBtn" onclick="deleteCustomFaqFromModal()" data-i18n="custom_del_btn"
                 style="display:none; background:#fee2e2; color:#dc2626; border:none; padding:7px 12px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;">
           🗑️ 刪除卡片
         </button>
         <div style="display:flex; gap:8px; margin-left:auto;">
-          <button type="button" class="chip" onclick="closeCustomFaqModal()" style="margin:0; padding:7px 14px;">取消</button>
-          <button type="submit" class="ai-btn" style="margin:0; padding:7px 18px; font-size:13px; font-weight:700; background:linear-gradient(135deg, #004B97, #2563eb);">💾 儲存卡片</button>
+          <button type="button" class="chip" onclick="closeCustomFaqModal()" style="margin:0; padding:7px 14px;" data-i18n="report_btn_cancel">取消</button>
+          <button type="submit" class="ai-btn" style="margin:0; padding:7px 18px; font-size:13px; font-weight:700; background:linear-gradient(135deg, #004B97, #2563eb);" data-i18n="custom_save_btn">💾 儲存卡片</button>
         </div>
       </div>
     </form>
@@ -1347,13 +1410,13 @@
 <div class="modal-backdrop" id="importFaqModal" onclick="if(event.target===this)closeImportModal()">
   <div class="modal-card" style="max-width:480px; border-radius:20px; padding:22px;">
     <button class="modal-close" onclick="closeImportModal()">✕</button>
-    <h3 style="font-size:17px; font-weight:900; margin-bottom:6px;">📥 匯入自訂問答卡片 (JSON)</h3>
-    <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">將先前匯出或好友分享的 JSON 資料貼在下方即可自動匯入：</p>
+    <h3 style="font-size:17px; font-weight:900; margin-bottom:6px;" data-i18n="import_title">📥 匯入自訂問答卡片 (JSON)</h3>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;" data-i18n="import_desc">將先前匯出或好友分享的 JSON 資料貼在下方即可自動匯入：</p>
     <textarea id="importJsonInput" rows="6" placeholder='[{"id":"custom_1", "board":"course", "q":"...", "a":"..."}]' 
               style="width:100%; box-sizing:border-box; padding:9px; font-size:11.5px; font-family:monospace; border:1.5px solid #cbd5e1; border-radius:10px; outline:none; resize:vertical;"></textarea>
     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
-      <button class="chip" onclick="closeImportModal()" style="margin:0;">取消</button>
-      <button class="ai-btn" onclick="executeImportFaq()" style="margin:0; padding:7px 16px; font-size:12.5px;">確認匯入</button>
+      <button class="chip" onclick="closeImportModal()" style="margin:0;" data-i18n="report_btn_cancel">取消</button>
+      <button class="ai-btn" onclick="executeImportFaq()" style="margin:0; padding:7px 16px; font-size:12.5px;" data-i18n="import_submit">確認匯入</button>
     </div>
   </div>
 </div>
@@ -1399,26 +1462,30 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
-    padding: 6px 0 4px;
+    gap: 2px;
+    padding: 5px 2px 3px;
     color: #64748b;
     position: relative;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    min-width: 0;
   }
   .tab-item:active {
     transform: scale(0.92);
   }
   .tab-icon {
-    font-size: 20px;
+    font-size: 19px;
     line-height: 1;
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .tab-label {
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
-    letter-spacing: 0.2px;
+    letter-spacing: -0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     transition: color 0.2s ease;
   }
   .tab-item.active {
@@ -1865,24 +1932,28 @@
   <button class="fab fab-chat" title="AI 聊天室" onclick="toggleChatSheet()">🤖</button>
 </div>
 
-<!-- 📱 LINE 風格底部四大功能導航列 (iOS Bottom Tab Bar) -->
+<!-- 📱 LINE 風格底部五大功能導航列 (iOS Bottom Tab Bar) -->
 <nav class="bottom-tab-bar" id="bottomTabBar" aria-label="快捷導航列">
   <button class="tab-item active" id="tab-home" onclick="switchBottomTab('home')" title="首頁問答指南">
     <span class="tab-icon">🏠</span>
-    <span class="tab-label">首頁指南</span>
+    <span class="tab-label" data-i18n="nav_home">首頁指南</span>
   </button>
-  <button class="tab-item" id="tab-portal" onclick="switchBottomTab('portal')" title="10大常用官方系統傳送門">
+  <button class="tab-item" id="tab-portal" onclick="switchBottomTab('portal')" title="11大常用官方系統傳送門">
     <span class="tab-icon">🎒</span>
-    <span class="tab-label">常用系統</span>
+    <span class="tab-label" data-i18n="nav_portal">常用系統</span>
+  </button>
+  <button class="tab-item" id="tab-health" onclick="switchBottomTab('health')" title="健諮中心 ＆ 醫師駐診特約">
+    <span class="tab-icon">🩺</span>
+    <span class="tab-label" data-i18n="nav_health">健諮中心</span>
   </button>
   <button class="tab-item" id="tab-transit" onclick="switchBottomTab('transit')" title="校門口即時公車與返鄉交通">
     <span class="tab-icon">🚌</span>
-    <span class="tab-label">即時交通</span>
+    <span class="tab-label" data-i18n="nav_transit">即時交通</span>
     <span class="tab-badge-dot" title="即時動態"></span>
   </button>
-  <button class="tab-item" id="tab-food" onclick="switchBottomTab('food')" title="176間美食地圖與天命拉霸機">
+  <button class="tab-item" id="tab-food" onclick="switchBottomTab('food')" title="興大美食地圖與天命拉霸機">
     <span class="tab-icon">🍜</span>
-    <span class="tab-label">興大美食</span>
+    <span class="tab-label" data-i18n="nav_food">興大美食</span>
   </button>
 </nav>
 
@@ -1892,18 +1963,18 @@
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
       <div>
         <h3 style="font-size:16px; color:var(--primary); font-weight:900; display:flex; align-items:center; gap:6px; margin:0; flex-wrap:wrap;">
-          🍜 興大校園與生活圈美食地圖
-          <span style="font-size:11px; background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;">303 間全收錄 (100%真實地址)</span>
+          <span data-i18n="food_map_title">🍜 興大校園與生活圈美食地圖</span>
+          <span style="font-size:11px; background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;" data-i18n="food_map_badge">303 間全收錄 (100%真實地址)</span>
           <span id="foodApiStatusPill" onclick="openFoodApiModal()" style="font-size:10.5px; cursor:pointer; padding:2px 8px; border-radius:8px; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; font-weight:600;" title="點擊設定 Google Apps Script Web App API 網址">⚙️ API 串接</span>
         </h3>
-        <p style="font-size:12px; color:var(--text-muted); margin-top:3px; margin-bottom:0;">
+        <p style="font-size:12px; color:var(--text-muted); margin-top:3px; margin-bottom:0;" data-i18n="food_map_desc">
           ⚡ 支援路名商圈、步行時間、咖啡甜點、校內學餐與 Google 試算表即時同步！
         </p>
       </div>
       <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
         <div class="layout-toggle" style="margin:0; padding:0; display:flex;" title="切換美食地圖雙欄/單欄排版">
-          <button id="foodLt2" class="active" onclick="setLayout(2)" style="padding:4px 8px; font-size:11px;">▦ 雙欄</button>
-          <button id="foodLt1" onclick="setLayout(1)" style="padding:4px 8px; font-size:11px;">☰ 單欄</button>
+          <button id="foodLt2" class="active" onclick="setLayout(2)" style="padding:4px 8px; font-size:11px;" data-i18n="layout_grid">▦ 雙欄</button>
+          <button id="foodLt1" onclick="setLayout(1)" style="padding:4px 8px; font-size:11px;" data-i18n="layout_list">☰ 單欄</button>
         </div>
         <button class="modal-close" style="position:static; margin-left:2px; flex-shrink:0;" onclick="closeFoodMap()">✕</button>
       </div>
@@ -1911,41 +1982,41 @@
 
     <!-- 搜尋框 -->
     <div style="margin-top:6px;">
-      <input type="text" id="foodSearchInput" class="food-search-box" placeholder="🔍 搜尋店名、菜色（如：樹瓦咖啡、玩麵、深森、牛肉麵、肉桂捲、加飯、珍奶）..." oninput="onFoodSearchChange()" />
+      <input type="text" id="foodSearchInput" class="food-search-box" placeholder="🔍 搜尋店名、菜色（如：樹瓦咖啡、玩麵、深森、牛肉麵、肉桂捲、加飯、珍奶）..." data-i18n-placeholder="food_search_placeholder" oninput="onFoodSearchChange()" />
     </div>
 
     <!-- 快速分類標籤 Filter Chips -->
     <div class="food-filter-container">
       <!-- Row 1: 商圈路名 -->
       <div class="food-filter-row">
-        <span class="food-filter-label">📍 商圈</span>
-        <button class="food-filter-btn active" data-type="street" data-val="all" onclick="setStreetFilter('all', this)">全部商圈</button>
-        <button class="food-filter-btn" data-type="street" data-val="校內學餐/校園專區" onclick="setStreetFilter('校內學餐/校園專區', this)">🌲 校內學餐 (1~3分)</button>
-        <button class="food-filter-btn" data-type="street" data-val="學府路/頂橋巷弄" onclick="setStreetFilter('學府路/頂橋巷弄', this)">🎓 學府路/頂橋 (89間)</button>
-        <button class="food-filter-btn" data-type="street" data-val="南門路商圈" onclick="setStreetFilter('南門路商圈', this)">🌸 南門路 (含樹瓦咖啡)</button>
-        <button class="food-filter-btn" data-type="street" data-val="康堤/興大路" onclick="setStreetFilter('康堤/興大路', this)">🌊 康堤/興大路/永東街</button>
-        <button class="food-filter-btn" data-type="street" data-val="忠孝夜市" onclick="setStreetFilter('忠孝夜市', this)">🏮 忠孝夜市</button>
-        <button class="food-filter-btn" data-type="street" data-val="高工/美村南路" onclick="setStreetFilter('高工/美村南路', this)">🛵 高工/美村南路</button>
-        <button class="food-filter-btn" data-type="street" data-val="大買家/大明路" onclick="setStreetFilter('大買家/大明路', this)">🛒 大買家/大明路</button>
-        <button class="food-filter-btn" data-type="street" data-val="夜市" onclick="setStreetFilter('夜市', this)">🎪 旱溪/大慶夜市</button>
-        <button class="food-filter-btn" data-type="street" data-val="遠距聚餐" onclick="setStreetFilter('遠距聚餐', this)">🚗 台中市區/遠距名店</button>
+        <span class="food-filter-label" data-i18n="food_label_street">📍 商圈</span>
+        <button class="food-filter-btn active" data-type="street" data-val="all" onclick="setStreetFilter('all', this)" data-i18n="food_filter_all_street">全部商圈</button>
+        <button class="food-filter-btn" data-type="street" data-val="校內學餐/校園專區" onclick="setStreetFilter('校內學餐/校園專區', this)" data-i18n="food_filter_campus">🌲 校內學餐 (1~3分)</button>
+        <button class="food-filter-btn" data-type="street" data-val="學府路/頂橋巷弄" onclick="setStreetFilter('學府路/頂橋巷弄', this)" data-i18n="food_filter_xuefu">🎓 學府路/頂橋 (89間)</button>
+        <button class="food-filter-btn" data-type="street" data-val="南門路商圈" onclick="setStreetFilter('南門路商圈', this)" data-i18n="food_filter_nanmen">🌸 南門路 (含樹瓦咖啡)</button>
+        <button class="food-filter-btn" data-type="street" data-val="康堤/興大路" onclick="setStreetFilter('康堤/興大路', this)" data-i18n="food_filter_kangdi">🌊 康堤/興大路/永東街</button>
+        <button class="food-filter-btn" data-type="street" data-val="忠孝夜市" onclick="setStreetFilter('忠孝夜市', this)" data-i18n="food_filter_nightmarket">🏮 忠孝夜市</button>
+        <button class="food-filter-btn" data-type="street" data-val="高工/美村南路" onclick="setStreetFilter('高工/美村南路', this)" data-i18n="food_filter_gaogong">🛵 高工/美村南路</button>
+        <button class="food-filter-btn" data-type="street" data-val="大買家/大明路" onclick="setStreetFilter('大買家/大明路', this)" data-i18n="food_filter_damaijia">🛒 大買家/大明路</button>
+        <button class="food-filter-btn" data-type="street" data-val="夜市" onclick="setStreetFilter('夜市', this)" data-i18n="food_filter_nightmarket_extra">🎪 旱溪/大慶夜市</button>
+        <button class="food-filter-btn" data-type="street" data-val="遠距聚餐" onclick="setStreetFilter('遠距聚餐', this)" data-i18n="food_filter_remote">🚗 台中市區/遠距名店</button>
       </div>
 
       <!-- Row 2: 餐點分類與步行時間 -->
       <div class="food-filter-row">
-        <span class="food-filter-label">🏷️ 分類</span>
-        <button class="food-filter-btn active" data-type="cat" data-val="all" onclick="setCategoryFilter('all', this)">全部分類</button>
-        <button class="food-filter-btn" data-type="cat" data-val="咖啡甜點" onclick="setCategoryFilter('咖啡甜點', this)">☕ 咖啡甜點 (自習/下午茶)</button>
-        <button class="food-filter-btn" data-type="cat" data-val="主食便當" onclick="setCategoryFilter('主食便當', this)">🍱 主食便當 (深森/燒臘)</button>
-        <button class="food-filter-btn" data-type="cat" data-val="平價麵食" onclick="setCategoryFilter('平價麵食', this)">🍜 平價麵食 (玩麵/拉麵)</button>
-        <button class="food-filter-btn" data-type="cat" data-val="早餐早午餐" onclick="setCategoryFilter('早餐早午餐', this)">🥐 早餐早午餐</button>
-        <button class="food-filter-btn" data-type="cat" data-val="火鍋排餐" onclick="setCategoryFilter('火鍋排餐', this)">🍲 火鍋排餐</button>
-        <button class="food-filter-btn" data-type="cat" data-val="夜市宵夜" onclick="setCategoryFilter('夜市宵夜', this)">🍢 夜市宵夜</button>
-        <button class="food-filter-btn" data-type="cat" data-val="飲品點心" onclick="setCategoryFilter('飲品點心', this)">🧋 飲品點心 (興大牛奶)</button>
-        <button class="food-filter-btn" data-type="cat" data-val="特色美食" onclick="setCategoryFilter('特色美食', this)">🍕 特色美食</button>
-        <button class="food-filter-btn" data-type="walk" data-val="3" onclick="setWalkFilter(3, this)" style="border-color:#10b981; color:#047857;">⚡ 3分內 (校內免出門)</button>
-        <button class="food-filter-btn" data-type="walk" data-val="5" onclick="setWalkFilter(5, this)" style="border-color:#3b82f6; color:#1d4ed8;">🚶 5分內 (正門/側門)</button>
-        <button class="food-filter-btn" style="background:#fef3c7; border-color:#f59e0b; color:#92400e; font-weight:700;" onclick="closeFoodMap(); openFoodSlotModal();">🎰 天命拉霸機</button>
+        <span class="food-filter-label" data-i18n="food_label_cat">🏷️ 分類</span>
+        <button class="food-filter-btn active" data-type="cat" data-val="all" onclick="setCategoryFilter('all', this)" data-i18n="food_filter_all_cat">全部分類</button>
+        <button class="food-filter-btn" data-type="cat" data-val="咖啡甜點" onclick="setCategoryFilter('咖啡甜點', this)" data-i18n="food_filter_cafe">☕ 咖啡甜點 (自習/下午茶)</button>
+        <button class="food-filter-btn" data-type="cat" data-val="主食便當" onclick="setCategoryFilter('主食便當', this)" data-i18n="food_filter_bento">🍱 主食便當 (深森/燒臘)</button>
+        <button class="food-filter-btn" data-type="cat" data-val="平價麵食" onclick="setCategoryFilter('平價麵食', this)" data-i18n="food_filter_noodle">🍜 平價麵食 (玩麵/拉麵)</button>
+        <button class="food-filter-btn" data-type="cat" data-val="早餐早午餐" onclick="setCategoryFilter('早餐早午餐', this)" data-i18n="food_filter_brunch">🥐 早餐早午餐</button>
+        <button class="food-filter-btn" data-type="cat" data-val="火鍋排餐" onclick="setCategoryFilter('火鍋排餐', this)" data-i18n="food_filter_hotpot">🍲 火鍋排餐</button>
+        <button class="food-filter-btn" data-type="cat" data-val="夜市宵夜" onclick="setCategoryFilter('夜市宵夜', this)" data-i18n="food_filter_snack">🍢 夜市宵夜</button>
+        <button class="food-filter-btn" data-type="cat" data-val="飲品點心" onclick="setCategoryFilter('飲品點心', this)" data-i18n="food_filter_drink">🧋 飲品點心 (興大牛奶)</button>
+        <button class="food-filter-btn" data-type="cat" data-val="特色美食" onclick="setCategoryFilter('特色美食', this)" data-i18n="food_filter_specialty">🍕 特色美食</button>
+        <button class="food-filter-btn" data-type="walk" data-val="3" onclick="setWalkFilter(3, this)" style="border-color:#10b981; color:#047857;" data-i18n="food_filter_walk_3">⚡ 3分內 (校內免出門)</button>
+        <button class="food-filter-btn" data-type="walk" data-val="5" onclick="setWalkFilter(5, this)" style="border-color:#3b82f6; color:#1d4ed8;" data-i18n="food_filter_walk_5">🚶 5分內 (正門/側門)</button>
+        <button class="food-filter-btn" style="background:#fef3c7; border-color:#f59e0b; color:#92400e; font-weight:700;" onclick="closeFoodMap(); openFoodSlotModal();" data-i18n="food_btn_slot">🎰 天命拉霸機</button>
       </div>
     </div>
 
@@ -1958,8 +2029,8 @@
     <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid #e2e8f0; font-size:12px; color:var(--text-muted); margin-top:4px;">
       <span id="foodCountLabel">顯示 287 間美食</span>
       <div style="display:flex; gap:8px;">
-        <button class="chip" onclick="closeFoodMap(); openChatSheet('興大周邊美食推薦');" style="background:linear-gradient(135deg,var(--primary),#2b6cb0); color:#fff; font-weight:700; border:none; padding:4px 12px; cursor:pointer;">🤖 AI 助手聊美食</button>
-        <button class="chip" onclick="closeFoodMap()" style="padding:4px 12px; font-weight:700; cursor:pointer;">關閉</button>
+        <button class="chip" onclick="closeFoodMap(); openChatSheet('興大周邊美食推薦');" style="background:linear-gradient(135deg,var(--primary),#2b6cb0); color:#fff; font-weight:700; border:none; padding:4px 12px; cursor:pointer;" data-i18n="food_btn_ask_ai">🤖 AI 助手聊美食</button>
+        <button class="chip" onclick="closeFoodMap()" style="padding:4px 12px; font-weight:700; cursor:pointer;" data-i18n="food_btn_close">關閉</button>
       </div>
     </div>
   </div>
@@ -1990,56 +2061,56 @@
 <div class="modal-backdrop" id="foodReportModal" style="display:none; z-index:100001;" onclick="if(event.target.id==='foodReportModal') closeFoodReportModal()">
   <div style="background:#fff; width:100%; max-width:440px; border-radius:18px; padding:22px; box-shadow:0 20px 40px rgba(0,0,0,0.25); animation:pop .25s ease;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-      <h3 style="margin:0; font-size:16px; color:#b91c1c; font-weight:800; display:flex; align-items:center; gap:6px;">
+      <h3 style="margin:0; font-size:16px; color:#b91c1c; font-weight:800; display:flex; align-items:center; gap:6px;" data-i18n="report_modal_title">
         🚩 回報店家問題 / 幽靈店家
       </h3>
       <button onclick="closeFoodReportModal()" style="background:none; border:none; font-size:18px; color:#94a3b8; cursor:pointer;">✕</button>
     </div>
 
-    <p style="font-size:12px; color:var(--text-muted); margin:0 0 14px; line-height:1.5;">
+    <p style="font-size:12px; color:var(--text-muted); margin:0 0 14px; line-height:1.5;" data-i18n="report_modal_desc">
       感謝你協助維護興大美食地圖！若此店已歇業、改名、搬遷或資訊有誤，請勾選回報，管理員審核後將即時修正或下架。
     </p>
 
     <div style="margin-bottom:12px;">
-      <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:4px;">店家名稱</label>
+      <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:4px;" data-i18n="report_store_name">店家名稱</label>
       <input type="text" id="reportStoreNameInput" readonly style="width:100%; padding:8px 12px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:13px; font-weight:700; background:#f8fafc; color:#1e293b; box-sizing:border-box;" />
       <input type="hidden" id="reportStoreIdInput" />
     </div>
 
     <div style="margin-bottom:12px;">
-      <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:6px;">問題類型 (請勾選)</label>
+      <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:6px;" data-i18n="report_issue_type">問題類型 (請勾選)</label>
       <div style="display:flex; flex-direction:column; gap:6px;" id="reportIssueOptions">
         <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#fef2f2; padding:6px 10px; border-radius:8px; border:1px solid #fecaca;">
           <input type="radio" name="report_issue_type" value="已永久停業/幽靈店家" checked style="accent-color:#b91c1c;">
-          <span style="font-weight:700; color:#b91c1c;">🛑 已永久停業 / 幽靈店家 (現場找不到)</span>
+          <span style="font-weight:700; color:#b91c1c;" data-i18n="report_opt_closed">🛑 已永久停業 / 幽靈店家 (現場找不到)</span>
         </label>
         <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
           <input type="radio" name="report_issue_type" value="地址或地圖定位錯誤" style="accent-color:var(--primary);">
-          <span>📍 地址門牌或地圖定位錯誤</span>
+          <span data-i18n="report_opt_addr">📍 地址門牌或地圖定位錯誤</span>
         </label>
         <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
           <input type="radio" name="report_issue_type" value="營業時間不正確" style="accent-color:var(--primary);">
-          <span>⏰ 營業時間或公休日不對</span>
+          <span data-i18n="report_opt_hours">⏰ 營業時間或公休日不對</span>
         </label>
         <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
           <input type="radio" name="report_issue_type" value="店名有誤/已搬遷改名" style="accent-color:var(--primary);">
-          <span>📝 店名有誤 / 已搬遷更名</span>
+          <span data-i18n="report_opt_name">📝 店名有誤 / 已搬遷更名</span>
         </label>
         <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1e293b; cursor:pointer; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
           <input type="radio" name="report_issue_type" value="其他錯誤或補充說明" style="accent-color:var(--primary);">
-          <span>💬 其他錯誤或菜單更新說明</span>
+          <span data-i18n="report_opt_other">💬 其他錯誤或菜單更新說明</span>
         </label>
       </div>
     </div>
 
     <div style="margin-bottom:12px;">
-      <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:4px;">補充說明 (選填)</label>
-      <textarea id="reportDetailsInput" placeholder="例：上個月已經頂讓換招牌了、或者新地址在..." rows="2" style="width:100%; padding:8px 10px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:12px; box-sizing:border-box; outline:none; resize:none; font-family:inherit;"></textarea>
+      <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:4px;" data-i18n="report_details_label">補充說明 (選填)</label>
+      <textarea id="reportDetailsInput" placeholder="例：上個月已經頂讓換招牌了、或者新地址在..." data-i18n-placeholder="report_details_placeholder" rows="2" style="width:100%; padding:8px 10px; border:1.5px solid #cbd5e1; border-radius:8px; font-size:12px; box-sizing:border-box; outline:none; resize:none; font-family:inherit;"></textarea>
     </div>
 
     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
-      <button onclick="closeFoodReportModal()" style="padding:6px 14px; font-size:12px; border:none; background:#e2e8f0; border-radius:8px; cursor:pointer; font-weight:600;">取消</button>
-      <button id="submitFoodReportBtn" onclick="submitFoodReport()" style="padding:6px 18px; font-size:12px; border:none; background:#b91c1c; color:#fff; font-weight:700; border-radius:8px; cursor:pointer;">確認送出回報</button>
+      <button onclick="closeFoodReportModal()" style="padding:6px 14px; font-size:12px; border:none; background:#e2e8f0; border-radius:8px; cursor:pointer; font-weight:600;" data-i18n="report_btn_cancel">取消</button>
+      <button id="submitFoodReportBtn" onclick="submitFoodReport()" style="padding:6px 18px; font-size:12px; border:none; background:#b91c1c; color:#fff; font-weight:700; border-radius:8px; cursor:pointer;" data-i18n="report_btn_submit">確認送出回報</button>
     </div>
   </div>
 </div>
@@ -2049,11 +2120,11 @@
   <div class="portal-modal-card">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
       <div>
-        <h3 style="font-size:16px; color:var(--primary); font-weight:900; display:flex; align-items:center; gap:6px; margin:0;">
+        <h3 style="font-size:16px; color:var(--primary); font-weight:900; display:flex; align-items:center; gap:6px; margin:0;" data-i18n="portal_modal_title">
           🎒 興大常用系統快捷傳送門
-          <span style="font-size:11px; background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;">10 大核心系統</span>
+          <span style="font-size:11px; background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;" data-i18n="portal_modal_badge">11 大核心系統</span>
         </h3>
-        <p style="font-size:12px; color:var(--text-muted); margin-top:3px; margin-bottom:0;">
+        <p style="font-size:12px; color:var(--text-muted); margin-top:3px; margin-bottom:0;" data-i18n="portal_modal_desc">
           選課、單一入口、公務信箱、學雜費⋯一鍵直達＋帳密小抄！
         </p>
       </div>
@@ -2062,10 +2133,10 @@
 
     <!-- 分類切換按鈕 -->
     <div class="portal-cats" style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
-      <button class="portal-cat-btn active" onclick="filterPortal('all', this, event)">全部 🌟</button>
-      <button class="portal-cat-btn" onclick="filterPortal('academic', this, event)">課業選課 📚</button>
-      <button class="portal-cat-btn" onclick="filterPortal('life', this, event)">校園生活 🎒</button>
-      <button class="portal-cat-btn" onclick="filterPortal('system', this, event)">帳號網路 💻</button>
+      <button class="portal-cat-btn active" onclick="filterPortal('all', this, event)" data-i18n="portal_cat_all">全部 🌟</button>
+      <button class="portal-cat-btn" onclick="filterPortal('academic', this, event)" data-i18n="portal_cat_academic">課業選課 📚</button>
+      <button class="portal-cat-btn" onclick="filterPortal('life', this, event)" data-i18n="portal_cat_life">校園生活 🎒</button>
+      <button class="portal-cat-btn" onclick="filterPortal('system', this, event)" data-i18n="portal_cat_system">帳號網路 💻</button>
     </div>
 
     <!-- 傳送門卡片網格 -->
@@ -2093,18 +2164,20 @@
   </div>
 </div>
 
-<footer>
+<footer data-i18n="footer_text">
   國立中興大學新生助手 · 靜態知識庫由 789 筆官方規章與學長姐智慧蒸餾而成（經去敏與去重驗證）<br />
   資訊僅供參考,最新規定請以各處室官方公告為準
 </footer>
 
-<script src="portal_data.js"></script>
-<script src="faq_data.js"></script>
+<script src="i18n.js?v=20261102b"></script>
+<script src="portal_data.js?v=20261102b"></script>
+<script src="faq_data.js?v=20261102b"></script>
 <script src="food_database.js"></script>
 <script src="food_full_database.js"></script>
 <script src="backend_adapter.js"></script>
 <script src="food_slot.js"></script>
-<script src="transit_guide.js"></script>
+<script src="transit_guide.js?v=20261102b"></script>
+<script src="health_care_guide.js?v=20261102b"></script>
 <script>
   // ── 🌟 興大新生專屬常用系統快捷傳送門 ──
   let currentPortalCategory = 'all';
@@ -2112,11 +2185,22 @@
   function renderPortalCards(cat = 'all') {
     const grid = document.getElementById('portalGrid');
     if (!grid || typeof PORTAL_DATA === 'undefined') return;
+    const lang = window.nchuI18n ? window.nchuI18n.getLanguage() : 'zh-TW';
     const filtered = cat === 'all' 
       ? PORTAL_DATA 
       : PORTAL_DATA.filter(item => item.category === cat);
+    const btnGo = window.nchuI18n ? window.nchuI18n.t('portal_btn_go', '🚀 前往') : '🚀 前往';
       
-    grid.innerHTML = filtered.map(item => `
+    grid.innerHTML = filtered.map(rawItem => {
+      const item = (typeof getLocalizedPortalItem === 'function') 
+        ? getLocalizedPortalItem(rawItem, lang) 
+        : rawItem;
+      const isJs = item.url && item.url.startsWith('javascript:');
+      const hrefAttr = isJs ? 'javascript:void(0)' : item.url;
+      const targetAttr = isJs ? '' : 'target="_blank" rel="noopener noreferrer"';
+      const onclickAttr = isJs ? `onclick="${item.url.replace('javascript:', '')}; if(typeof closePortalModal==='function')closePortalModal(); return false;"` : '';
+
+      return `
       <div class="portal-card" data-cat="${item.category}">
         <div class="portal-card-top">
           <div class="portal-icon-box" style="background:${item.gradient};">
@@ -2128,12 +2212,13 @@
         <div class="portal-alias">${item.alias}</div>
         <p class="portal-desc">${item.desc}</p>
         <div class="portal-actions">
-          <a class="portal-btn portal-btn-go" href="${item.url}" target="_blank" rel="noopener noreferrer" title="直達系統">🚀 前往</a>
-          <button class="portal-btn portal-btn-copy" onclick="copyPortalUrl('${item.url}', this)" title="複製網址">🔗</button>
-          <button class="portal-btn portal-btn-tip" onclick="openPortalTipModal('${item.id}')" title="帳密登入小抄">💡</button>
+          <a class="portal-btn portal-btn-go" href="${hrefAttr}" ${targetAttr} ${onclickAttr}>${btnGo}</a>
+          <button class="portal-btn portal-btn-copy" onclick="copyPortalUrl('${item.url}', this)" aria-label="複製網址">🔗</button>
+          <button class="portal-btn portal-btn-tip" onclick="openPortalTipModal('${item.id}')" aria-label="帳密登入小抄">💡</button>
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
   }
 
   // ── 🎒 興大常用系統快捷傳送門彈窗控制 ──
@@ -2217,8 +2302,12 @@
 
   function openPortalTipModal(id) {
     if (typeof PORTAL_DATA === 'undefined') return;
-    const item = PORTAL_DATA.find(x => x.id === id);
-    if (!item) return;
+    const rawItem = PORTAL_DATA.find(x => x.id === id);
+    if (!rawItem) return;
+    const lang = window.nchuI18n ? window.nchuI18n.getLanguage() : 'zh-TW';
+    const item = (typeof getLocalizedPortalItem === 'function') 
+      ? getLocalizedPortalItem(rawItem, lang) 
+      : rawItem;
     
     const modal = document.getElementById("portalTipModal");
     if (!modal) return;
@@ -2568,21 +2657,29 @@
 
   const chipBar = document.getElementById("chipBar");
 
+  function getLocalizedBoardName(boardKey) {
+    if (window.nchuI18n) {
+      return window.nchuI18n.t("board_" + boardKey, BOARD_NAMES[boardKey] || boardKey);
+    }
+    return BOARD_NAMES[boardKey] || boardKey;
+  }
+
   function updateChipBar() {
     const starCount = getStarredIds().length;
     const customCount = getCustomFaqs().length;
+    const t = (k, fb) => window.nchuI18n ? window.nchuI18n.t(k, fb) : fb;
 
     const chips = [
-      ["all", "✨ 全部"],
-      ["starred", `⭐ 我的收藏 (${starCount})`],
-      ["custom", customCount > 0 ? `📝 我的筆記 (${customCount})` : "📝 我的筆記"]
-    ].concat(Object.entries(BOARD_NAMES).filter(([k]) => k !== "custom"));
+      ["all", t("chip_all", "✨ 全部")],
+      ["starred", `${t("chip_starred", "⭐ 我的收藏")} (${starCount})`],
+      ["custom", customCount > 0 ? `${t("chip_custom", "📝 我的筆記")} (${customCount})` : t("chip_custom", "📝 我的筆記")]
+    ].concat(Object.entries(BOARD_NAMES).filter(([k]) => k !== "custom").map(([k, label]) => [k, t("board_" + k, label)]));
 
     chipBar.innerHTML = chips.map(([k, label]) =>
       `<button class="chip${currentBoard === k ? " active" : ""}" data-b="${k}" onclick="setBoard('${k}', this)">${label}</button>`).join("") +
-      `<button class="chip" style="background:linear-gradient(135deg, #b45309 0%, #f59e0b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(245,158,11,.35);" onmouseover="this.style.background='linear-gradient(135deg, #d97706 0%, #b45309 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #b45309 0%, #f59e0b 100%)'" onclick="openFoodSlotModal()" title="興大美食天命拉霸機 (100% 來自真實 176 間學長姐推薦)">🎰 美食拉霸機</button>` +
-      `<button class="chip" style="background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(197,160,89,.35);" onmouseover="this.style.background='linear-gradient(135deg, #b8860b 0%, #996515 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #c5a059 0%, #b8860b 100%)'" onclick="openFoodMap()" title="開啟興大美食地圖 (0 Token 快速瀏覽)">🍜 興大美食地圖</button>` +
-      `<button class="chip" style="background:var(--mint, #abdad5); color:var(--primary-dark, #0f2745); border-color:transparent;" onclick="openPickleModal(this)" title="匹克球學習社群(114-2 開始)">🏓 匹克球社群</button>`;
+      `<button class="chip" style="background:linear-gradient(135deg, #b45309 0%, #f59e0b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(245,158,11,.35);" onmouseover="this.style.background='linear-gradient(135deg, #d97706 0%, #b45309 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #b45309 0%, #f59e0b 100%)'" onclick="openFoodSlotModal()" title="興大美食天命拉霸機 (100% 來自真實 176 間學長姐推薦)">${t("chip_slot", "🎰 美食拉霸機")}</button>` +
+      `<button class="chip" style="background:linear-gradient(135deg, #c5a059 0%, #b8860b 100%); color:#fff; font-weight:900; border:none; box-shadow:0 2px 5px rgba(197,160,89,.35);" onmouseover="this.style.background='linear-gradient(135deg, #b8860b 0%, #996515 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #c5a059 0%, #b8860b 100%)'" onclick="openFoodMap()" title="開啟興大美食地圖 (0 Token 快速瀏覽)">${t("chip_food", "🍜 興大美食地圖")}</button>` +
+      `<button class="chip" style="background:var(--mint, #abdad5); color:var(--primary-dark, #0f2745); border-color:transparent;" onclick="openPickleModal(this)" title="匹克球學習社群(114-2 開始)">${t("chip_pickle", "🏓 匹克球社群")}</button>`;
   }
 
   function setBoard(b, el) {
@@ -2683,6 +2780,8 @@
   function renderGrid() {
     const query = (document.getElementById("faqSearch").value || "").trim().toLowerCase();
     const allItems = getAllFaqItems();
+    const lang = window.nchuI18n ? window.nchuI18n.getLanguage() : "zh-TW";
+    const t = (k, fb) => window.nchuI18n ? window.nchuI18n.t(k, fb) : fb;
     
     let items = allItems.filter(item => {
       if (currentBoard === "starred") return isStarred(item.id);
@@ -2693,7 +2792,13 @@
 
     if (query) {
       items = items.filter(item => {
-        const fullText = (item.q + " " + item.a + " " + (item.keywords || []).join(" ") + " " + (BOARD_NAMES[item.board] || "")).toLowerCase();
+        const fullText = (
+          (item.q || "") + " " + (item.q_en || "") + " " +
+          (item.a || "") + " " + (item.a_en || "") + " " +
+          (item.keywords || []).join(" ") + " " +
+          (item.keywords_en || []).join(" ") + " " +
+          (BOARD_NAMES[item.board] || "")
+        ).toLowerCase();
         return fullText.includes(query);
       });
     }
@@ -2707,7 +2812,15 @@
     const countEl = document.getElementById("resultCount");
     if (countEl) {
       const customTotal = getCustomFaqs().length;
-      countEl.textContent = `共 ${items.length} 篇問答指引${customTotal > 0 ? ` (含 ${customTotal} 筆自訂筆記)` : ""}`;
+      if (lang !== "zh-TW") {
+        const prefix = t("result_count_prefix", "Found");
+        const suffix = t("result_count_suffix", "FAQ guides");
+        const customPrefix = t("result_count_custom_prefix", " (incl. ");
+        const customSuffix = t("result_count_custom_suffix", " custom notes)");
+        countEl.textContent = `${prefix} ${items.length} ${suffix}${customTotal > 0 ? `${customPrefix}${customTotal}${customSuffix}` : ""}`;
+      } else {
+        countEl.textContent = `共 ${items.length} 篇問答指引${customTotal > 0 ? ` (含 ${customTotal} 筆自訂筆記)` : ""}`;
+      }
     }
 
     const grid = document.getElementById("faqGrid");
@@ -2717,55 +2830,62 @@
       if (currentBoard === "starred") {
         grid.innerHTML = `<div class="empty-msg" style="padding:48px 16px;">
           <div style="font-size:36px; margin-bottom:8px;">⭐</div>
-          <div style="font-weight:700; font-size:15px; margin-bottom:6px;">尚未收藏任何問答卡片</div>
-          <p style="font-size:13px; color:var(--text-muted); margin:0 0 16px;">點擊任何卡片右上角的「☆」即可將重要指引加入個人收藏！</p>
-          <button class="chip active" onclick="setBoard('all')">瀏覽全部問答</button>
+          <div style="font-weight:700; font-size:15px; margin-bottom:6px;">${lang === 'en' ? 'No starred FAQ cards yet' : '尚未收藏任何問答卡片'}</div>
+          <p style="font-size:13px; color:var(--text-muted); margin:0 0 16px;">${lang === 'en' ? 'Click the star icon on any card to add it to your personal bookmarks!' : '點擊任何卡片右上角的「☆」即可將重要指引加入個人收藏！'}</p>
+          <button class="chip active" onclick="setBoard('all')">${t("chip_all", "瀏覽全部問答")}</button>
         </div>`;
       } else {
-        grid.innerHTML = getBlackCatSvgHtml("喵～學長姐的資料庫裡找不到這個（抓頭 🐾）", "試試看其他關鍵字，或是直接點下方問 AI 助手！");
+        const bubbleMsg = t("cat_empty_bubble", "喵～學長姐的資料庫裡找不到這個（抓頭 🐾）");
+        const subMsg = t("cat_empty_tip", "試試看其他關鍵字，或是直接點下方問 AI 助手！");
+        grid.innerHTML = getBlackCatSvgHtml(bubbleMsg, subMsg);
       }
       return;
     }
 
     const showSpareSlot = currentBoard === "custom" && !query;
     const spareSlotHtml = showSpareSlot ? `
-      <article class="faq-card faq-spare-card" onclick="openCustomFaqModal()" title="點擊新增自訂筆記">
+      <article class="faq-card faq-spare-card" onclick="openCustomFaqModal()" title="${t('card_spare_title', '點擊新增自訂筆記')}">
         <div class="faq-card-header">
-          <span class="faq-board-tag" style="background:rgba(2, 132, 199, 0.12); color:#0284c7;">➕ 新增自訂筆記</span>
+          <span class="faq-board-tag" style="background:rgba(2, 132, 199, 0.12); color:#0284c7;">➕ ${t('card_spare_title', '新增自訂筆記')}</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
           <div style="font-size:24px;">📝</div>
-          <h3 class="faq-q" style="margin:0; color:var(--primary);">點擊新增自訂問答筆記</h3>
+          <h3 class="faq-q" style="margin:0; color:var(--primary);">${t('card_spare_title', '點擊新增自訂問答筆記')}</h3>
         </div>
-        <p class="faq-preview">記錄系所避雷、選課清單或私房生活筆記，安全保存在本機瀏覽器中。</p>
+        <p class="faq-preview">${t('card_spare_desc', '記錄系所避雷、選課清單或私房生活筆記，安全保存在本機瀏覽器中。')}</p>
         <div class="faq-card-footer">
-          <span class="faq-more" style="color:var(--primary); font-weight:800;">＋ 點擊立即編輯筆記 →</span>
+          <span class="faq-more" style="color:var(--primary); font-weight:800;">${t('card_spare_action', '＋ 點擊立即編輯筆記 →')}</span>
         </div>
       </article>
     ` : "";
 
-    const cardsHtml = items.map((it, i) => {
+    const cardsHtml = items.map((rawIt, i) => {
+      const it = (typeof getLocalizedFaqItem === "function") ? getLocalizedFaqItem(rawIt, lang) : rawIt;
       const starred = isStarred(it.id);
+      const moreText = t("card_more", "查看解答 →");
+      const copyTitle = t("card_copy", "複製問題與解答");
+      const boardName = getLocalizedBoardName(it.board);
+
       return `
         <article class="faq-card ${it.isCustom ? 'faq-custom-card' : ''}" style="animation-delay:${Math.min(i * 35, 300)}ms" onclick="openModal('${it.id}')">
           <div class="faq-card-header">
             <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-              <span class="faq-board-tag">${BOARD_NAMES[it.board] || it.board}</span>
-              ${it.isCustom ? `<span class="faq-custom-tag">✏️ 自訂</span>` : ''}
+              <span class="faq-board-tag">${boardName}</span>
+              ${it.isCustom ? `<span class="faq-custom-tag">${t("card_custom_badge", "✏️ 自訂")}</span>` : ''}
             </div>
-            <button class="faq-star-btn ${starred ? 'starred' : ''}" onclick="toggleStarFaq('${it.id}', event)" title="${starred ? '取消收藏' : '加入收藏星星'}">
+            <button class="faq-star-btn ${starred ? 'starred' : ''}" onclick="toggleStarFaq('${it.id}', event)" title="${starred ? (lang === 'en' ? 'Unfavorite' : '取消收藏') : (lang === 'en' ? 'Favorite' : '加入收藏星星')}">
               ${starred ? '⭐' : '☆'}
             </button>
           </div>
           <h3 class="faq-q">${esc(it.q)}</h3>
           <p class="faq-preview">${esc(String(it.a).replace(/\n/g, " ").replace(/[*#]/g, ""))}</p>
           <div class="faq-card-footer">
-            <span class="faq-more">查看解答 →</span>
+            <span class="faq-more">${moreText}</span>
             <div class="faq-card-actions">
-              <button class="faq-action-btn" onclick="quickCopyFaq('${it.id}', event)" title="複製問題與解答">📋</button>
+              <button class="faq-action-btn" onclick="quickCopyFaq('${it.id}', event)" title="${copyTitle}">📋</button>
               ${it.isCustom ? `
-                <button class="faq-action-btn" onclick="openCustomFaqModal('${it.id}', event)" title="編輯此卡片">✏️</button>
-                <button class="faq-action-btn faq-action-del" onclick="deleteCustomFaq('${it.id}', event)" title="刪除此卡片">🗑️</button>
+                <button class="faq-action-btn" onclick="openCustomFaqModal('${it.id}', event)" title="${t('card_edit', '編輯此卡片')}">✏️</button>
+                <button class="faq-action-btn faq-action-del" onclick="deleteCustomFaq('${it.id}', event)" title="${t('card_del', '刪除此卡片')}">🗑️</button>
               ` : ''}
             </div>
           </div>
@@ -2779,10 +2899,12 @@
   let currentFaq = null;
   function openModal(id) {
     const all = getAllFaqItems();
-    const it = all.find(x => x.id === id);
-    if (!it) return;
+    const rawIt = all.find(x => x.id === id);
+    if (!rawIt) return;
+    const lang = window.nchuI18n ? window.nchuI18n.getLanguage() : "zh-TW";
+    const it = (typeof getLocalizedFaqItem === "function") ? getLocalizedFaqItem(rawIt, lang) : rawIt;
     currentFaq = it;
-    document.getElementById("mBoard").textContent = BOARD_NAMES[it.board] || it.board;
+    document.getElementById("mBoard").textContent = getLocalizedBoardName(it.board);
     document.getElementById("mQ").textContent = it.q;
     document.getElementById("mA").textContent = it.a;
     document.getElementById("mKw").innerHTML = (it.keywords || []).slice(0, 8).map(k => `<span class="kw">#${esc(k)}</span>`).join("");
@@ -2830,6 +2952,23 @@
   renderPortalCards('all');
   renderGrid();
   runPortalDrawerIntro();
+
+  // ── 🌐 多語系即時切換監聽 (i18n Listener) ──
+  if (window.nchuI18n) {
+    window.nchuI18n.onChange(lang => {
+      updateChipBar();
+      renderPortalCards(currentPortalCategory || 'all');
+      renderGrid();
+      if (typeof renderLiveBusCards === 'function') {
+        const activeTab = document.querySelector('.bus-gate-tab.active');
+        const gate = (activeTab && activeTab.textContent.includes('國光')) ? 'guoguang' : 'main';
+        renderLiveBusCards(gate);
+      }
+      if (typeof filterFoodStores === 'function' && typeof renderFoodGrid === 'function') {
+        renderFoodGrid(filterFoodStores());
+      }
+    });
+  }
 
   // ── 🎬 導覽模式(手動逐步):按 →/空白鍵/點🎬 跳下一張,Esc 停止 ──
   let tourRunning = false;
@@ -3106,13 +3245,24 @@
   function renderFoodGrid(items) {
     const grid = document.getElementById("foodGrid");
     const countLabel = document.getElementById("foodCountLabel");
-    if (countLabel) countLabel.textContent = `共篩選出 ${items.length} 間美食店家 (含真實門牌地址)`;
+    const lang = window.nchuI18n ? window.nchuI18n.getLanguage() : "zh-TW";
+    const t = (k, fb) => window.nchuI18n ? window.nchuI18n.t(k, fb) : fb;
+
+    if (countLabel) {
+      if (lang === "en") {
+        countLabel.textContent = `Filtered ${items.length} food spots (with real addresses)`;
+      } else if (lang === "id") {
+        countLabel.textContent = `Menampilkan ${items.length} tempat kuliner (alamat lengkap)`;
+      } else {
+        countLabel.textContent = `共篩選出 ${items.length} 間美食店家 (含真實門牌地址)`;
+      }
+    }
     if (!grid) return;
 
     if (items.length === 0) {
       grid.innerHTML = `
         <div style="grid-column:1/-1; text-align:center; padding:36px; color:var(--text-muted); font-size:13px;">
-          🍽️ 找不到符合條件的美食店家，換個路段或關鍵字試試吧！
+          ${t("food_empty_tip", "🍽️ 找不到符合條件的美食店家，換個路段或關鍵字試試吧！")}
         </div>
       `;
       return;
@@ -3124,29 +3274,42 @@
       const badgeText = rawName.includes("(") ? rawName.substring(rawName.indexOf("(") + 1, rawName.indexOf(")")) : "";
       const isSuwa = rawName.includes("樹瓦");
       const mapUrl = store.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("台中 " + cleanStoreName + " " + (store.address || ""))}`;
-      const escapedName = cleanStoreName.replace(/'/g, "\\'");
+      const encodedName = encodeURIComponent(cleanStoreName).replace(/'/g, "%27");
+      const encodedStoreId = encodeURIComponent(store.id || "").replace(/'/g, "%27");
+      const safeStoreName = esc(cleanStoreName);
+      const safeBadge = esc(badgeText ? badgeText.substring(0, 14) : "");
+      const safeCategory = esc(store.category || "美食");
+      const safeAddr = esc(store.address || "");
+      const safeHours = esc(store.hours || "11:00 - 20:30");
+      const safeRating = esc(store.rating || "4.5");
+      const safeReviews = esc(store.review_count || "180");
+      const safeContent = esc(store.content || "").replace(/\n/g, "<br>");
       const walkMins = parseInt(store.walk_minutes || 4, 10);
       const walkPillClass = walkMins <= 3 ? "pill-walk-near" : (walkMins <= 6 ? "pill-walk-mid" : "pill-walk-far");
-      const walkText = walkMins <= 3 ? `🌲 校內 ${walkMins}分` : (walkMins >= 15 ? `🛵 騎車約 ${walkMins}分` : `🚶 ${walkMins}分鐘`);
-      const rating = store.rating || "4.5";
-      const reviews = store.review_count || "180";
-      const hours = store.hours || "11:00 - 20:30";
-      const category = store.category || "美食";
+      
+      let walkText = "";
+      if (lang === "en") {
+        walkText = walkMins <= 3 ? `🌲 Campus ${walkMins}m` : (walkMins >= 15 ? `🛵 Scooter ${walkMins}m` : `🚶 ${walkMins} mins walk`);
+      } else if (lang === "id") {
+        walkText = walkMins <= 3 ? `🌲 Kampus ${walkMins}m` : (walkMins >= 15 ? `🛵 Motor ${walkMins}m` : `🚶 ${walkMins} mnt jalan`);
+      } else {
+        walkText = walkMins <= 3 ? `🌲 校內 ${walkMins}分` : (walkMins >= 15 ? `🛵 騎車約 ${walkMins}分` : `🚶 ${walkMins}分鐘`);
+      }
+      const reviewsText = lang === "en" ? `${safeReviews} reviews` : (lang === "id" ? `${safeReviews} ulasan` : `${safeReviews}則`);
       const photoUrl = store.photo_url || "";
-      const storeAddr = store.address || "";
 
       return `
         <div class="food-card ${isSuwa ? 'vip-highlight' : ''}">
-          ${isSuwa ? '<span class="food-vip-ribbon">🌟 興大/南門路獨家首選</span>' : ''}
+          ${isSuwa ? `<span class="food-vip-ribbon">${lang === 'en' ? '🌟 Nanmen Rd Exclusive Pick' : '🌟 興大/南門路獨家首選'}</span>` : ''}
           <div>
             ${photoUrl ? `
-              <img src="${photoUrl}" alt="${cleanStoreName}" class="food-img-thumb" loading="lazy" onerror="this.style.display='none'" />
+              <img src="${photoUrl}" alt="${safeStoreName}" class="food-img-thumb" loading="lazy" onerror="this.style.display='none'" />
             ` : ''}
             <div class="food-card-title" style="${isSuwa ? 'margin-top:4px;' : ''}">
               <span style="${isSuwa ? 'color:#b45309; font-size:14.5px;' : ''}">
-                ${isSuwa ? '☕' : '🍽️'} ${cleanStoreName}
+                ${isSuwa ? '☕' : '🍽️'} ${safeStoreName}
               </span>
-              ${badgeText ? `<span class="food-tag-badge">${badgeText.substring(0, 14)}</span>` : ""}
+              ${safeBadge ? `<span class="food-tag-badge">${safeBadge}</span>` : ""}
             </div>
 
             <!-- 標籤膠囊列 -->
@@ -3155,24 +3318,24 @@
                 ${walkText}
               </span>
               <span class="food-pill-badge pill-rating">
-                ⭐ ${rating} (${reviews}則)
+                ⭐ ${safeRating} (${reviewsText})
               </span>
               <span class="food-pill-badge pill-hours">
-                ${category}
+                ${safeCategory}
               </span>
             </div>
 
             <div class="food-card-content" style="margin-top:6px;">
-              ${storeAddr ? `
+              ${safeAddr ? `
                 <div style="font-size:11px; color:#1e293b; margin-bottom:3px; display:flex; align-items:center; gap:4px; font-weight:600;">
-                  <span style="color:#0284c7;">📍</span> <span>${storeAddr}</span>
+                  <span style="color:#0284c7;">📍</span> <span>${safeAddr}</span>
                 </div>
               ` : ''}
               <div style="font-size:11px; color:#64748b; margin-bottom:3px; display:flex; align-items:center; gap:3px;">
-                <span>🕒</span> <span>${hours}</span>
+                <span>🕒</span> <span>${safeHours}</span>
               </div>
               <div style="font-size:11.5px; line-height:1.45; color:var(--text-main);">
-                ${(store.content || "").replace(/\n/g, "<br>")}
+                ${safeContent}
               </div>
             </div>
           </div>
@@ -3181,14 +3344,14 @@
             ${(() => {
               const isReported = window.nchuBackendAdapter ? window.nchuBackendAdapter.isStoreReported(cleanStoreName) : false;
               if (isReported) {
-                return `<button class="food-report-btn reported" disabled title="已收到同學回報">✅ 已回報</button>`;
+                return `<button class="food-report-btn reported" disabled title="已收到同學回報">${t('food_btn_reported', '✅ 已回報')}</button>`;
               }
-              return `<button class="food-report-btn" onclick="openFoodReportModal('${escapedName}', '${store.id || ''}')" title="回報此店家已歇業或資訊有誤">🚩 回報</button>`;
+              return `<button class="food-report-btn" onclick="openFoodReportModal(decodeURIComponent('${encodedName}'), decodeURIComponent('${encodedStoreId}'))" title="回報此店家已歇業或資訊有誤">${t('food_btn_report', '🚩 回報')}</button>`;
             })()}
             <div style="display:flex; gap:4px;">
-              <button class="food-ask-btn" onclick="askFood('${escapedName}')">💬 諮詢</button>
+              <button class="food-ask-btn" onclick="askFood(decodeURIComponent('${encodedName}'))">${t('food_btn_consult', '💬 諮詢')}</button>
               <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="food-map-link">
-                <span>📍 導航</span>
+                <span>${t('food_btn_nav', '📍 導航')}</span>
               </a>
             </div>
           </div>
@@ -3387,7 +3550,8 @@
   function ensureChatLoaded(askText) {
     const frame = document.getElementById("chatFrame");
     const msg = document.getElementById("chatLoadMsg");
-    msg.innerHTML = "🤖 新鮮人-興生FAQ載入中...";
+    const lang = window.nchuI18n ? window.nchuI18n.getLanguage() : "zh-TW";
+    msg.innerHTML = lang === "en" ? "🤖 Loading NCHU AI Assistant..." : "🤖 新鮮人-興生FAQ載入中...";
     msg.style.display = "flex";
     frame.onload = function () {
       // 同源檢查:確認內容真的有渲染出東西
@@ -3401,10 +3565,11 @@
           if (typeof frame.contentWindow.openWhitepaperModal === "function") {
             frame.contentWindow.openWhitepaperModal();
           }
+          frame.contentWindow.postMessage({ type: "NCHU_I18N_CHANGE", lang }, "*");
         }
       } catch (e) { msg.style.display = "none"; }
     };
-    const src = "chat.html?v=" + Date.now() + (askText ? "&ask=" + encodeURIComponent(askText) : "");
+    const src = "chat.html?v=" + Date.now() + "&lang=" + encodeURIComponent(lang) + (askText ? "&ask=" + encodeURIComponent(askText) : "");
     // 用旗標記錄是否已載入(不可用 frame.src 判斷:空 src 會被解析成本頁網址)
     if (!ensureChatLoaded._loaded || askText) {
       ensureChatLoaded._loaded = true;
@@ -3417,6 +3582,7 @@
           if (typeof frame.contentWindow.openWhitepaperModal === "function") {
             frame.contentWindow.openWhitepaperModal();
           }
+          frame.contentWindow.postMessage({ type: "NCHU_I18N_CHANGE", lang }, "*");
         }
       } catch (e) {}
     }
@@ -3433,9 +3599,15 @@
     sheet.style.setProperty("--sheet-h", "62vh"); // 預設半高
     sheet.dataset.stage = "1";
     sheet.classList.add("open");
+    const lang = window.nchuI18n ? window.nchuI18n.getLanguage() : "zh-TW";
+    const brandName = lang === "en" ? "🤖 NCHU AI Assistant" : "🤖 新鮮人-興生FAQ";
+    const lineOverview = lang === "en" ? "Freshman LINE Groups Overview" : "115學年度 各系新生 LINE 群總覽";
+    const askingPrefix = lang === "en" ? "Asking: " : "正在問:「";
+    const askingSuffix = lang === "en" ? "" : "」";
+
     document.getElementById("chatSheetTitle").textContent =
-      askText === "__DEPT_LIST__" ? "🤖 新鮮人-興生FAQ · 115學年度 各系新生 LINE 群總覽" :
-      askText ? "🤖 新鮮人-興生FAQ · 正在問:「" + askText + "」" : "🤖 新鮮人-興生FAQ";
+      askText === "__DEPT_LIST__" ? `${brandName} · ${lineOverview}` :
+      askText ? `${brandName} · ${askingPrefix}${askText}${askingSuffix}` : brandName;
     if (askText === "__DEPT_LIST__") {
       // 直接由本頁渲染科系列表,不經過 iframe(0 Token、不會白畫面)
       showDeptListPanel();
@@ -3721,7 +3893,7 @@
     }
   }
 
-  // ── 📱 LINE 風格底部四大功能導航列互動切換 ──
+  // ── 📱 LINE 風格底部五大功能導航列互動切換 ──
   function switchBottomTab(tab) {
     document.querySelectorAll(".bottom-tab-bar .tab-item").forEach(btn => {
       btn.classList.remove("active");
@@ -3733,14 +3905,24 @@
       closePortalModal();
       if (typeof closeTransitModal === "function") closeTransitModal();
       if (typeof closeFoodMap === "function") closeFoodMap();
+      if (typeof closeHealthCareGuide === "function") closeHealthCareGuide();
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (tab === "portal") {
       if (typeof closeTransitModal === "function") closeTransitModal();
       if (typeof closeFoodMap === "function") closeFoodMap();
+      if (typeof closeHealthCareGuide === "function") closeHealthCareGuide();
       openPortalModal();
+    } else if (tab === "health") {
+      closePortalModal();
+      if (typeof closeTransitModal === "function") closeTransitModal();
+      if (typeof closeFoodMap === "function") closeFoodMap();
+      if (typeof openHealthCareGuide === "function") {
+        openHealthCareGuide("doctors");
+      }
     } else if (tab === "transit") {
       closePortalModal();
       if (typeof closeFoodMap === "function") closeFoodMap();
+      if (typeof closeHealthCareGuide === "function") closeHealthCareGuide();
       if (typeof openTransitModal === "function") {
         openTransitModal("live");
       } else if (typeof openBusDynamicModal === "function") {
@@ -3749,6 +3931,7 @@
     } else if (tab === "food") {
       closePortalModal();
       if (typeof closeTransitModal === "function") closeTransitModal();
+      if (typeof closeHealthCareGuide === "function") closeHealthCareGuide();
       if (typeof openFoodMap === "function") {
         openFoodMap();
       }

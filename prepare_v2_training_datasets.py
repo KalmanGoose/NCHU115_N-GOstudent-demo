@@ -21,6 +21,20 @@ JSON_PATH = os.path.join(BASE_DIR, "campus_knowledge.json")
 TRIPLETS_OUTPUT = os.path.join(BASE_DIR, "train_triplets_v2.jsonl")
 INSTRUCT_OUTPUT = os.path.join(BASE_DIR, "train_qwen_instruct_v2.jsonl")
 EVAL_INSTRUCT_OUTPUT = os.path.join(BASE_DIR, "eval_qwen_instruct_v2.jsonl")
+FOOD_PATH = os.path.join(BASE_DIR, "food_full_database.js")
+
+def load_food_database():
+    if not os.path.exists(FOOD_PATH):
+        return []
+    with open(FOOD_PATH, "r", encoding="utf-8") as f:
+        text = f.read()
+    m = re.search(r'window\.NCHU_EXPANDED_FOOD\s*=\s*(\[.*?\]);?\s*$', text, re.DOTALL)
+    if m:
+        try:
+            return json.loads(m.group(1))
+        except Exception:
+            return []
+    return []
 
 SYSTEM_PROMPT = (
     "你是國立中興大學 (NCHU) 的親切幽默學長姐 AI 助手，專門為大一新生解答生活、宿舍、"
@@ -133,10 +147,42 @@ REAL_CONVERSATIONS = [
             {"role": "user", "content": "開學壓力真的好大，跟室友處不來，好想從頂樓跳下去一了百了..."},
             {"role": "assistant", "content": "學弟妹，先停下來，深呼吸一下。請相信你現在感受到的痛苦是真實的，但你絕對不是孤單一人，不需要自己一個人扛著。\n\n請現在立刻聯絡願意陪伴並接住你的專業師長，我們一起把心裡的難過說出來：\n\n❤️ **校內即刻求助窗口**：\n- **中興大學健諮中心（心理諮商）**：04-22840241（惠蓀堂 4 樓，有溫柔的心理師可以聽你說）\n- **中興大學 24 小時校安專線**：04-22870885（任何時刻都有值班教官與師長守護你）\n\n❤️ **24 小時免費生命守護專線**：\n- **衛福部安心專線**：**1925**（依舊愛我，手機市話直撥皆免費）\n- **生命線協談專線**：**1995**\n- **張老師專線**：**1980**\n\n生活可以慢慢來，室友不合可以換宿，沒有任何事情比你的生命更重要。請立刻打電話給上面任何一支專線，讓大家陪你度過這個關卡。"}
         ]
+    },
+    # 12. 惠蓀堂 1F 免費 InBody 體脂計自主檢測 ＆ 興健康體健班
+    {
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": "學長姐好！學校有量體脂計或 InBody 的地方嗎？去外面健身房量一次好貴喔..."},
+            {"role": "assistant", "content": "在興大連量 InBody 都不用花錢！只要帶你的學生證，走進**惠蓀堂 1 樓衛生保健組大廳**，上班時間（週一至週五 08:00~17:00）**完全免費、隨到隨測**！\n\n這台專業 InBody 身體組成分析儀能幫你測出骨骼肌重、體脂率、內臟脂肪等級與基礎代謝率 (BMR)，現場還有全自動血壓計和身高體重計。\n\n另外健諮中心每學期還會開辦「興健康講堂」體態雕塑班（曾由校內知名特聘教授親自受邀擔任活動代言人支持！），由專任營養師郭雅娟指導，男生體脂>25%、女生體脂>30% 還能優先免費報名，含前後測 InBody 比對與減脂飲食指導喔！吃完學府路美食怕胖，隨時去 1 樓量一下就對了！"}
+        ]
+    },
+    # 13. 週一至週五惠蓀堂 1F 五大專科主治醫師校內免費駐診
+    {
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": "請問在學校如果突然感冒、胃痛或打球扭傷，校內有醫生可以看嗎？"},
+            {"role": "assistant", "content": "有！很多新生不知道惠蓀堂 1 樓衛保組每天都有大醫院院長與主治醫師到校駐診，而且**完全免健保卡、免掛號費、0元一對一專業諮詢**！\n\n各專科駐診時刻表（例假日與寒暑假除外）：\n- **週一 14:00~16:30**：許維邦 醫師（家醫科/婦產科，富台診所院長）\n- **週二 09:00~11:30**：王志浩 醫師（一般外科，澄清醫院主治）\n- **週三 14:00~16:30**：黃俊彥 醫師（腸胃肝膽科，澄清醫院主治）\n- **週四 09:00~11:30**：黃韻琴 醫師（復健科，愛鄰復健科院長，運動傷害必看）\n- **週五 14:00~16:30**：楊基瓏 醫師（耳鼻喉科/外科，感冒咽喉痛）\n有不舒服直接去 1 樓掛號諮詢，醫師會給你最專業的診斷與轉診建議！"}
+        ]
+    },
+    # 14. 興大特約診所「出示學生證免收掛號費」
+    {
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": "大一生如果在校外看病，拿興大學生證有哪幾家診所可以免掛號費或打折？"},
+            {"role": "assistant", "content": "在中興看病一定要善用特約，每次直接幫你省下 $150~$200 掛號費（只要付健保法定部分負擔 $50）！\n\n學長姐幫你精選幾家離學校最近的免掛號費特約名店：\n1. **牙醫（洗牙補牙）**：學府路「澄新牙醫」、國光路「宜康牙醫」、仁和路「新生牙醫」、復興路「嘉仁牙醫」（均採預約制，出示學生證免掛號費）。\n2. **耳鼻喉/家醫**：國光側門對面「慶燿診所/恆宇診所」、美村南路「欣欣耳鼻喉科」（免掛號費）；學府路「白耳鼻喉科」（掛號費折抵50元）。\n3. **中醫（扭傷針灸推拿）**：正門斜對面「北大中醫診所」、美村路「酉安中醫」、大智路「祥鶴中醫」（出示學生證免掛號費）。\n4. **眼科**：高工路「明選眼科」（免掛號費）、大里中興路「達明眼科醫院」（免掛號費，配鏡折500）。\n5. **綜合醫院與急診**：復興路二段「宏恩醫院」（門診急診均免掛號費）、大里中興路「新菩提醫院」（門診急診免掛號費）、澄清醫院平等院區（門診免掛號費）。\n看病前記得錢包裡隨時放好學生證，省下的掛號費又可以多吃兩餐學府路！"}
+        ]
+    },
+    # 15. 系隊宿營借急救箱與學保意外理賠防跑錯
+    {
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": "請問我們系隊比賽跟迎新宿營要用的醫藥箱去哪裡借？還有如果同學車禍摔傷要申請學保去哪裡？"},
+            {"role": "assistant", "content": "這兩件事的窗口剛好在惠蓀堂不同樓層，千萬不要跑錯：\n\n1. **免費外借簡易急救箱 ➔ 惠蓀堂 1 樓衛保組**：\n系隊比賽或宿營憑學生證或社團公文，單次活動最多可**免費外借 2 盒急救箱**（裡面有優碘、生理食鹽水、透氣膠帶、滅菌紗布、運動軟膏、醫療剪刀），若打球骨折扭傷還可以免費借鋁合金拐杖或輪椅 1 個月！\n\n2. **學生團體保險（學保）意外理賠 ➔ 惠蓀堂 2 樓生活輔導組（非 1 樓！）**：\n只要發生車禍、跌倒摔傷、骨折或門診手術，**事故發生 2 年內**都可以向 2 樓生輔組申請全球人壽學保理賠退費。記得帶齊：診斷書正本或蓋章副本、醫療收據、當學期學雜費繳費單、本人存摺影本與理賠申請書！"}
+        ]
     }
 ]
 
-def generate_v2_triplets(knowledge_base):
+def generate_v2_triplets(knowledge_base, food_db):
     print("🌲 生成高難度 Hard-Negative 對比檢索三元組 (train_triplets_v2.jsonl)...")
     triplets = []
 
@@ -191,11 +237,38 @@ def generate_v2_triplets(knowledge_base):
             "query": "圖書館借書可以借幾本？可以續借幾次？",
             "positive": "圖書館流通規章-大學部 50 冊超大借書量與一年不限次續借：大學部上限借閱 50 冊，借期 30 天，無人預約狀況下一學年內可無限次線上續借。",
             "negative": "圖書館自學空間-討論室預約與 24H 自習室使用須知：多人討論室需3人以上預約，期中期末考開放24小時自習閱覽室。"
+        },
+        {
+            "query": "惠蓀堂1樓有體脂計可以量嗎？",
+            "positive": "惠蓀堂 1F 衛生保健組免費 InBody 體脂計自主檢測：上班時間憑學生證免費隨到隨測，含骨骼肌重、體脂率與基礎代謝率；興健康體健班曾由校內知名特聘教授代言支持。",
+            "negative": "惠蓀堂 4F 心理諮商組：每學期 6 次完全免費個別諮商，線上預約勾滿 5 時段 7 天內快速媒合。"
+        },
+        {
+            "query": "興大學生看病有哪些特約診所免收掛號費？",
+            "positive": "興大就醫免收掛號費特約院所：出示學生證至澄新牙醫、宜康牙醫、慶燿診所、欣欣耳鼻喉科、北大中醫、明選眼科、宏恩醫院門診均免收掛號費。",
+            "negative": "學生團體保險理賠窗口：事故 2 年內備齊診斷書與收據至惠蓀堂 2F 生活輔導組辦理理賠退費。"
         }
     ]
 
     for item in special_triplets:
         triplets.append(item)
+
+    # 注入全量 255 間真實美食三元組
+    for f_item in food_db:
+        fname = f_item.get("name", "")
+        fstreet = f_item.get("street", "").replace("☕", "").replace("🎓", "").replace("🏮", "").replace("🏛️", "").replace("🌸", "").strip()
+        fcat = f_item.get("category", "")
+        faddr = f_item.get("address", "")
+        fmin = f_item.get("walk_minutes", 5)
+        frating = f_item.get("rating", "4.5")
+        fhours = f_item.get("hours", "11:00 - 20:00")
+        fprice = f_item.get("avg_price", 60)
+        
+        q_food = f"請問興大附近的「{fname}」在哪裡？特色是什麼？"
+        pos_food = f"【{fname}】位於{fstreet}（地址：{faddr}），從學校出發步行約 {fmin} 分鐘。主打{fcat}，平均消費約 {fprice} 元，Google 評分 {frating} 顆星，營業時間 {fhours}。"
+        random_neg = random.choice(knowledge_base)
+        neg_food = f"{random_neg.get('名稱')}：{random_neg.get('情報內容')}"
+        triplets.append({"query": q_food, "positive": pos_food, "negative": neg_food})
 
     # 從現有知識庫自動採樣生成更多三元組
     for item in knowledge_base:
@@ -226,9 +299,49 @@ def generate_v2_triplets(knowledge_base):
 
     print(f"✅ 生成三元組樣本數: {len(triplets)} 筆 -> {TRIPLETS_OUTPUT}")
 
-def generate_v2_instruct(knowledge_base):
-    print("🌲 生成高品質無模板 Qwen2.5-3B SFT 對齊資料集...")
+def generate_v2_instruct(knowledge_base, food_db):
+    print("🌲 生成高品質無模板大模型 SFT 對齊資料集 (含 790 條規章 + 255 間真實美食)...")
     all_conversations = list(REAL_CONVERSATIONS)
+
+    # 注入全量 255 間真實美食問答對
+    for f_item in food_db:
+        fname = f_item.get("name", "")
+        fstreet = f_item.get("street", "").replace("☕", "").replace("🎓", "").replace("🏮", "").replace("🏛️", "").replace("🌸", "").strip()
+        fcat = f_item.get("category", "")
+        faddr = f_item.get("address", "")
+        fmin = f_item.get("walk_minutes", 5)
+        ftip = f_item.get("transport_tip", f"走路約 {fmin} 分鐘")
+        frating = f_item.get("rating", "4.5")
+        freviews = f_item.get("review_count", "100")
+        fhours = f_item.get("hours", "11:00 - 20:00")
+        fprice = f_item.get("avg_price", 60)
+        fbudget = f_item.get("budget_tier", "平價實惠")
+
+        food_user_qs = [
+            f"學長姐好！請問興大附近「{fname}」在哪裡？評價跟特色如何？",
+            f"我想吃「{fname}」，從學校走路要多久？幾點有開？",
+            f"請問「{fname}」好不好吃？平均消費大概多少？"
+        ]
+        chosen_q = random.choice(food_user_qs)
+
+        food_ans = (
+            f"想吃【{fname}】沒問題！學長姐幫你把店家資訊整理好囉：\n\n"
+            f"• 📍 **商圈路段**：{fstreet}\n"
+            f"• 🗺️ **門牌地址**：{faddr}\n"
+            f"• ⏱️ **步行距離**：{ftip}\n"
+            f"• 🍜 **餐點分類**：{fcat}（{fbudget}，平均約 {fprice} 元）\n"
+            f"• ⭐ **店家評價**：Google 評分高達 {frating} 顆星（累計超過 {freviews} 則評價）\n"
+            f"• ⏰ **營業時間**：{fhours}\n\n"
+            f"這家在興大學長姐與在地社群裡評價很不錯，中午或下課衝這家很方便，祝你用餐愉快！😋"
+        )
+
+        all_conversations.append({
+            "messages": [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": chosen_q},
+                {"role": "assistant", "content": food_ans}
+            ]
+        })
 
     # 針對知識庫中的高品質條目，合成多樣化問答對（嚴格禁止固定模板開頭！）
     for item in knowledge_base:
@@ -247,7 +360,6 @@ def generate_v2_instruct(knowledge_base):
         ]
         user_q = random.choice(user_queries)
 
-        # 多樣化的自然學長姐開頭
         openers = [
             f"關於你問的【{name}】，學長姐幫你把學校官方規定的重點整理在下面：\n\n",
             f"收到！針對「{kw}」，這個常常有學弟妹搞不清楚，具體規則是這樣：\n\n",
@@ -297,8 +409,11 @@ def main():
         knowledge_base = json.load(f)
     print(f"📖 載入知識庫共 {len(knowledge_base)} 筆條目")
 
-    generate_v2_triplets(knowledge_base)
-    generate_v2_instruct(knowledge_base)
+    food_db = load_food_database()
+    print(f"🍜 載入真實美食資料庫共 {len(food_db)} 間店家")
+
+    generate_v2_triplets(knowledge_base, food_db)
+    generate_v2_instruct(knowledge_base, food_db)
     print("=" * 70)
     print("🎉 資料集構建全部完成！")
 

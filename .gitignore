@@ -17,6 +17,8 @@ telemetry_logs.jsonl
 *.pt
 *.bin
 *.safetensors
+archives/
+.agents/
 nchu_bge_small_model/
 nchu_bge_small_model_v1/
 nchu_qwen_adapter/

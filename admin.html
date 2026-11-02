@@ -702,12 +702,23 @@
   </div>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
   <script src="food_full_database.js"></script>
   <script src="backend_adapter.js"></script>
   <script>
     let currentStores = [];
     let currentReports = [];
     let pendingBatchData = [];
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
 
     document.addEventListener("DOMContentLoaded", () => {
       checkLoginSession();
@@ -823,22 +834,27 @@
           const statusClass = r.status === "pending" ? "status-pending" : (r.status === "delist" ? "status-delist" : "status-resolved");
           const statusText = r.status === "pending" ? "待審核" : (r.status === "delist" ? "已下架" : "已處理/駁回");
           const timeStr = r.created_at ? new Date(r.created_at).toLocaleString("zh-TW", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "";
-          const escapedName = (r.store_name || "").replace(/'/g, "\\'");
+          const safeName = escapeHtml(r.store_name);
+          const safeIssue = escapeHtml(r.issue_type);
+          const safeDetails = escapeHtml(r.details || "無補充");
+          const safeReporter = escapeHtml(r.reporter || "同學");
+          const encodedName = encodeURIComponent(r.store_name || "").replace(/'/g, "%27");
+          const encodedId = encodeURIComponent(r.id || "").replace(/'/g, "%27");
 
           return `
             <tr>
               <td style="color:var(--text-muted); font-size:12px;">${timeStr}</td>
-              <td style="font-weight:700; color:#fff;">${r.store_name}</td>
-              <td><span style="color:#f87171; font-weight:600;">${r.issue_type}</span></td>
-              <td style="font-size:12px; color:#cbd5e1; max-width:240px;">${r.details || "無補充"}</td>
-              <td style="font-size:12px; color:var(--text-muted);">${r.reporter || "同學"}</td>
+              <td style="font-weight:700; color:#fff;">${safeName}</td>
+              <td><span style="color:#f87171; font-weight:600;">${safeIssue}</span></td>
+              <td style="font-size:12px; color:#cbd5e1; max-width:240px;">${safeDetails}</td>
+              <td style="font-size:12px; color:var(--text-muted);">${safeReporter}</td>
               <td><span class="status-tag ${statusClass}">${statusText}</span></td>
               <td>
                 ${isPending ? `
                   <div style="display:flex; gap:6px;">
-                    <button class="btn btn-danger btn-sm" onclick="handleResolveReport('${r.id}', 'delist', '${escapedName}')" title="確認已歇業，前台立即下架">🛑 確認下架</button>
-                    <button class="btn btn-secondary btn-sm" onclick="quickEditFromReport('${escapedName}')" title="資訊有誤，前往修正門牌或時間">✏️ 修正</button>
-                    <button class="btn btn-secondary btn-sm" onclick="handleResolveReport('${r.id}', 'rejected', '${escapedName}')">❌ 駁回</button>
+                    <button class="btn btn-danger btn-sm" onclick="handleResolveReport('${encodedId}', 'delist', decodeURIComponent('${encodedName}'))" title="確認已歇業，前台立即下架">🛑 確認下架</button>
+                    <button class="btn btn-secondary btn-sm" onclick="quickEditFromReport(decodeURIComponent('${encodedName}'))" title="資訊有誤，前往修正門牌或時間">✏️ 修正</button>
+                    <button class="btn btn-secondary btn-sm" onclick="handleResolveReport('${encodedId}', 'rejected', decodeURIComponent('${encodedName}'))">❌ 駁回</button>
                   </div>
                 ` : `<span style="font-size:12px; color:var(--text-muted);">已完成</span>`}
               </td>
@@ -884,24 +900,30 @@
 
       tbody.innerHTML = stores.slice(0, 100).map(s => {
         const isActive = s.is_active !== false && String(s.is_active).toUpperCase() !== "FALSE";
-        const escapedName = (s.name || "").replace(/'/g, "\\'");
+        const encodedName = encodeURIComponent(s.name || "").replace(/'/g, "%27");
+        const safeName = escapeHtml(s.name);
+        const safeStreet = escapeHtml(s.street || "");
+        const safeCategory = escapeHtml(s.category || "");
+        const safeRating = escapeHtml(s.rating || 4.5);
+        const safeReviewCount = escapeHtml(s.review_count || 100);
+        const safeAddress = escapeHtml(s.address || "");
         return `
           <tr>
             <td>
               <label class="switch">
-                <input type="checkbox" ${isActive ? "checked" : ""} onchange="toggleStoreStatus('${escapedName}', this.checked)">
+                <input type="checkbox" ${isActive ? "checked" : ""} onchange="toggleStoreStatus(decodeURIComponent('${encodedName}'), this.checked)">
                 <span class="slider"></span>
               </label>
             </td>
-            <td style="font-weight:700; color:#fff;">${s.name}</td>
-            <td style="font-size:12px; color:#38bdf8;">${s.street || ""}</td>
-            <td style="font-size:12px;">${s.category || ""}</td>
-            <td style="font-size:12px;">⭐ ${s.rating || 4.5} (${s.review_count || 100})</td>
+            <td style="font-weight:700; color:#fff;">${safeName}</td>
+            <td style="font-size:12px; color:#38bdf8;">${safeStreet}</td>
+            <td style="font-size:12px;">${safeCategory}</td>
+            <td style="font-size:12px;">⭐ ${safeRating} (${safeReviewCount})</td>
             <td style="font-size:12px; color:var(--text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-              ${s.address || ""}
+              ${safeAddress}
             </td>
             <td style="text-align:right;">
-              <button class="btn btn-secondary btn-sm" onclick="openStoreEditModal('${escapedName}')">✏️ 編輯</button>
+              <button class="btn btn-secondary btn-sm" onclick="openStoreEditModal(decodeURIComponent('${encodedName}'))">✏️ 編輯</button>
             </td>
           </tr>
         `;

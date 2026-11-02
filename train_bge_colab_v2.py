@@ -42,11 +42,15 @@ def main():
         print(f"使用 GPU: {torch.cuda.get_device_name(0)}")
     print("=" * 70)
 
-    train_path = "/content/train_triplets_v2.jsonl"
+    train_path = "/content/train_triplets_v3.jsonl"
+    if not os.path.exists(train_path):
+        train_path = "train_triplets_v3.jsonl"
+    if not os.path.exists(train_path):
+        train_path = "/content/train_triplets_v2.jsonl"
     if not os.path.exists(train_path):
         train_path = "train_triplets_v2.jsonl"
 
-    print("📖 載入 V2 三元組訓練資料集...")
+    print("📖 載入滿血版 V3 三元組訓練資料集...")
     all_data = load_jsonl(train_path)
     print(f"✅ 總樣本數: {len(all_data)}")
 
@@ -68,7 +72,9 @@ def main():
         ("在學校騎機車被鎖車要罰多少錢？", "【總務處駐警隊】校內機車違規進入核心區鎖車，法定名稱為開鎖費 200 元，洽駐警隊 04-22840285 繳費開鎖。"),
         ("學雜費減免跟就學貸款先後順序？", "【學務處生輔組】先減免後就貸黃金鐵律：務必先辦減免扣除金額後，再持預估繳費單至臺灣銀行對保。"),
         ("中興大學有哪些中研院院士大師？", "【中央研究院院士大師陣容】廖一久講座教授（草蝦之父）、楊秋忠講座教授（土壤國家講座）、葉錫東講座教授（木瓜疫苗之父）；傑出校友江安世院士（果蠅腦圖譜）。"),
-        ("大一選課每學期最少要修幾學分？", "【教務處選課規定】學士班一二三年級每學期不得少於 16 學分，四年級不得少於 9 學分。")
+        ("大一選課每學期最少要修幾學分？", "【教務處選課規定】學士班一二三年級每學期不得少於 16 學分，四年級不得少於 9 學分。"),
+        ("惠蓀堂1樓有體脂計可以量嗎？", "【惠蓀堂 1F 衛生保健組】免費 InBody 身體組成分析儀自主量測，分析骨骼肌、體脂率與基礎代謝率；興健康體健班曾由校內知名特聘教授代言支持。"),
+        ("興大學生看病有哪些特約診所免收掛號費？", "【興大就醫免收掛號費特約院所】出示學生證至澄新牙醫、宜康牙醫、慶燿診所、欣欣耳鼻喉科、北大中醫、明選眼科、宏恩醫院門診均免收掛號費。")
     ]
 
     print("\n🔍 [微調前基準] 評測基底模型相似度:")
