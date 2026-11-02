@@ -1095,6 +1095,16 @@
         <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" data-i18n="hot_health_desc">惠蓀堂1F免費測體脂/駐診、20+間免掛號費特約診所與吃貨贖罪券！</div>
       </div>
     </div>
+    <div class="hot-card hot-safety" onclick="if(typeof openSafetyFaithGuide==='function')openSafetyFaithGuide('safety')" style="border-color:#10b981;">
+      <div style="font-size:30px;">🛡️</div>
+      <div>
+        <div style="font-weight:900; font-size:14px; display:flex; align-items:center; gap:6px;">
+          <span data-i18n="hot_safety_title">平安通行與多元生活 🕊️</span>
+          <span style="font-size:11px; background:#d1fae5; color:#047857; padding:1px 6px; border-radius:6px; font-weight:700;" data-i18n="hot_safety_badge">交通警示·宗教·清真蔬食</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" data-i18n="hot_safety_desc">4大易肇事路口、深夜安心動線、學安室僑輔、清真寺教會與蔬食指南！</div>
+      </div>
+    </div>
     <div class="hot-card hot-star" onclick="openModal('faq_club_star')">
       <div style="font-size:30px;">🎤</div>
       <div>
@@ -2178,6 +2188,7 @@
 <script src="food_slot.js"></script>
 <script src="transit_guide.js?v=20261102b"></script>
 <script src="health_care_guide.js?v=20261102b"></script>
+<script src="campus_safety_faith_guide.js?v=20261102b"></script>
 <script>
   // ── 🌟 興大新生專屬常用系統快捷傳送門 ──
   let currentPortalCategory = 'all';
@@ -3906,16 +3917,19 @@
       if (typeof closeTransitModal === "function") closeTransitModal();
       if (typeof closeFoodMap === "function") closeFoodMap();
       if (typeof closeHealthCareGuide === "function") closeHealthCareGuide();
+      if (typeof closeSafetyFaithGuide === "function") closeSafetyFaithGuide();
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (tab === "portal") {
       if (typeof closeTransitModal === "function") closeTransitModal();
       if (typeof closeFoodMap === "function") closeFoodMap();
       if (typeof closeHealthCareGuide === "function") closeHealthCareGuide();
+      if (typeof closeSafetyFaithGuide === "function") closeSafetyFaithGuide();
       openPortalModal();
     } else if (tab === "health") {
       closePortalModal();
       if (typeof closeTransitModal === "function") closeTransitModal();
       if (typeof closeFoodMap === "function") closeFoodMap();
+      if (typeof closeSafetyFaithGuide === "function") closeSafetyFaithGuide();
       if (typeof openHealthCareGuide === "function") {
         openHealthCareGuide("doctors");
       }
@@ -3923,6 +3937,7 @@
       closePortalModal();
       if (typeof closeFoodMap === "function") closeFoodMap();
       if (typeof closeHealthCareGuide === "function") closeHealthCareGuide();
+      if (typeof closeSafetyFaithGuide === "function") closeSafetyFaithGuide();
       if (typeof openTransitModal === "function") {
         openTransitModal("live");
       } else if (typeof openBusDynamicModal === "function") {
@@ -3932,6 +3947,7 @@
       closePortalModal();
       if (typeof closeTransitModal === "function") closeTransitModal();
       if (typeof closeHealthCareGuide === "function") closeHealthCareGuide();
+      if (typeof closeSafetyFaithGuide === "function") closeSafetyFaithGuide();
       if (typeof openFoodMap === "function") {
         openFoodMap();
       }
