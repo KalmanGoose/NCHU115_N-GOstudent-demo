@@ -4,7 +4,7 @@ const FAQ_DATA = [
     "id": "faq_course_01",
     "board": "course",
     "q": "行政QA-全校一級行政處室核心業務範疇與辦公地點全景導覽",
-    "a": "興大行政大樓與各處室核心配置全覽：• 行政大樓：1F（註冊組103、課務組104、出納組）、2F（招生組、文書組、教學資源暨發展中心）、3F（研發處、國際事務處、總務處長室）、4F（校長室、副校長室、秘書室）。• 雲平樓：學務處課外活動組(1F,04-22840227)。• 惠蓀堂：1F（健康及諮商中心-衛生保健）、2F（生活輔導組、學生安全輔導室/兵役業務）、4F（健康及諮商中心-心理諮商）。• 興大二村南棟1F：學務處住宿輔導組(04-22840552)。• 資訊科學大樓 2F：計算機及資訊網路中心。• 萬年樓 5F：語言中心。• 體育館 1F：體育室。",
+    "a": "興大行政大樓與各處室核心配置全覽：• 行政大樓：1F（註冊組103、課務組104、出納組）、2F（招生組、文書組、教學資源暨發展中心）、3F（研發處、國際事務處、總務處長室）、4F（校長室、副校長室、秘書室）。• 雲平樓：1F 學務處課外活動組(04-22840227)、居學園及「校內穆斯林祈禱室與男/女小淨室」。• 惠蓀堂：1F（健康及諮商中心-衛生保健）、2F（生活輔導組、學生安全輔導室/兵役業務）、4F（健康及諮商中心-心理諮商）。• 興大二村南棟1F：學務處住宿輔導組(04-22840552)。• 資訊科學大樓 2F：計算機及資訊網路中心。• 萬年樓 5F：語言中心。• 體育館 1F：體育室。",
     "keywords": [
       "免役證明",
       "ESAP課程",
@@ -13,10 +13,12 @@ const FAQ_DATA = [
       "學生活動",
       "報到流程",
       "大一英文",
-      "課外組"
+      "課外組",
+      "雲平樓",
+      "祈禱室"
     ],
     "q_en": "Administrative QA - Campus Core Administrative Divisions & Locations Guide",
-    "a_en": "NCHU Main Administration Building & Divisions Overview:\n• Administration Building: 1F (Registrar 103, Curriculum 104, Cashier), 2F (Admissions, Documentation, Center for Teaching and Learning Development), 3F (R&D Office, Office of International Affairs - OIA, General Affairs), 4F (President & Vice President Offices, Secretariat).\n• Yun-Ping Building: Student Activity Division / Extracurricular (1F, 04-22840227).\n• Huisun Hall: 1F (Health Care Section, Center for Counseling & Health), 2F (Life Guidance Section, Military/Student Safety Office), 4F (Psychological Counseling Section).\n• South Building of 2nd Dormitory Village 1F: Student Housing Service Division (04-22840552).\n• Computer & Information Network Center: 2F, Information Science Building.\n• Language Center: 5F, Wan-Nian Building.\n• Physical Education Office: 1F, Gymnasium.",
+    "a_en": "NCHU Main Administration Building & Divisions Overview:\n• Administration Building: 1F (Registrar 103, Curriculum 104, Cashier), 2F (Admissions, Documentation, Center for Teaching and Learning Development), 3F (R&D Office, Office of International Affairs - OIA, General Affairs), 4F (President & Vice President Offices, Secretariat).\n• Yun-Ping Building: 1F Student Activity Division / Extracurricular (04-22840227), Ju-Xue-Yuan & Muslim Prayer Room with Male/Female Wudu Facilities.\n• Huisun Hall: 1F (Health Care Section, Center for Counseling & Health), 2F (Life Guidance Section, Military/Student Safety Office), 4F (Psychological Counseling Section).\n• South Building of 2nd Dormitory Village 1F: Student Housing Service Division (04-22840552).\n• Computer & Information Network Center: 2F, Information Science Building.\n• Language Center: 5F, Wan-Nian Building.\n• Physical Education Office: 1F, Gymnasium.",
     "keywords_en": [
       "Administrative Offices",
       "Registrar",
@@ -1086,6 +1088,40 @@ const FAQ_DATA = [
       "First Aid Kit",
       "Student Insurance",
       "Huisun 2F"
+    ]
+  },
+  {
+    "id": "faq_muslim_prayer_room",
+    "board": "admin",
+    "q": "校內穆斯林祈禱室與男/女小淨室位置（雲平樓 1 樓）及借用密碼洽詢方式",
+    "a": "【興大校內穆斯林祈禱室與小淨設施指南】\n1. 所在位置：位於校內「雲平樓 1 樓」（配合學生活動中心「居學園」空間規劃設置，注意：實體空間在雲平樓 1F，而非行政大樓）。\n2. 內部設施：除提供專門供穆斯林師生進行每日禮拜、祈禱之靜思空間與禮拜毯外，內部亦設有專屬「男、女獨立小淨室（Wudu area）」，方便師生於禮拜前進行小淨（淨身）儀式。\n3. 開放時間與門禁密碼申請：開放時間依雲平樓規定為準，空間設有密碼鎖門禁。如需使用，可直接前往雲平樓 1 樓祈禱室門口「掃描門上 QR Code」詢問開門密碼，或發送電子郵件至國際事務處信箱（oiastudent@nchu.edu.tw）洽詢。\n4. 校外大型聚禮：每週五主麻日聚禮（Jum'ah）可由興大正門搭乘 23 或 73 號公車（約 18 分鐘）前往「台中清真寺」（南屯區大墩南路 160 號）。",
+    "keywords": [
+      "穆斯林",
+      "祈禱室",
+      "小淨室",
+      "小淨",
+      "雲平樓",
+      "居學園",
+      "伊斯蘭教",
+      "清真",
+      "禮拜",
+      "Halal",
+      "Wudu",
+      "Prayer Room",
+      "台中清真寺",
+      "國際處"
+    ],
+    "q_en": "NCHU Campus Muslim Prayer Room & Male/Female Wudu Facilities (Yunping Bldg 1F)",
+    "a_en": "NCHU Muslim Prayer Room & Wudu (Ablution) Guide:\n1. Location: Located on the 1st Floor of Yunping Building (within the 'Ju-Xue-Yuan' Student Activity Center area—note that the physical room is in Yunping Bldg 1F, not the Administration Building).\n2. Facilities: Features a dedicated quiet prayer space with prayer mats and separate Male & Female Wudu (ablution) rooms for ritual purification before prayers.\n3. Opening Hours & Access Code: Open according to Yunping Building hours with password-protected entry. To obtain the entry password, scan the QR code posted at the prayer room door or email the Office of International Affairs (OIA) at oiastudent@nchu.edu.tw.\n4. Friday Jum'ah Prayer: Take Bus 23 or 73 from NCHU Main Gate (approx. 18 mins) to Taichung Mosque (No. 160, Dadun S. Rd., Nantun Dist.).",
+    "keywords_en": [
+      "Muslim",
+      "Prayer Room",
+      "Wudu",
+      "Ablution",
+      "Yunping Building",
+      "Islam",
+      "Halal",
+      "Taichung Mosque"
     ]
   }
 ];
