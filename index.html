@@ -2183,7 +2183,7 @@
         <span class="food-filter-label" data-i18n="food_label_street">📍 商圈</span>
         <button class="food-filter-btn active" data-type="street" data-val="all" onclick="setStreetFilter('all', this)" data-i18n="food_filter_all_street">全部商圈</button>
         <button class="food-filter-btn" data-type="street" data-val="校內學餐/校園專區" onclick="setStreetFilter('校內學餐/校園專區', this)" data-i18n="food_filter_campus">🌲 校內學餐 (1~3分)</button>
-        <button class="food-filter-btn" data-type="street" data-val="學府路/頂橋巷弄" onclick="setStreetFilter('學府路/頂橋巷弄', this)" data-i18n="food_filter_xuefu">🎓 學府路/頂橋 (89間)</button>
+        <button class="food-filter-btn" data-type="street" data-val="學府路/頂橋巷弄" onclick="setStreetFilter('學府路/頂橋巷弄', this)" data-i18n="food_filter_xuefu">🎓 學府路/頂橋 (正門生活圈)</button>
         <button class="food-filter-btn" data-type="street" data-val="南門路商圈" onclick="setStreetFilter('南門路商圈', this)" data-i18n="food_filter_nanmen">🌸 南門路 (含樹瓦咖啡)</button>
         <button class="food-filter-btn" data-type="street" data-val="康堤/興大路" onclick="setStreetFilter('康堤/興大路', this)" data-i18n="food_filter_kangdi">🌊 康堤/興大路/永東街</button>
         <button class="food-filter-btn" data-type="street" data-val="忠孝夜市" onclick="setStreetFilter('忠孝夜市', this)" data-i18n="food_filter_nightmarket">🏮 忠孝夜市</button>
@@ -2213,12 +2213,12 @@
 
     <!-- 卡片網格 Cards Grid -->
     <div class="food-grid" id="foodGrid">
-      <!-- 由 JS 動態渲染 287 間美食 -->
+      <!-- 由 JS 動態渲染 203 間美食 -->
     </div>
 
     <!-- 底部狀態列 -->
     <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid #e2e8f0; font-size:12px; color:var(--text-muted); margin-top:4px;">
-      <span id="foodCountLabel">顯示 287 間美食</span>
+      <span id="foodCountLabel">顯示 203 間美食</span>
       <div style="display:flex; gap:8px;">
         <button class="chip" onclick="closeFoodMap(); openChatSheet('興大周邊美食推薦');" style="background:linear-gradient(135deg,var(--primary),#2b6cb0); color:#fff; font-weight:700; border:none; padding:4px 12px; cursor:pointer;" data-i18n="food_btn_ask_ai">🤖 AI 助手聊美食</button>
         <button class="chip" onclick="closeFoodMap()" style="padding:4px 12px; font-weight:700; cursor:pointer;" data-i18n="food_btn_close">關閉</button>
@@ -2364,7 +2364,7 @@
 <script src="portal_data.js?v=20261102b"></script>
 <script src="faq_data.js?v=20261102b"></script>
 <script src="food_database.js"></script>
-<script src="food_full_database.js"></script>
+<script src="food_full_database.js?v=203"></script>
 <script src="backend_adapter.js"></script>
 <script src="food_slot.js"></script>
 <script src="transit_guide.js?v=20261102b"></script>
@@ -3232,7 +3232,7 @@
   let currentFoodMaxWalk = null;
   let isFoodApiConnected = false;
 
-  // 1. 初始化資料載入 (支援 GAS API 與本地 287 筆回退)
+  // 1. 初始化資料載入 (支援 GAS API 與本地 203 筆回退)
   async function loadFoodDatabase(forceRefresh = false) {
     const isExplicitlyDisabled = localStorage.getItem("nchu_food_api_disabled") === "true";
     const savedApiUrl = localStorage.getItem("nchu_food_api_url") || (!isExplicitlyDisabled ? DEFAULT_FOOD_API_URL : "");
@@ -3260,11 +3260,11 @@
           }
         }
       } catch (e) {
-        console.warn("GAS API 連線失敗，切換為本地 287 筆資料庫", e);
+        console.warn("GAS API 連線失敗，切換為本地 203 筆資料庫", e);
       }
     }
 
-    // 回退使用本地 food_full_database.js (287 筆)
+    // 回退使用本地 food_full_database.js (203 筆)
     if (typeof NCHU_EXPANDED_FOOD !== "undefined" && Array.isArray(NCHU_EXPANDED_FOOD) && NCHU_EXPANDED_FOOD.length > 0) {
       allFoodStores = NCHU_EXPANDED_FOOD;
     } else if (typeof SENIOR_FOOD_DB !== "undefined" && Array.isArray(SENIOR_FOOD_DB)) {
@@ -3626,7 +3626,7 @@
   function clearFoodApiUrl() {
     localStorage.removeItem("nchu_food_api_url");
     localStorage.setItem("nchu_food_api_disabled", "true");
-    alert("已停用雲端 API 連線，已自動切換為本地 287 筆擴充資料庫！");
+    alert("已停用雲端 API 連線，已自動切換為本地 203 筆擴充資料庫！");
     closeFoodApiModal();
     loadFoodDatabase(true).then(() => {
       renderFoodGrid(filterFoodStores());
