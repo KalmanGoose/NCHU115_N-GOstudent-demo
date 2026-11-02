@@ -220,26 +220,29 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(15, 23, 42, 0.72);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       z-index: 99999;
       align-items: center;
       justify-content: center;
-      padding: 14px;
+      padding: 14px 10px;
       box-sizing: border-box;
+      overflow-y: hidden;
     }
     .safety-modal-card {
       background: #ffffff;
-      border-radius: 24px;
+      border-radius: 22px;
       width: 100%;
-      max-width: 680px;
-      max-height: 90vh;
+      max-width: 600px;
+      height: 88vh;
+      max-height: 88vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.35);
       border: 1.5px solid #a7f3d0;
       overflow: hidden;
+      box-sizing: border-box;
       animation: safetyPop .28s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     @keyframes safetyPop {
@@ -488,13 +491,14 @@
       box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3);
     }
 
-    /* 📱 手機端響應式防爆框優化 */
-    @media (max-width: 480px) {
+    /* 📱 手機端響應式防爆框優化 (統一規格: max-width 480px, max-height 88vh, radius: 20px) */
+    @media (max-width: 600px) {
       .safety-modal-backdrop {
-        padding: 8px;
+        padding: 14px 10px;
       }
       .safety-modal-card {
-        max-height: 92vh;
+        max-width: 480px;
+        max-height: 88vh;
         border-radius: 20px;
       }
       .safety-header {

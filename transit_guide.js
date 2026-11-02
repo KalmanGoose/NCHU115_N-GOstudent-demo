@@ -221,26 +221,29 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.78);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       z-index: 99998;
       align-items: center;
       justify-content: center;
-      padding: 14px;
+      padding: 14px 10px;
       box-sizing: border-box;
+      overflow-y: hidden;
     }
     .transit-card {
       background: #14171f;
-      border-radius: 20px;
+      border-radius: 22px;
       width: 100%;
-      max-width: 540px;
+      max-width: 600px;
+      height: 88vh;
       max-height: 88vh;
       display: flex;
       flex-direction: column;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
       position: relative;
       overflow: hidden;
+      box-sizing: border-box;
       animation: transitModalIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
       color: #e2e8f0;
     }
@@ -675,12 +678,12 @@
       margin: 10px 0;
     }
 
-    /* 手機版適配：置中浮動卡片，消除頂部大量空白 */
+    /* 手機版適配：統一規格 (max-width 480px, max-height 88vh, radius: 20px) */
     @media (max-width: 600px) {
       .transit-modal-backdrop {
         align-items: center !important;
         justify-content: center !important;
-        padding: 12px !important;
+        padding: 14px 10px !important;
       }
       .transit-card {
         border-radius: 20px !important;

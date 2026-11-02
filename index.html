@@ -1630,33 +1630,155 @@
     flex-direction: column; gap: 10px; color: var(--text-muted); font-size: 13px; pointer-events: none;
   }
 
-  /* ── 興大美食地圖彈窗 (與聊天室同步的即時搜尋與篩選卡片) ── */
+  /* ── 統一彈窗外層遮罩 (Backdrop) ── */
+  #portalModal, #foodMapModal2 {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(15, 23, 42, 0.72) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    display: none;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 14px 10px !important;
+    box-sizing: border-box !important;
+    overflow-y: hidden !important;
+  }
+
+  /* ── 統一五大功能彈窗規格 (Desktop: 600px, 88vh, radius: 22px) ── */
   .food-modal-card, .portal-modal-card {
     background: #ffffff;
     width: 100%;
-    max-width: 800px;
+    max-width: 600px;
+    height: 88vh;
     max-height: 88vh;
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: 22px;
+    padding: 18px 16px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    box-shadow: 0 10px 30px rgba(15,39,69,0.18);
-    animation: pop .3s cubic-bezier(.2,.7,.3,1.15);
+    box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.35);
+    animation: pop .25s cubic-bezier(.2,.7,.3,1.15);
     position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
   }
+  /* 常用系統 2*4 排列 (避免一張一張滑動過久，一畫面呈現核心系統) */
   .portal-modal-card .portal-grid {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
-    gap: 12px !important;
-    padding: 6px 2px 24px !important;
+    gap: 8px !important;
+    padding: 4px 2px 14px !important;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
   .portal-modal-card .portal-card {
+    min-width: 0 !important;
     flex: initial !important;
-    min-height: 120px;
+    padding: 8px 9px !important;
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    min-height: 104px !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+  }
+  .portal-modal-card .portal-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(15, 39, 69, 0.1) !important;
+    border-color: var(--mint) !important;
+  }
+  .portal-modal-card .portal-card-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 4px !important;
+  }
+  .portal-modal-card .portal-icon-box {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 16px !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+    box-shadow: none !important;
+  }
+  .portal-modal-card .portal-tag {
+    font-size: 9px !important;
+    padding: 1.5px 5px !important;
+    border-radius: 4px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+  }
+  .portal-modal-card .portal-name {
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    line-height: 1.25 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin: 2px 0 0 !important;
+  }
+  .portal-modal-card .portal-alias {
+    font-size: 10px !important;
+    color: #64748b !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+  }
+  .portal-modal-card .portal-desc {
+    display: none !important;
+  }
+  .portal-modal-card .portal-actions {
+    display: flex !important;
+    gap: 4px !important;
+    margin-top: 6px !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+  .portal-modal-card .portal-btn-go {
+    flex: 1 !important;
+    min-width: 0 !important;
+    height: 25px !important;
+    line-height: 25px !important;
+    padding: 0 4px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    background: #004B97 !important;
+    color: #ffffff !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .portal-modal-card .portal-btn-copy,
+  .portal-modal-card .portal-btn-tip {
+    width: 25px !important;
+    height: 25px !important;
+    padding: 0 !important;
+    font-size: 11px !important;
+    border-radius: 6px !important;
+    border: 1px solid #cbd5e1 !important;
+    background: #f8fafc !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
   }
   .food-search-box {
     width: 100%;
@@ -1921,7 +2043,12 @@
   @media (max-width: 640px) {
     .chip-bar { padding: 8px 10px 4px; gap: 5px 6px; }
     .chip { padding: 5px 10px; font-size: 11px; }
-    .food-modal-card { padding: 14px 10px; max-height: 92vh; border-radius: 16px; }
+    .food-modal-card, .portal-modal-card {
+      max-width: 480px !important;
+      max-height: 88vh !important;
+      border-radius: 20px !important;
+      padding: 14px 12px !important;
+    }
     .food-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
     .food-card { padding: 8px; }
     .food-card-title { font-size: 12px; }
